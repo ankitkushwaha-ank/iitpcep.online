@@ -1,8 +1,6 @@
 # ===============================
 # 🧠 Core Django Dependencies
 # ===============================
-# Changed to Django 4.2 LTS (Long-Term Support)
-# This is compatible with your server's older Python version.
 Django~=4.2.0
 django-environ==0.11.2
 pytz==2024.1
@@ -11,15 +9,17 @@ sqlparse==0.5.1
 # ===============================
 # ⚙️ Database & ORM Support
 # ===============================
-# Replaced 'psycopg2-binary' (for PostgreSQL)
-# with 'mysqlclient' for CyberPanel's MariaDB/MySQL.
-mysqlclient~=2.2.0
+# Using PyMySQL to avoid build errors on Render
+PyMySQL~=1.1.0
+# mysqlclient~=2.2.0  <-- REMOVED. This was causing the build error.
 
 # ===============================
 # 🧰 Server + Deployment
 # ===============================
-# REMOVED Gunicorn: Not needed. CyberPanel uses OpenLiteSpeed (lswsgi).
-# REMOVED Whitenoise: Not needed. OpenLiteSpeed will serve static files.
+# ADDED Gunicorn: This is REQUIRED by Render to run your web server.
+gunicorn
+# ADDED Whitenoise: Recommended for serving static files on Render.
+whitenoise
 
 # ===============================
 # 🌐 REST API / Backend Support

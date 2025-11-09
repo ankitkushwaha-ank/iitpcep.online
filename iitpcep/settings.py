@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
 from config import DATABASE, SYSTEM  # ✅ import DB + system config safely
-
+import pymysql
+pymysql.install_as_MySQLdb()
 # --------------------------------------------------
 # 📁 BASE CONFIG
 # --------------------------------------------------
