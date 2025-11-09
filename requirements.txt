@@ -41,7 +41,6 @@ python-dateutil==2.9.0.post0
 # ===============================
 # 🧾 File Uploads / Media Handling
 # ===============================
-Pillow==10.3.0
 
 # ===============================
 # 🧠 Security & Environment
