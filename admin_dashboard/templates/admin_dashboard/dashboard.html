@@ -1,0 +1,175 @@
+{% extends "admin_dashboard/base.html" %}
+{% load static %}
+{% block content %}
+  <link rel="stylesheet" href="static/admin_dashboard/css/style.css" />
+<!-- Header -->
+<div class="flex items-center justify-between mb-8">
+  <h1 class="text-3xl font-bold text-gray-800 tracking-tight">Admin Dashboard</h1>
+  <span class="text-sm text-gray-500">Last updated: {{ system.last_updated|date:"M d, Y h:i A" }}</span>
+</div>
+
+<!-- Stats Section -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+
+  <!-- Users -->
+  <div class="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-5 rounded-2xl shadow-md hover:shadow-xl transition-all">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm uppercase opacity-75">Total Users</p>
+        <h2 class="text-3xl font-bold">{{ total_users }}</h2>
+      </div>
+      <i data-lucide="users" class="w-10 h-10 text-white/80"></i>
+    </div>
+  </div>
+
+  <!-- Online -->
+  <div class="bg-gradient-to-r from-green-600 to-emerald-500 text-white p-5 rounded-2xl shadow-md hover:shadow-xl transition-all">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm uppercase opacity-75">Online Users</p>
+        <h2 class="text-3xl font-bold">{{ online_users }}</h2>
+      </div>
+      <i data-lucide="wifi" class="w-10 h-10 text-white/80"></i>
+    </div>
+  </div>
+
+  <!-- Courses -->
+  <div class="bg-gradient-to-r from-purple-600 to-indigo-500 text-white p-5 rounded-2xl shadow-md hover:shadow-xl transition-all">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm uppercase opacity-75">Courses</p>
+        <h2 class="text-3xl font-bold">{{ total_courses }}</h2>
+      </div>
+      <i data-lucide="book-open" class="w-10 h-10 text-white/80"></i>
+    </div>
+  </div>
+
+  <!-- Assignments -->
+  <div class="bg-gradient-to-r from-orange-600 to-amber-500 text-white p-5 rounded-2xl shadow-md hover:shadow-xl transition-all">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm uppercase opacity-75">Assignments</p>
+        <h2 class="text-3xl font-bold">{{ assignments }}</h2>
+      </div>
+      <i data-lucide="clipboard-list" class="w-10 h-10 text-white/80"></i>
+    </div>
+  </div>
+
+</div>
+
+<!-- Chart Section -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-10">
+  <h2 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+    <i data-lucide="activity" class="w-5 h-5 mr-2 text-blue-600"></i>
+    Activity Overview
+  </h2>
+  <canvas id="activityChart" height="120"></canvas>
+</div>
+
+<!-- System Status & Latest Events -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+  <!-- System Configuration -->
+  <div class="bg-white rounded-2xl shadow-md p-6">
+    <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+      <i data-lucide="settings" class="w-5 h-5 mr-2 text-gray-600"></i>
+      System Configuration
+    </h3>
+
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-500 mb-1">Status</p>
+        <p class="font-semibold {% if system.system_status == 'ONLINE' %}text-green-600{% else %}text-red-600{% endif %}">
+          {{ system.system_status }}
+        </p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500 mb-1">PIN</p>
+        <p class="font-semibold tracking-wider">{{ system.system_pin }}</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500 mb-1">Root</p>
+        <p class="font-semibold">{{ system.system_root }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Events -->
+  <div class="bg-white rounded-2xl shadow-md p-6">
+    <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+      <i data-lucide="calendar" class="w-5 h-5 mr-2 text-gray-600"></i>
+      Recent Events
+    </h3>
+
+    {% if events %}
+      <ul class="divide-y divide-gray-200">
+        {% for e in events %}
+        <li class="py-3 flex justify-between items-center">
+          <div>
+            <p class="font-medium text-gray-800">{{ e.title }}</p>
+            <p class="text-sm text-gray-500">{{ e.get_event_type_display }} — {{ e.date|date:"M d, Y" }}</p>
+          </div>
+          <span class="text-sm px-3 py-1 rounded-full
+                {% if e.event_type == 'DEADLINE' %}
+                  bg-red-100 text-red-700
+                {% elif e.event_type == 'NOTICE' %}
+                  bg-yellow-100 text-yellow-700
+                {% else %}
+                  bg-blue-100 text-blue-700
+                {% endif %}">
+            {{ e.event_type }}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-gray-500 text-sm italic">No recent events.</p>
+    {% endif %}
+  </div>
+</div>
+
+
+<!-- Chart.js & Lucide -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+lucide.createIcons();
+
+new Chart(document.getElementById("activityChart"), {
+  type: "bar",
+  data: {
+    labels: ["Users", "Courses", "Assignments", "Quizzes", "Exams"],
+    datasets: [{
+      data: [{{ total_users }}, {{ total_courses }}, {{ assignments }}, {{ quizzes }}, {{ exams }}],
+      backgroundColor: [
+        "rgba(59, 130, 246, 0.8)",
+        "rgba(139, 92, 246, 0.8)",
+        "rgba(249, 115, 22, 0.8)",
+        "rgba(16, 185, 129, 0.8)",
+        "rgba(239, 68, 68, 0.8)"
+      ],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { color: "#555" },
+        grid: { color: "rgba(200,200,200,0.2)" }
+      },
+      x: {
+        ticks: { color: "#555" },
+        grid: { display: false }
+      }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { backgroundColor: "#1f2937", titleColor: "#fff", bodyColor: "#fff" }
+    }
+  }
+});
+</script>
+
+{% endblock %}

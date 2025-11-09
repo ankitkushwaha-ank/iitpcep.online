@@ -1,0 +1,308 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Moodle: Center for Educational Technology: Log in to the site</title>
+  <link href="{% static 'images/IITP_LOGO.ico' %}" rel='icon'>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+  --card-bg: #ffffff;
+  --accent: #0b347e; /* New button color */
+  --accent-dark: #082a66;
+  --border: #cfd4dc;
+  --text: #333;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: "Roboto", "Segoe UI", Arial, sans-serif;
+  background: url("{% static 'images/bg_image.png' %}") no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text);
+}
+
+.card {
+  display: flex;
+  width: 980px; /* Slightly larger */
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e7eaf0;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.08),
+    0 12px 25px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+}
+
+.left {
+  width: 55%;
+  padding: 50px 60px;
+  border-right: 1px solid #e6e8ee;
+  box-sizing: border-box;
+}
+
+.right {
+  width: 45%;
+  padding: 60px 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center the whole block vertically */
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.brand img {
+  width: 440px; /* Adjusted logo width */
+  display: block;
+  margin: 0 auto 25px auto;
+  user-select: none;
+}
+
+form {
+  margin-top: 18px;
+}
+
+.input {
+  width: 90%;
+  padding: 14px 16px; /* thicker fields */
+  border: 1.6px solid var(--border);
+  border-radius: 6px;
+  font-size: 15.5px;
+  margin-bottom: 16px;
+  outline: none;
+  background-color: #fff;
+  transition: 0.2s ease;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.input:focus {
+  border-color: #2f64d7;
+  box-shadow: 0 0 0 3px rgba(43, 99, 217, 0.15);
+}
+
+.btn {
+  width: 100%;
+  padding: 14px 0; /* thicker button */
+  background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16.5px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+}
+
+.btn:hover {
+  background: linear-gradient(180deg, #0f3f9c, #072a63);
+  box-shadow:
+    0 6px 14px rgba(11, 52, 126, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.muted-link {
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  color: #2b4e83;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.muted-link:hover {
+  text-decoration: underline;
+}
+
+/* Right side */
+.right h3 {
+  margin: 0 0 20px 0;
+  font-weight: 500;
+  color: #333;
+  font-size: 17px;
+  text-align: center;
+}
+
+.ms-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid #dddfe4;
+  border-radius: 6px;
+  padding: 10px 24px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.ms-button:hover {
+  background: #f5f7fa;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ms-button img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+/* Cookies notice */
+.cookie {
+  margin-top: 35px;
+  color: #0b347e; /* blue text */
+  font-size: 14px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.cookie:hover {
+  text-decoration: underline;
+}
+
+/* Blue circle background on ? mark */
+.cookie .icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b347e;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .card {
+    flex-direction: column;
+    width: 92%;
+  }
+
+  .left, .right {
+    width: 100%;
+    border: none;
+    padding: 30px;
+  }
+
+  .brand img {
+    width: 220px;
+  }
+
+  .right {
+    border-top: 1px solid #e6e8ee;
+    text-align: center;
+    padding-top: 40px;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+    <div class="card">
+    <!-- Left section -->
+    <div class="left">
+      <div class="brand">
+        <img src="{% static 'images/iitp_full.png' %}" alt="IIT Patna CET">
+      </div>
+
+      <!-- ✅ Django login form -->
+      <form method="POST" action="">
+        {% csrf_token %}
+        <input
+          class="input"
+          type="text"
+          name="username"
+          placeholder="Username or email"
+          required
+        />
+        <input
+          class="input"
+          type="password"
+          name="pin"
+          placeholder="PIN"
+          required
+        />
+        <button class="btn" type="submit">Log in</button>
+      </form>
+
+      <!-- Password reset link -->
+      <a class="muted-link" href="#">Lost password?</a>
+
+      <!-- ✅ Message display (success / error) -->
+      {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Right section -->
+    <div class="right">
+      <h3>Sign in with</h3>
+      <button class="ms-button">
+        <img src="{% static 'images/microsoft.png' %}" alt="Microsoft Logo">
+        Microsoft
+      </button>
+      <a class="cookie" href="#">❓ Cookies notice</a>
+    </div>
+  </div>
+
+  <!-- Optional styling for messages -->
+  <style>
+    .messages {
+      margin-top: 10px;
+    }
+    .alert {
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .alert.success {
+      background: #e0f8e0;
+      color: #1b791b;
+      border: 1px solid #1b791b;
+    }
+    .alert.error {
+      background: #fdeaea;
+      color: #c0392b;
+      border: 1px solid #c0392b;
+    }
+    .alert.info {
+      background: #e8f0fe;
+      color: #2b57c0;
+      border: 1px solid #2b57c0;
+    }
+  </style>
+
+</body>
+</html>

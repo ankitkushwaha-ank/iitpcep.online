@@ -1,0 +1,175 @@
+{% include 'admin/_head.html' %}
+{% include 'admin/_header.html' %}
+
+<!-- === MAIN ADMIN DASHBOARD === -->
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card text-center p-3">
+      <i class="fa fa-users fa-2x text-primary mb-2"></i>
+      <div class="card-title">Total Users</div>
+      <h4>{{ total_users }}</h4>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center p-3">
+      <i class="fa fa-book fa-2x text-success mb-2"></i>
+      <div class="card-title">Courses</div>
+      <h4>{{ total_courses }}</h4>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center p-3">
+      <i class="fa fa-file-lines fa-2x text-warning mb-2"></i>
+      <div class="card-title">Assignments</div>
+      <h4>{{ total_assignments }}</h4>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center p-3">
+      <i class="fa fa-clock fa-2x text-danger mb-2"></i>
+      <div class="card-title">System Status</div>
+      {% if system_status %}
+        <span class="badge bg-success">Online</span>
+      {% else %}
+        <span class="badge bg-danger">Offline</span>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- === GENERAL SETTINGS === -->
+<h5 class="mb-3"><i class="fa fa-gear"></i> General Settings</h5>
+<form method="POST" action="{% url 'update_general_settings' %}" class="card p-3 mb-4">
+  {% csrf_token %}
+  <div class="row g-3">
+    <div class="col-md-4">
+      <label class="form-label">System Mode</label>
+      <select class="form-select" name="system_status">
+        <option value="on" {% if system_status %}selected{% endif %}>Online</option>
+        <option value="off" {% if not system_status %}selected{% endif %}>Shutdown</option>
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">System PIN</label>
+      <input type="text" name="system_pin" class="form-control" value="{{ system_pin }}">
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Root Admin Username</label>
+      <input type="text" name="system_root" class="form-control" value="{{ system_root }}">
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+</form>
+
+<hr>
+
+<!-- === COURSE MANAGEMENT === -->
+<h5 class="mb-3"><i class="fa fa-book"></i> Manage Courses</h5>
+<div class="card p-3 mb-4">
+  <a href="{% url 'add_course' %}" class="btn btn-success mb-3"><i class="fa fa-plus"></i> Add New Course</a>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for course in courses %}
+      <tr>
+        <td>{{ course.code }}</td>
+        <td>{{ course.title }}</td>
+        <td>{{ course.description|truncatewords:15 }}</td>
+        <td>
+          <a href="{% url 'edit_course' course.id %}" class="btn btn-sm btn-warning"><i class="fa fa-pen"></i></a>
+          <a href="{% url 'delete_course' course.id %}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="text-center text-muted">No courses available.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<hr>
+
+<!-- === ASSIGNMENTS, QUIZZES, EXAMS === -->
+<h5 class="mb-3"><i class="fa fa-file-lines"></i> Manage Assessments</h5>
+<div class="card p-3 mb-4">
+  <div class="mb-3">
+    <a href="{% url 'add_assignment' %}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Add Assignment</a>
+    <a href="{% url 'add_quiz' %}" class="btn btn-outline-success btn-sm"><i class="fa fa-plus"></i> Add Quiz</a>
+    <a href="{% url 'add_exam' %}" class="btn btn-outline-warning btn-sm"><i class="fa fa-plus"></i> Add Exam</a>
+  </div>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Title</th>
+        <th>Course</th>
+        <th>Attempts</th>
+        <th>Open Date</th>
+        <th>Close Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in assessments %}
+      <tr>
+        <td>{{ item.type }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.course.title }}</td>
+        <td>{{ item.max_attempts }}</td>
+        <td>{{ item.open_date|date:"d M, Y H:i" }}</td>
+        <td>{{ item.close_date|date:"d M, Y H:i" }}</td>
+        <td>
+          <a href="{% url 'edit_assessment' item.id %}" class="btn btn-sm btn-warning"><i class="fa fa-pen"></i></a>
+          <a href="{% url 'delete_assessment' item.id %}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<hr>
+
+<!-- === USER MANAGEMENT === -->
+<h5 class="mb-3"><i class="fa fa-users"></i> Manage Users</h5>
+<div class="card p-3 mb-4">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.username }}</td>
+        <td>{% if user.is_admin %}<span class="badge bg-primary">Admin</span>{% else %}User{% endif %}</td>
+        <td>{% if user.is_banned %}<span class="badge bg-danger">Banned</span>{% else %}<span class="badge bg-success">Active</span>{% endif %}</td>
+        <td>
+          <a href="{% url 'edit_user' user.id %}" class="btn btn-sm btn-warning"><i class="fa fa-pen"></i></a>
+          <a href="{% url 'delete_user' user.id %}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+          <a href="{% url 'ban_user' user.id %}" class="btn btn-sm btn-dark"><i class="fa fa-ban"></i></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% include 'admin/_footer.html' %}

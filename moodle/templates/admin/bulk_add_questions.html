@@ -1,0 +1,30 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div style="max-width:900px">
+      {{ form.as_p }}
+    </div>
+    <input type="submit" class="default" value="Add questions">
+    <a href="{% url 'admin:%s_%s_change' opts.app_label opts.model_name original.pk %}" class="button"
+       style="margin-left:8px;">Back</a>
+  </form>
+
+  <hr>
+  <details>
+    <summary><b>Format help</b></summary>
+    <pre style="white-space:pre-wrap; background:#f8f8f8; padding:12px; border:1px solid #eee;">
+Q: What is 2+2?
+A) 1
+B) 2
+C) 3
+D) 4 *
+
+Q: Short text sample
+TEXT: Your free-text answer here
+    </pre>
+  </details>
+{% endblock %}

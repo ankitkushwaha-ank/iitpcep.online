@@ -1,0 +1,46 @@
+{% extends "admin_dashboard/base.html" %}
+{% block content %}
+  <link rel="stylesheet" href="static/admin_dashboard/css/style.css" />
+<div class="flex items-center justify-between mb-6">
+  <h2 class="text-2xl font-bold">Questions</h2>
+  <a href="{% url 'admin:moodle_question_add' %}" class="px-4 py-2 rounded-lg bg-blue-600 text-white">+ Add Question</a>
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <table class="min-w-full text-sm">
+    <thead class="bg-gray-100 text-gray-600 uppercase">
+      <tr>
+        <th class="px-4 py-3 text-left">ID</th>
+        <th class="px-4 py-3 text-left">Question</th>
+        <th class="px-4 py-3 text-left">Parent</th>
+        <th class="px-4 py-3 text-left">Type</th>
+        <th class="px-4 py-3 text-left">Marks</th>
+        <th class="px-4 py-3 text-left">Correct</th>
+        <th class="px-4 py-3 text-right">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for q in questions %}
+      <tr class="border-t">
+        <td class="px-4 py-3 font-mono">{{ q.id }}</td>
+        <td class="px-4 py-3">
+          {{ q.text|striptags|truncatechars:80 }}
+        </td>
+        <td class="px-4 py-3">{{ q.parent_type }} #{{ q.parent_id }}</td>
+        <td class="px-4 py-3">{{ q.question_type }}</td>
+        <td class="px-4 py-3">{{ q.marks }}</td>
+        <td class="px-4 py-3">
+          {% if q.correct_option %}{{ q.correct_option.option_label }}{% elif q.correct_answer_text %}Text{% else %}-{% endif %}
+        </td>
+        <td class="px-4 py-3 text-right space-x-2">
+          <a href="{% url 'admin:moodle_question_change' q.pk %}" class="px-3 py-1 rounded border text-blue-700 border-blue-200 hover:bg-blue-50">Edit</a>
+          <a href="{% url 'admin:moodle_question_delete' q.pk %}" class="px-3 py-1 rounded border text-red-700 border-red-200 hover:bg-red-50">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" class="px-4 py-8 text-center text-gray-500">No questions yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

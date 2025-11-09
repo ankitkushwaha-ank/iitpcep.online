@@ -1,0 +1,63 @@
+# ===============================
+# 🧠 Core Django Dependencies
+# ===============================
+Django==5.0.6
+django-environ==0.11.2
+pytz==2024.1
+sqlparse==0.5.1
+
+# ===============================
+# ⚙️ Database & ORM Support
+# ===============================
+psycopg2-binary==2.9.9    # PostgreSQL (use on AWS or production)
+# sqlite3 works by default (no install needed)
+
+# ===============================
+# 🧰 Server + Deployment
+# ===============================
+gunicorn==23.0.0           # Production WSGI server
+whitenoise==6.6.0          # Serve static files efficiently
+
+# ===============================
+# 🌐 REST API / Backend Support
+# ===============================
+djangorestframework==3.15.2
+
+# ===============================
+# ✍️ Rich Text Editors
+# ===============================
+django-ckeditor==6.7.1
+
+# ===============================
+# 🧩 Utility / Common Django Add-ons
+# ===============================
+django-crispy-forms==2.2
+crispy-bootstrap5==2024.2
+django-filter==24.3
+
+# ===============================
+# 📅 Date & Time Utilities
+# ===============================
+python-dateutil==2.9.0.post0
+
+# ===============================
+# 🧾 File Uploads / Media Handling
+# ===============================
+Pillow==10.3.0
+
+# ===============================
+# 🧠 Security & Environment
+# ===============================
+python-dotenv==1.0.1
+
+# ===============================
+# 🧱 Optional: If using AWS
+# ===============================
+boto3==1.35.0             # For AWS S3 storage
+botocore==1.35.0
+django-storages==1.14.4
+
+# ===============================
+# 🧩 For Performance / Compression (optional)
+# ===============================
+django-compressor==4.5

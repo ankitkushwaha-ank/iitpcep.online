@@ -1,0 +1,104 @@
+{% extends "admin_dashboard/base.html" %}
+{% block content %}
+  <link rel="stylesheet" href="static/admin_dashboard/css/style.css" />
+<div class="flex items-center justify-between mb-6">
+  <h2 class="text-2xl font-bold">Assessments</h2>
+  <div class="space-x-2">
+    <a href="{% url 'admin:moodle_assignment_add' %}" class="px-3 py-2 bg-blue-600 text-white rounded">+ Assignment</a>
+    <a href="{% url 'admin:moodle_quiz_add' %}" class="px-3 py-2 bg-indigo-600 text-white rounded">+ Quiz</a>
+    <a href="{% url 'admin:moodle_exam_add' %}" class="px-3 py-2 bg-purple-600 text-white rounded">+ Exam</a>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+  <div class="bg-white rounded-xl shadow overflow-hidden">
+    <div class="px-4 py-3 font-semibold bg-gray-50">Assignments</div>
+    <table class="min-w-full text-sm">
+      <thead class="bg-gray-100 text-gray-600 uppercase">
+        <tr>
+          <th class="px-4 py-3 text-left">Title</th>
+          <th class="px-4 py-3 text-left">Course</th>
+          <th class="px-4 py-3 text-left">Live</th>
+          <th class="px-4 py-3 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in assignments %}
+        <tr class="border-t">
+          <td class="px-4 py-3 font-medium">{{ t.title }}</td>
+          <td class="px-4 py-3">{{ t.course }}</td>
+          <td class="px-4 py-3">{% if t.is_live %}<span class="px-2 py-1 rounded bg-green-100 text-green-700 text-xs">LIVE</span>{% else %}<span class="px-2 py-1 rounded bg-gray-100 text-gray-700 text-xs">OFF</span>{% endif %}</td>
+          <td class="px-4 py-3 text-right space-x-2">
+            <a href="{% url 'admin:moodle_assignment_change' t.pk %}" class="px-3 py-1 rounded border text-blue-700 border-blue-200 hover:bg-blue-50">Edit</a>
+            <a href="{% url 'admin:moodle_assignment_delete' t.pk %}" class="px-3 py-1 rounded border text-red-700 border-red-200 hover:bg-red-50">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">No assignments.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="px-4 py-3 border-t bg-gray-50"><a href="{% url 'admin_dashboard' %}">Back</a> · <a href="{% url 'admin:moodle_assignment_changelist' %}" class="text-blue-600">Open in Django Admin</a></div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow overflow-hidden">
+    <div class="px-4 py-3 font-semibold bg-gray-50">Quizzes</div>
+    <table class="min-w-full text-sm">
+      <thead class="bg-gray-100 text-gray-600 uppercase">
+        <tr>
+          <th class="px-4 py-3 text-left">Title</th>
+          <th class="px-4 py-3 text-left">Course</th>
+          <th class="px-4 py-3 text-left">Live</th>
+          <th class="px-4 py-3 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in quizzes %}
+        <tr class="border-t">
+          <td class="px-4 py-3 font-medium">{{ t.title }}</td>
+          <td class="px-4 py-3">{{ t.course }}</td>
+          <td class="px-4 py-3">{% if t.is_live %}<span class="px-2 py-1 rounded bg-green-100 text-green-700 text-xs">LIVE</span>{% else %}<span class="px-2 py-1 rounded bg-gray-100 text-gray-700 text-xs">OFF</span>{% endif %}</td>
+          <td class="px-4 py-3 text-right space-x-2">
+            <a href="{% url 'admin:moodle_quiz_change' t.pk %}" class="px-3 py-1 rounded border text-blue-700 border-blue-200 hover:bg-blue-50">Edit</a>
+            <a href="{% url 'admin:moodle_quiz_delete' t.pk %}" class="px-3 py-1 rounded border text-red-700 border-red-200 hover:bg-red-50">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">No quizzes.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="px-4 py-3 border-t bg-gray-50"><a href="{% url 'admin:moodle_quiz_changelist' %}" class="text-blue-600">Open in Django Admin</a></div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow overflow-hidden">
+    <div class="px-4 py-3 font-semibold bg-gray-50">Exams</div>
+    <table class="min-w-full text-sm">
+      <thead class="bg-gray-100 text-gray-600 uppercase">
+        <tr>
+          <th class="px-4 py-3 text-left">Title</th>
+          <th class="px-4 py-3 text-left">Course</th>
+          <th class="px-4 py-3 text-left">Live</th>
+          <th class="px-4 py-3 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in exams %}
+        <tr class="border-t">
+          <td class="px-4 py-3 font-medium">{{ t.title }}</td>
+          <td class="px-4 py-3">{{ t.course }}</td>
+          <td class="px-4 py-3">{% if t.is_live %}<span class="px-2 py-1 rounded bg-green-100 text-green-700 text-xs">LIVE</span>{% else %}<span class="px-2 py-1 rounded bg-gray-100 text-gray-700 text-xs">OFF</span>{% endif %}</td>
+          <td class="px-4 py-3 text-right space-x-2">
+            <a href="{% url 'admin:moodle_exam_change' t.pk %}" class="px-3 py-1 rounded border text-blue-700 border-blue-200 hover:bg-blue-50">Edit</a>
+            <a href="{% url 'admin:moodle_exam_delete' t.pk %}" class="px-3 py-1 rounded border text-red-700 border-red-200 hover:bg-red-50">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">No exams.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="px-4 py-3 border-t bg-gray-50"><a href="{% url 'admin:moodle_exam_changelist' %}" class="text-blue-600">Open in Django Admin</a></div>
+  </div>
+</div>
+{% endblock %}

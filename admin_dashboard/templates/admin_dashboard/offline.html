@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Access Restricted | IKON Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-orange-700 to-black text-white flex items-center justify-center min-h-screen">
+  <div class="text-center max-w-md bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-2xl">
+    <div class="text-6xl mb-4">🚫</div>
+    <h1 class="text-3xl font-bold mb-2">Access Restricted</h1>
+    <p class="text-gray-300 mb-6">You do not have permission to access this admin panel.</p>
+    <a href="{% url 'admin_login' %}"
+       class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold transition">
+      Go to Login
+    </a>
+  </div>
+</body>
+</html>

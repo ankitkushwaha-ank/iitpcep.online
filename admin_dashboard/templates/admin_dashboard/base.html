@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IITP CEP Admin Panel</title>
+
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="static/admin_dashboard/css/style.css" />
+<style>
+  /* =====================================================
+   🎨 IKON Admin Dashboard Styles
+   Author: Hacker (IKON)
+   Description: Smooth, modern enhancements over Tailwind
+   ===================================================== */
+
+/* ====================== */
+/* 🌈 Sidebar Menu Links */
+/* ====================== */
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #374151; /* gray-700 */
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.menu-link:hover {
+  background-color: #fff7ed; /* orange-50 */
+  color: #f97316; /* orange-500 */
+  transform: translateX(4px);
+}
+
+.menu-link.active {
+  background: linear-gradient(90deg, #f97316, #ea580c);
+  color: white;
+  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.25);
+  transform: scale(1.02);
+}
+
+.menu-link i {
+  width: 18px;
+  height: 18px;
+}
+
+/* ====================== */
+/* 📊 Stat Cards */
+/* ====================== */
+.stat-card {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+  transform: translateY(0);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+}
+
+/* ====================== */
+/* 🪟 Card Containers */
+/* ====================== */
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ====================== */
+/* 🕶️ Glass Effect */
+/* ====================== */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* ====================== */
+/* 🧭 Navbar / Header */
+/* ====================== */
+header {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+header h2 {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+header .status-pill {
+  background: #dcfce7;
+  color: #15803d;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* ====================== */
+/* 🧩 Table Styling */
+/* ====================== */
+.table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+table thead {
+  background-color: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+}
+
+table th, table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+table tr:hover {
+  background-color: #fff7ed;
+  transition: background-color 0.2s ease;
+}
+
+/* ====================== */
+/* 🧠 Buttons */
+/* ====================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #f97316;
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #ea580c;
+  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.25);
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+/* ====================== */
+/* ⚙️ System Status Badges */
+/* ====================== */
+.status-online {
+  background-color: #dcfce7;
+  color: #166534;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-offline {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* ====================== */
+/* 💬 Toast Messages */
+/* ====================== */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-left: 5px solid #f97316;
+  padding: 14px 18px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.4s ease forwards;
+  z-index: 1000;
+}
+
+@keyframes slideIn {
+  0% { opacity: 0; transform: translateX(20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* ====================== */
+/* 🧱 Utility Styles */
+/* ====================== */
+.shadow-soft {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.rounded-xl {
+  border-radius: 1rem;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Sidebar menu hover / active states */
+    .menu-link {
+      @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-700 hover:bg-orange-100 hover:text-orange-600 transition-all duration-200;
+    }
+    .menu-link.active {
+      @apply bg-orange-500 text-white font-semibold shadow-md;
+    }
+    /* Scrollbar customization */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+  </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800 flex h-screen overflow-hidden">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="bg-white w-64 flex flex-col shadow-xl transition-all duration-300">
+    <div class="flex items-center justify-between px-5 py-4 border-b">
+      <h1 class="font-bold text-2xl text-orange-600">IITP CEP Admin</h1>
+      <button id="sidebarToggle" class="lg:hidden text-gray-600 hover:text-orange-600">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+      <a href="{% url 'admin_dashboard' %}" class="menu-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+        <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+      </a>
+      <a href="{% url 'admin_users' %}" class="menu-link {% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
+        <i data-lucide="users" class="w-5 h-5"></i> Users
+      </a>
+      <a href="{% url 'admin_courses' %}" class="menu-link {% if request.resolver_match.url_name == 'admin_courses' %}active{% endif %}">
+        <i data-lucide="book-open" class="w-5 h-5"></i> Courses
+      </a>
+      <a href="{% url 'admin_tests' %}" class="menu-link {% if request.resolver_match.url_name == 'admin_tests' %}active{% endif %}">
+        <i data-lucide="clipboard-list" class="w-5 h-5"></i> Tests
+      </a>
+      <a href="{% url 'admin_questions' %}" class="menu-link {% if request.resolver_match.url_name == 'admin_questions' %}active{% endif %}">
+        <i data-lucide="help-circle" class="w-5 h-5"></i> Questions
+      </a>
+      <a href="{% url 'admin_system' %}" class="menu-link {% if request.resolver_match.url_name == 'admin_system' %}active{% endif %}">
+        <i data-lucide="settings" class="w-5 h-5"></i> System
+      </a>
+    </nav>
+
+    <div class="border-t p-4">
+      <a href="{% url 'admin_logout' %}" class="flex items-center gap-2 text-gray-600 hover:text-red-600">
+        <i data-lucide="log-out" class="w-5 h-5"></i> Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="flex-1 flex flex-col h-screen overflow-y-auto">
+
+    <!-- Top Navbar -->
+    <header class="bg-white shadow-sm py-3 px-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <button id="sidebarOpen" class="text-gray-600 hover:text-orange-600 lg:hidden">
+          <i data-lucide="menu"></i>
+        </button>
+        <h2 class="text-lg font-semibold text-gray-800">{% block page_title %}{% endblock %}</h2>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <i data-lucide="user" class="w-5 h-5 text-gray-600"></i>
+          <span class="text-sm font-medium">{{ request.user.username|default:"Admin" }}</span>
+        </div>
+        <span class="text-xs px-3 py-1 bg-green-100 text-green-600 rounded-full">
+          Online
+        </span>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="flex-1 bg-gray-50 p-6 overflow-y-auto">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    lucide.createIcons();
+
+    const sidebar = document.getElementById("sidebar");
+    const openBtn = document.getElementById("sidebarOpen");
+    const closeBtn = document.getElementById("sidebarToggle");
+
+    if (openBtn) {
+      openBtn.addEventListener("click", () => {
+        sidebar.classList.remove("-translate-x-full");
+      });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        sidebar.classList.add("-translate-x-full");
+      });
+    }
+  </script>
+</body>
+</html>

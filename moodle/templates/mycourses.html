@@ -1,0 +1,339 @@
+{% include '_head.html' %}
+{% include '_header.html' %}
+{% load static %}
+
+
+<title>My courses</title>
+<div  class="drawer drawer-left drawer-primary d-print-none not-initialized" data-region="fixed-drawer" id="theme_moove-drawers-primary" data-preference="" data-state="show-drawer-primary" data-forceopen="0" data-close-on-resize="1">
+    <div class="drawerheader">
+        <button
+            class="btn drawertoggle icon-no-margin hidden"
+            data-toggler="drawers"
+            data-action="closedrawer"
+            data-target="theme_moove-drawers-primary"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Close drawer"
+        >
+            <i class="icon fa fa-times fa-fw " aria-hidden="true"  ></i>
+        </button>
+    </div>
+    <div class="drawercontent drag-container" data-usertour="scroller">
+                <div class="list-group">
+                <a href="" class="list-group-item list-group-item-action  " >
+                    Home
+                </a>
+                <a href="" class="list-group-item list-group-item-action  " >
+                    Dashboard
+                </a>
+                <a href="" class="list-group-item list-group-item-action active " aria-current="true">
+                    My courses
+                </a>
+                <a href="" class="list-group-item list-group-item-action  " >
+                    CET-IIT Patna
+                </a>
+                <a href="" class="list-group-item list-group-item-action  " >
+                    Central Library
+                </a>
+        </div>
+
+    </div>
+</div>
+
+    <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers   drag-container">
+
+        <header id="page-header" class="moove-container-fluid">
+    <div class="d-flex flex-wrap">
+        <div class="ml-auto d-flex">
+
+        </div>
+        <div id="course-header">
+
+        </div>
+    </div>
+    <div class="d-sm-flex align-items-center">
+                <div class="mr-auto">
+                    <div class="page-context-header"><div class="page-header-headings"><h1 class="h2">My courses</h1></div></div>
+                </div>
+        <div class="header-actions-container ml-auto" data-region="header-actions-container">
+        </div>
+
+    </div>
+</header>
+
+        <div id="topofscroll" class="main-inner">
+            <div class="drawer-toggles d-flex">
+            </div>
+
+            <div id="page-content" class="d-print-block">
+                <div id="region-main-box">
+                    <section id="region-main" aria-label="Content">
+
+                        <span class="notifications" id="user-notifications"></span>
+                        <div role="main"><span id="maincontent"></span><aside id="block-region-content" class="block-region" data-blockregion="content" data-droptarget="1"><a href="#sb-1" class="sr-only sr-only-focusable">Skip Course overview</a>
+
+<section id="inst5"
+     class=" block_myoverview block  card mb-3"
+     role="complementary"
+     data-block="myoverview"
+     data-instance-id="5"
+          aria-labelledby="instance-5-header"
+     >
+
+    <div class="card-body p-3">
+
+            <h5 id="instance-5-header" class="card-title d-inline">Course overview</h5>
+
+
+        <div class="card-text content mt-3">
+            <div id="block-myoverview-690e15a31eff8690e15a31effc1" class="block-myoverview block-cards" data-region="myoverview" role="navigation">
+    <hr class="mt-0"/>
+
+                <!-- ================= Filter Bar ================= -->
+                <div role="search" data-region="filter" class="d-flex align-items-center my-3"
+                    aria-label="Course overview controls">
+                    <div class="row no-gutters">
+                        <div class="dropdown mb-1 mr-2">
+                            <button id="groupingdropdown" type="button"
+                                class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-label="Grouping drop-down menu">
+                                <span data-active-item-text>All</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" data-show-active-item
+                                aria-labelledby="groupingdropdown">
+                                <li><a class="dropdown-item" href="#">All</a></li>
+                                <li><a class="dropdown-item" href="#">In progress</a></li>
+                                <li><a class="dropdown-item" href="#">Future</a></li>
+                                <li><a class="dropdown-item" href="#">Past</a></li>
+                                <li><a class="dropdown-item" href="#">Starred</a></li>
+                                <li><a class="dropdown-item" href="#">Removed from view</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-1 mr-2 flex-grow-1">
+                            <div class="form-inline simplesearchform">
+                                <div class="input-group searchbar w-100" role="search">
+                                    <input type="text" class="form-control withclear rounded" placeholder="Search"
+                                        name="search" autocomplete="off">
+                                    <button class="btn btn-clear d-none" type="button">
+                                        <i class="icon fa fa-times fa-fw" aria-hidden="true"></i>
+                                        <span class="sr-only">Clear search input</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-1 mr-2 d-flex flex-wrap align-items-center">
+                            <div class="dropdown">
+                                <button id="sortingdropdown" type="button"
+                                    class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false"
+                                    aria-label="Sorting drop-down menu">
+                                    <span data-active-item-text>Sort by course name</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu"
+                                    aria-labelledby="sortingdropdown">
+                                    <li><a class="dropdown-item" href="#">Sort by course name</a></li>
+                                    <li><a class="dropdown-item" href="#">Sort by last accessed</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="dropdown mb-1">
+                            <button id="displaydropdown" type="button"
+                                class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-label="Display drop-down menu">
+                                <span data-active-item-text>Card</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu"
+                                aria-labelledby="displaydropdown">
+                                <li><a class="dropdown-item" href="#">Card</a></li>
+                                <li><a class="dropdown-item" href="#">List</a></li>
+                                <li><a class="dropdown-item" href="#">Summary</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid p-0">
+    <div id="courses-view-690e15a31eff8690e15a31effc1"
+        data-region="courses-view"
+        data-display="card"
+        data-grouping="all"
+        data-sort="fullname">
+
+        <div class="row mt-5">
+
+            {% for course in courses %}
+            <div class="col-md-4 col-sm-6 mb-5">
+                <div class="card shadow-sm border-0 rounded-lg overflow-hidden"
+                    style="border-radius:12px; background-color:#fff; margin:0 12px;">
+
+                    <!-- Card Image (Clickable) -->
+                <div class="card-img-top position-relative">
+                    <a href="{% url 'course_detail' course.code %}" style="display:block; text-decoration:none; color:inherit;">
+                        {% if course.image %}
+                            <img src="{{ course.image.url }}" alt="{{ course.title }}"
+                                style="width:100%; height:160px; object-fit:cover;">
+                        {% else %}
+                            <img src="{% static 'images/default-course.svg' %}" alt="Default Course"
+                                style="width:100%; height:160px; object-fit:cover;">
+                        {% endif %}
+
+                        {% if course.description %}
+                        <span
+                            style="position:absolute; top:10px; left:10px; background:#093DAB; color:#fff; font-size:12px; padding:4px 9px; border-radius:5px; font-weight:500; max-width:90%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                            {{ course.description }}
+                        </span>
+                        {% endif %}
+                    </a>
+                </div>
+
+
+                    <div class="card-body p-4">
+                        <!-- ✅ Clickable area (only main content) -->
+                        <a href="{% url 'course_detail' course.code %}" style="text-decoration:none; color:inherit; display:block;">
+                            <h6 class="card-title mb-3"
+                                style="font-size:16px; font-weight:400; color:#1E56A0;">
+                                BO CDA {{ course.code }}: {{ course.title }}
+                            </h6>
+
+                            <div class="progress mb-3" style="height:8px; border-radius:10px;">
+                                <div class="progress-bar" role="progressbar"
+                                    style="width: 90%; background-color:#093DAB;"
+                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </a>
+
+                        <!-- ✅ Progress text + 3-dot menu perfectly aligned -->
+                        <div class="d-flex justify-content-between align-items-center mt-1">
+                            <p style="color:#333; font-weight:500; margin:0; line-height:32px;">90% complete</p>
+
+                            <div class="dropdown">
+                                <button class="btn p-1 m-0 rounded-circle d-flex align-items-center justify-content-center"
+                                    style="background:#E9EDF7; width:32px; height:32px; flex-shrink:0;"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-v" style="color:#093DAB; font-size:14px;"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{% url 'course_detail' course.code %}">View course</a></li>
+                                    <li><a class="dropdown-item" href="#">Unenroll</a></li>
+                                    <li><a class="dropdown-item" href="#">Add to favorites</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No courses available.</p>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+  <span id="sb-1"></span><a href="#sb-2" class="sr-only sr-only-focusable">Skip Analytic Widgets</a>
+
+<section id="inst45"
+     class=" block_analyticswidget block  card mb-3"
+     role="complementary"
+     data-block="analyticswidget"
+     data-instance-id="45"
+          aria-labelledby="instance-45-header"
+     >
+
+    <div class="card-body p-3">
+
+            <h5 id="instance-45-header" class="card-title d-inline">Analytic Widgets</h5>
+
+
+        <div class="card-text content mt-3">
+            <div class="ananyticswidget">
+
+
+
+
+            <div class="aw_teacher">
+                <div class="aw_header">
+        <h4> My </h4>
+        <div class="tools">
+            <a title="Profile" data-toggle="tooltip" href="https://cet.iitp.ac.in/moodle/user/profile.php?id=26965"><i class="fa fa-user"></i></a>
+        </div>
+                </div>
+        <div class=" row  mt-4">
+            <div class="aw_widget_header">
+
+
+
+</div>
+<div class="aw_stats col-md-12 mb-4">
+    <div class="aw_widget_header">
+
+        <h5> <a href="https://cet.iitp.ac.in/moodle/my/courses.php" title="My courses"
+                data-toggle="tooltip"><i class="fa fa-graduation-cap"></i> courses, so far as student</a>
+            </h5>
+
+        <div class="tools">
+
+        </div>
+    </div>
+    <div class="row mx-0 aw-shadow-box ">
+
+
+        <div class="col-md-6 ">
+            <canvas id="enrolment_course_stats" class="aw_chart">
+
+            </canvas>
+        </div>
+
+
+        <div class="col-md-6 ">
+            <canvas id="completion_course_stats" class="aw_chart">
+
+            </canvas>
+        </div>
+
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+            <div class="footer"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+  <span id="sb-2"></span></aside></div>
+
+
+
+                    </section>
+                </div>
+            </div>
+        </div>
+
+
+        {% include '_footer.html' %}
+                {% include '_script.html' %}
+</div>
+</div>
+
+</body>
+</html>

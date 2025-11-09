@@ -1,0 +1,118 @@
+<footer id="page-footer">
+            <div class="moove-container-fluid footer-columns">
+                <div class="row">
+                    <div class="col-md-4 column-left">
+                        <div class="contact">
+                            <h3 class="footer-title">Contact us</h3>
+        
+                            <ul>
+                                    <li>
+                                        <a class="website btn btn-link">
+                                            <i class="fa fa-globe"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="mobile btn btn-link">
+                                            <i class="fa fa-phone"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="mail btn btn-link">
+                                            <i class="fa fa-envelope"></i>
+                                        </a>
+                                    </li>
+                            </ul>
+                        </div>
+        
+                        <div class="socialnetworks">
+                            <h3 class="footer-title">Follow us</h3>
+        
+                            <ul class="mb-0">
+                                    <li>
+                                        <a target="_blank" class="facebook btn btn-link btn-rounded">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a target="_blank" class="twitter btn btn-link btn-rounded">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a target="_blank" class="linkedin btn btn-link btn-rounded">
+                                            <i class="fa fa-linkedin"></i>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a target="_blank" class="youtube btn btn-link btn-rounded">
+                                            <i class="fa fa-youtube"></i>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a target="_blank" class="instagram btn btn-link btn-rounded">
+                                            <i class="fa fa-instagram"></i>
+                                        </a>
+                                    </li>
+        
+        
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4 column-center">
+                            <div class="supportemail"><a  class="btn contactsitesupport btn-outline-info"><i class="icon fa fa-life-ring fa-fw iconhelp icon-pre" aria-hidden="true"  ></i>Contact site support</a></div>
+        
+                        <div class="logininfo">
+                          {% if username %}
+                            You are logged in as
+                            <span class="user-name">{{ username|title }}</span>
+                            (<a href="{% url 'logout' %}" class="logout-link">Log out</a>)
+                          {% else %}
+                            You are logged in as
+                            <span class="user-name">IItians</span>
+                            (<a href="{% url 'login' %}" class="login-link">Log in</a>)
+                          {% endif %}
+                        </div>
+
+        
+                        <div class="tool_dataprivacy"><a >Data retention summary</a></div>
+        
+                        <div class="tool_usertours-resettourcontainer"></div>
+                    </div>
+                    <div class="col-md-4 column-right">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="footer-content-debugging footer-dark bg-dark text-light">
+                <div class="moove-container-fluid footer-dark-inner">
+                    
+                </div>
+            </div>
+        
+            <div data-region="footer-container-popover">
+                <button class="btn btn-icon bg-secondary icon-no-margin btn-footer-popover" data-action="footer-popover" aria-label="Show footer">
+                    <i class="icon fa fa-question fa-fw " aria-hidden="true"  ></i>
+                </button>
+            </div>
+            <div class="footer-content-popover container" data-region="footer-content-popover">
+                    <div class="footer-section p-3 border-bottom">
+        
+                    </div>
+                <div class="footer-section p-3">
+                    <div>Powered by <a >Moodle</a></div>
+                </div>
+            </div>
+        
+            <div class="copyright">
+                <div class="madeby">
+                    <p>This theme was developed by</p>
+                    <a>
+                        <img src="https://cet.iitp.ac.in/moodle/theme/moove/pix/logo_conectime.svg" alt="Conecti.me" style="height: 40px;">
+                    </a>
+                </div>
+            </div>
+        </footer>

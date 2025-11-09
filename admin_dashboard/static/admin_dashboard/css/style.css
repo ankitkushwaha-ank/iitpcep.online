@@ -1,0 +1,234 @@
+/* =====================================================
+   🎨 IKON Admin Dashboard Styles
+   Author: Hacker (IKON)
+   Description: Smooth, modern enhancements over Tailwind
+   ===================================================== */
+
+/* ====================== */
+/* 🌈 Sidebar Menu Links */
+/* ====================== */
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #374151; /* gray-700 */
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.menu-link:hover {
+  background-color: #fff7ed; /* orange-50 */
+  color: #f97316; /* orange-500 */
+  transform: translateX(4px);
+}
+
+.menu-link.active {
+  background: linear-gradient(90deg, #f97316, #ea580c);
+  color: white;
+  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.25);
+  transform: scale(1.02);
+}
+
+.menu-link i {
+  width: 18px;
+  height: 18px;
+}
+
+/* ====================== */
+/* 📊 Stat Cards */
+/* ====================== */
+.stat-card {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+  transform: translateY(0);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+}
+
+/* ====================== */
+/* 🪟 Card Containers */
+/* ====================== */
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ====================== */
+/* 🕶️ Glass Effect */
+/* ====================== */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* ====================== */
+/* 🧭 Navbar / Header */
+/* ====================== */
+header {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+header h2 {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+header .status-pill {
+  background: #dcfce7;
+  color: #15803d;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* ====================== */
+/* 🧩 Table Styling */
+/* ====================== */
+.table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+table thead {
+  background-color: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+}
+
+table th, table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+table tr:hover {
+  background-color: #fff7ed;
+  transition: background-color 0.2s ease;
+}
+
+/* ====================== */
+/* 🧠 Buttons */
+/* ====================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #f97316;
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #ea580c;
+  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.25);
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+/* ====================== */
+/* ⚙️ System Status Badges */
+/* ====================== */
+.status-online {
+  background-color: #dcfce7;
+  color: #166534;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-offline {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* ====================== */
+/* 💬 Toast Messages */
+/* ====================== */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-left: 5px solid #f97316;
+  padding: 14px 18px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.4s ease forwards;
+  z-index: 1000;
+}
+
+@keyframes slideIn {
+  0% { opacity: 0; transform: translateX(20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* ====================== */
+/* 🧱 Utility Styles */
+/* ====================== */
+.shadow-soft {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.rounded-xl {
+  border-radius: 1rem;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

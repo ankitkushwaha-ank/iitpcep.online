@@ -1,0 +1,28 @@
+{% extends "admin_dashboard/base.html" %}
+{% block content %}
+  <link rel="stylesheet" href="static/admin_dashboard/css/style.css" />
+<h2 class="text-2xl font-bold mb-6">System Configuration</h2>
+
+<form method="post" class="bg-white rounded-xl shadow p-6 max-w-xl">
+  {% csrf_token %}
+  <div class="mb-4">
+    <label class="block text-sm font-medium mb-1">System Status</label>
+    <select name="status" class="w-full border rounded-lg px-3 py-2">
+      <option value="ONLINE" {% if config.system_status == "ONLINE" %}selected{% endif %}>ONLINE</option>
+      <option value="OFFLINE" {% if config.system_status == "OFFLINE" %}selected{% endif %}>OFFLINE</option>
+    </select>
+  </div>
+  <div class="mb-4">
+    <label class="block text-sm font-medium mb-1">System PIN</label>
+    <input type="text" name="pin" value="{{ config.system_pin }}" class="w-full border rounded-lg px-3 py-2" />
+  </div>
+  <div class="mb-6">
+    <label class="block text-sm font-medium mb-1">System Root</label>
+    <input type="text" value="{{ config.system_root }}" disabled class="w-full border rounded-lg px-3 py-2 bg-gray-100" />
+  </div>
+  <div class="flex items-center justify-between">
+    <span class="text-xs text-gray-500">Last updated: {{ config.last_updated|date:"M d, Y H:i" }}</span>
+    <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Save</button>
+  </div>
+</form>
+{% endblock %}
