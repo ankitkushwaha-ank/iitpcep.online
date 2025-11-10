@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-your-secret-key')
 
 # ⚙️ Debug & Allowed Hosts
 DEBUG = False
-ALLOWED_HOSTS = ['iitpcep.online', 'www.iitpcep.online', 'https://iitpcep-online.onrender.com','iitpcep-online.onrender.com']
+ALLOWED_HOSTS = ['iitpcep.online', 'www.iitpcep.online', 'https://iitpcep-online.onrender.com','iitpcep-online.onrender.com','cet.iitpcep.online']
 
 # Redirect Django login checks to your custom admin login
 LOGIN_URL = "/admincp/login/"
@@ -105,7 +105,7 @@ except Exception as e:
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'moodle', 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # ✅ Used in production for collectstatic
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # ✅ Optional but recommended
 
