@@ -22,7 +22,7 @@ body {
   padding: 0;
   height: 100vh;
   font-family: "Roboto", "Segoe UI", Arial, sans-serif;
-  background: url("images/bg_image.png") no-repeat center center fixed;
+  background: url("/static/images/bg_image.png") no-repeat center center fixed;
   background-size: cover;
   display: flex;
   justify-content: center;
@@ -41,7 +41,6 @@ body {
     0 2px 6px rgba(0, 0, 0, 0.08),
     0 12px 25px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(4px);
 }
 
 .left {
@@ -218,6 +217,34 @@ form {
 }
 
   </style>
+    <style>
+    .messages {
+      margin-top: 10px;
+    }
+    .alert {
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .alert.success {
+      background: #e0f8e0;
+      color: #1b791b;
+      border: 1px solid #1b791b;
+    }
+    .alert.error {
+      background: #fdeaea;
+      color: #c0392b;
+      border: 1px solid #c0392b;
+    }
+    .alert.info {
+      background: #e8f0fe;
+      color: #2b57c0;
+      border: 1px solid #2b57c0;
+    }
+  </style>
 </head>
 
 <body>
@@ -267,42 +294,12 @@ form {
     <div class="right">
       <h3>Sign in with</h3>
       <button class="ms-button">
-        <img src="static 'images/microsoft.png" alt="Microsoft Logo">
+        <img src="/static/images/microsoft.png" alt="Microsoft Logo">
         Microsoft
       </button>
       <a class="cookie" href="#">❓ Cookies notice</a>
     </div>
   </div>
-
-  <!-- Optional styling for messages -->
-  <style>
-    .messages {
-      margin-top: 10px;
-    }
-    .alert {
-      padding: 10px;
-      margin-bottom: 5px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 500;
-      text-align: center;
-    }
-    .alert.success {
-      background: #e0f8e0;
-      color: #1b791b;
-      border: 1px solid #1b791b;
-    }
-    .alert.error {
-      background: #fdeaea;
-      color: #c0392b;
-      border: 1px solid #c0392b;
-    }
-    .alert.info {
-      background: #e8f0fe;
-      color: #2b57c0;
-      border: 1px solid #2b57c0;
-    }
-  </style>
 
 </body>
 </html>
