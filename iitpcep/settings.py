@@ -12,6 +12,11 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-your-secret-key')
 # ⚙️ Debug & Allowed Hosts
 DEBUG = True
 ALLOWED_HOSTS = ['iitpcep.online', 'www.iitpcep.online', 'https://iitpcep-online.onrender.com','iitpcep-online.onrender.com','cet.iitpcep.online']
+CSRF_TRUSTED_ORIGINS = [
+    'https://iitpcep.online',
+    'https://www.iitpcep.online',
+    'https://iitpcep-online.onrender.com'
+]
 
 # Redirect Django login checks to your custom admin login
 LOGIN_URL = "/admincp/login/"
