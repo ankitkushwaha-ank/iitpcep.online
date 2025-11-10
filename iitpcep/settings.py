@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-your-secret-key')
 
 # ⚙️ Debug & Allowed Hosts
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['iitpcep.online', 'www.iitpcep.online', 'https://iitpcep-online.onrender.com','iitpcep-online.onrender.com']
 
 # Redirect Django login checks to your custom admin login
