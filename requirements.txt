@@ -1,40 +1,38 @@
 # ===============================
 # 🧠 Core Django Dependencies
 # ===============================
-Django~=4.2.0
+Django==4.2.15
+djangorestframework==3.15.2
 django-environ==0.11.2
 pytz==2024.1
 sqlparse==0.5.1
-djangorestframework==3.15.2
 
 # ===============================
 # 🧰 Server + Deployment (Render)
 # ===============================
-# Production web server
-gunicorn==23.0.0
-# Serves static files
-whitenoise==6.11.0
+gunicorn==23.0.0          # WSGI server
+whitenoise==6.7.0         # Serves static files efficiently
 
 # ===============================
-# ☁️ Google Cloud & Storage
+# ☁️ Google Cloud & Storage (Optional)
 # ===============================
-# Main package for GCS file storage
-django-storages==1.14.6
-# Google Cloud Storage client library
-google-cloud-storage==3.5.0
-# Securely connects to Cloud SQL
-cloud-sql-python-connector[pymysql]==1.18.5
-# Google authentication library
-google-auth==2.43.0
+django-storages==1.14.3           # Django storage backends
+google-cloud-storage==3.5.0       # GCS client library
+cloud-sql-python-connector[pymysql]==1.18.5  # Secure Cloud SQL connector
+google-auth==2.43.0               # Google authentication library
+PyMySQL==1.1.1                    # MySQL client for Python
 
 # ===============================
 # ✍️ App Utilities
 # ===============================
-# Rich text editor
-django-ckeditor==6.7.1
-# Image processing
-Pillow==12.0.0
-# Date/time parsing
-python-dateutil==2.9.0.post0
-# Environment variables
-python-dotenv==1.0.1
+django-ckeditor==6.7.1            # Rich text editor
+Pillow==10.4.0                    # Image handling library
+python-dateutil==2.9.0.post0      # Advanced date/time utilities
+python-dotenv==1.0.1              # Environment variable loader
+
+# ===============================
+# 🧹 Optional Tools / Helpers
+# ===============================
+# Uncomment if you want better logging or security extras
+# psycopg2-binary==2.9.9          # For PostgreSQL databases
+# requests==2.32.3                # For HTTP requests in integrations
