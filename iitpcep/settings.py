@@ -1,6 +1,82 @@
 import os
 from pathlib import Path
 from config import DATABASE, SYSTEM  # ✅ import DB + system config safely
+import os
+import json
+import pymysql
+from google.oauth2 import service_account
+from cloud_sql_python_connector import connector
+
+# --- Load Google Credentials from Environment ---
+# This is the core of the production setup. It loads the JSON string
+# from the environment variable and creates a single 'credentials' object.
+
+credentials = None
+GS_CREDENTIALS = None  # for django-storages
+
+# 1. Get the JSON string from the environment
+GOOGLE_CREDENTIALS_JSON_STR = os.environ.get('GOOGLE_CREDENTIALS_JSON')
+
+if GOOGLE_CREDENTIALS_JSON_STR:
+    try:
+        # 2. Parse the JSON string into a dictionary
+        info = json.loads(GOOGLE_CREDENTIALS_JSON_STR)
+
+        # 3. Create the credentials object
+        credentials = service_account.Credentials.from_service_account_info(info)
+
+        # 4. Pass the same credentials to django-storages
+        GS_CREDENTIALS = credentials
+    except Exception as e:
+        print(f"Error loading Google credentials from JSON: {e}")
+else:
+    print("WARNING: 'GOOGLE_CREDENTIALS_JSON' environment variable not set.")
+
+# --- Cloud SQL (MySQL) Production Configuration ---
+
+# This is a required fix for the connector to work with PyMySQL
+pymysql.version_info = (1, 4, 6)
+pymysql.install_as_MySQLdb()
+
+# 1. Initialize the Cloud SQL Connector *with our credentials*
+# This one 'credentials' object handles auth for both DB and Storage
+db_connector = connector.Connector(credentials=credentials)
+
+
+# 2. This function is called by Django to get a database connection
+def get_db_conn():
+    conn = db_connector.connect(
+        os.environ.get('DB_HOST', ''),  # 'project:region:instance'
+        "pymysql",
+        user=os.environ.get('DB_USER', ''),
+        password=os.environ.get('DB_PASS', ''),
+        db=os.environ.get('DB_NAME', ''),
+    )
+    return conn
+
+
+# 3. Configure Django's DATABASES setting
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME'),
+        # We use 'CONN_CALLABLE' to tell Django to use our connector function
+        # The other fields are ignored, but NAME is still needed.
+        'CONN_CALLABLE': get_db_conn,
+    }
+}
+
+# --- Google Cloud Storage (GCS) Production Configuration ---
+
+# We already set GS_CREDENTIALS at the top.
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+GS_BUCKET_NAME = os.environ.get('GS_BUCKET_NAME')
+GS_FILE_OVERWRITE = False
+
+# The URLs will be built using your bucket name
+MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/media/'
 
 # --------------------------------------------------
 # 📁 BASE CONFIG
@@ -11,18 +87,13 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-your-secret-key')
 
 # ⚙️ Debug & Allowed Hosts
 DEBUG = True
-ALLOWED_HOSTS = ['iitpcep.online', 'www.iitpcep.online', 'https://iitpcep-online.onrender.com','iitpcep-online.onrender.com','cet.iitpcep.online']
+ALLOWED_HOSTS = ['127.0.0.1','iitpcep.online', 'www.iitpcep.online', 'https://iitpcep-online.onrender.com','iitpcep-online.onrender.com','cet.iitpcep.online']
 CSRF_TRUSTED_ORIGINS = [
     'https://iitpcep.online',
     'https://www.iitpcep.online',
-    'https://cet.iitpcep.online',
-    'https://iitpcep-online.onrender.com'
+    'https://iitpcep-online.onrender.com',
+    'cet.iitpcep.online'
 ]
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
-
 
 # Redirect Django login checks to your custom admin login
 LOGIN_URL = "/admincp/login/"
@@ -90,24 +161,6 @@ TEMPLATES = [
     },
 ]
 
-
-# --------------------------------------------------
-# 🧠 DATABASE CONFIGURATION (safe fallback)
-# --------------------------------------------------
-from config import DATABASE
-
-DATABASES = {}
-try:
-    if DATABASE and isinstance(DATABASE, dict) and DATABASE.get("ENGINE"):
-        DATABASES["default"] = DATABASE
-    else:
-        raise ValueError("Invalid DATABASE object in config.py")
-except Exception as e:
-    print(f"[SETTINGS WARNING] Database config failed ({e}) — using SQLite fallback.")
-    DATABASES["default"] = {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
 
 
 
