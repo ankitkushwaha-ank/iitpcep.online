@@ -5,51 +5,36 @@ Django~=4.2.0
 django-environ==0.11.2
 pytz==2024.1
 sqlparse==0.5.1
-
-# ===============================
-# ⚙️ Database & ORM Support
-# ===============================
-# Using PyMySQL to avoid build errors on Render
-PyMySQL~=1.1.0
-# mysqlclient~=2.2.0  <-- REMOVED. This was causing the build error.
-
-# ===============================
-# 🧰 Server + Deployment
-# ===============================
-# ADDED Gunicorn: This is REQUIRED by Render to run your web server.
-gunicorn
-# ADDED Whitenoise: Recommended for serving static files on Render.
-whitenoise
-
-# ===============================
-# 🌐 REST API / Backend Support
-# ===============================
 djangorestframework==3.15.2
 
 # ===============================
-# ✍️ Rich Text Editors
+# 🧰 Server + Deployment (Render)
 # ===============================
+# Production web server
+gunicorn==23.0.0
+# Serves static files
+whitenoise==6.11.0
+
+# ===============================
+# ☁️ Google Cloud & Storage
+# ===============================
+# Main package for GCS file storage
+django-storages==1.14.6
+# Google Cloud Storage client library
+google-cloud-storage==3.5.0
+# Securely connects to Cloud SQL
+cloud-sql-python-connector[pymysql]==1.18.5
+# Google authentication library
+google-auth==2.43.0
+
+# ===============================
+# ✍️ App Utilities
+# ===============================
+# Rich text editor
 django-ckeditor==6.7.1
-
-whitenoise
-
-# ===============================
-# 📅 Date & Time Utilities
-# ===============================
+# Image processing
+Pillow==12.0.0
+# Date/time parsing
 python-dateutil==2.9.0.post0
-
-# ===============================
-# 🧾 File Uploads / Media Handling
-# ===============================
-Pillow
-
-# ===============================
-# 🧠 Security & Environment
-# ===============================
+# Environment variables
 python-dotenv==1.0.1
-
-django-storages
-google-cloud-storage
-cloud-sql-python-connector[pymysql]
-pymysql
-google-auth
