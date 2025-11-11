@@ -21,9 +21,8 @@ ALLOWED_HOSTS = [
     "localhost",
     "iitpcep.online",
     "www.iitpcep.online",
-    "iitpcep-online.onrender.com", # This is the correct Render domain
+    "iitpcep-online.onrender.com",  # This is the correct Render domain
     "cet.iitpcep.online",
-    # "https-iitpcep-online.onrender.com", # This was invalid and removed
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -62,7 +61,7 @@ INSTALLED_APPS = [
 # --------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", # Should be near the top
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Should be near the top
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -147,6 +146,9 @@ else:
 
     if GOOGLE_CREDENTIALS_JSON_STR:
         try:
+            # 👇 THIS IS THE FIX 👇
+            from google.oauth2 import service_account
+
             info = json.loads(GOOGLE_CREDENTIALS_JSON_STR)
             credentials = service_account.Credentials.from_service_account_info(info)
             GS_CREDENTIALS = credentials  # <-- Pass credentials to django-storages
@@ -201,7 +203,7 @@ else:
 
     # --- 4. CONFIGURE MEDIA FILES (Google Cloud Storage) ---
     GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME")
-    if GS_BUCKET_NAME and GS_CREDENTIALS: # Check for both
+    if GS_BUCKET_NAME and GS_CREDENTIALS:  # Check for both
         DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
         GS_FILE_OVERWRITE = False
         MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
@@ -209,7 +211,7 @@ else:
     else:
         warnings.warn("⚠️ GS_BUCKET_NAME or credentials not set. Media will use local storage.")
         MEDIA_URL = "/media/"
-        MEDIA_ROOT = os.path.join(BASE_DIR, "media") # Fallback to local
+        MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # Fallback to local
         DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 
@@ -223,6 +225,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # --------------------------------------------------
 def system_context(request):
     """Inject SYSTEM settings globally into templates"""
-
-    
     return {"SYSTEM": SYSTEM}
+
+
