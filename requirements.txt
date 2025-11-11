@@ -48,3 +48,8 @@ Pillow
 # ===============================
 python-dotenv==1.0.1
 
+django-storages
+google-cloud-storage
+cloud-sql-python-connector[pymysql]
+pymysql
+google-auth

@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+
+<html  dir="ltr" lang="en" xml:lang="en">
+<head>
+    <title>Moodle: Center for Educational Technology</title>
+    <link rel="shortcut icon" href="https://cet.iitp.ac.in/moodle/pluginfile.php/1/theme_moove/favicon/1706000481/IITP_Logo.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="moodle, Moodle: Center for Educational Technology" />
+<link rel="stylesheet" type="text/css" href="https://cet.iitp.ac.in/moodle/theme/yui_combo.php?rollup/3.18.1/yui-moodlesimple-min.css" /><script id="firstthemesheet" type="text/css">/** Required in order to fix style inclusion problems in IE with YUI **/</script><link rel="stylesheet" type="text/css" href="https://cet.iitp.ac.in/moodle/theme/styles.php/moove/1706000481_1/all" />
+<script>
+//<![CDATA[
+var M = {}; M.yui = {};
+M.pageloadstarttime = new Date();
+M.cfg = {"wwwroot":"https:\/\/cet.iitp.ac.in\/moodle","homeurl":{},"sesskey":"jP3pppP3nC","sessiontimeout":"28800","sessiontimeoutwarning":"1200","themerev":"1706000481","slasharguments":1,"theme":"moove","iconsystemmodule":"core\/icon_system_fontawesome","jsrev":"1706000481","admin":"admin","svgicons":true,"usertimezone":"Asia\/Kolkata","courseId":1,"courseContextId":2,"contextid":2,"contextInstanceId":1,"langrev":1706000481,"templaterev":"1706000481"};var yui1ConfigFn = function(me) {if(/-skin|reset|fonts|grids|base/.test(me.name)){me.type='css';me.path=me.path.replace(/\.js/,'.css');me.path=me.path.replace(/\/yui2-skin/,'/assets/skins/sam/yui2-skin')}};
+var yui2ConfigFn = function(me) {var parts=me.name.replace(/^moodle-/,'').split('-'),component=parts.shift(),module=parts[0],min='-min';if(/-(skin|core)$/.test(me.name)){parts.pop();me.type='css';min=''}
+if(module){var filename=parts.join('-');me.path=component+'/'+module+'/'+filename+min+'.'+me.type}else{me.path=component+'/'+component+'.'+me.type}};
+YUI_config = {"debug":false,"base":"https:\/\/cet.iitp.ac.in\/moodle\/lib\/yuilib\/3.18.1\/","comboBase":"https:\/\/cet.iitp.ac.in\/moodle\/theme\/yui_combo.php?","combine":true,"filter":null,"insertBefore":"firstthemesheet","groups":{"yui2":{"base":"https:\/\/cet.iitp.ac.in\/moodle\/lib\/yuilib\/2in3\/2.9.0\/build\/","comboBase":"https:\/\/cet.iitp.ac.in\/moodle\/theme\/yui_combo.php?","combine":true,"ext":false,"root":"2in3\/2.9.0\/build\/","patterns":{"yui2-":{"group":"yui2","configFn":yui1ConfigFn}}},"moodle":{"name":"moodle","base":"https:\/\/cet.iitp.ac.in\/moodle\/theme\/yui_combo.php?m\/1706000481\/","combine":true,"comboBase":"https:\/\/cet.iitp.ac.in\/moodle\/theme\/yui_combo.php?","ext":false,"root":"m\/1706000481\/","patterns":{"moodle-":{"group":"moodle","configFn":yui2ConfigFn}},"filter":null,"modules":{"moodle-core-maintenancemodetimer":{"requires":["base","node"]},"moodle-core-blocks":{"requires":["base","node","io","dom","dd","dd-scroll","moodle-core-dragdrop","moodle-core-notification"]},"moodle-core-lockscroll":{"requires":["plugin","base-build"]},"moodle-core-formchangechecker":{"requires":["base","event-focus","moodle-core-event"]},"moodle-core-languninstallconfirm":{"requires":["base","node","moodle-core-notification-confirm","moodle-core-notification-alert"]},"moodle-core-event":{"requires":["event-custom"]},"moodle-core-handlebars":{"condition":{"trigger":"handlebars","when":"after"}},"moodle-core-notification":{"requires":["moodle-core-notification-dialogue","moodle-core-notification-alert","moodle-core-notification-confirm","moodle-core-notification-exception","moodle-core-notification-ajaxexception"]},"moodle-core-notification-dialogue":{"requires":["base","node","panel","escape","event-key","dd-plugin","moodle-core-widget-focusafterclose","moodle-core-lockscroll"]},"moodle-core-notification-alert":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-notification-confirm":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-notification-exception":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-notification-ajaxexception":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-dragdrop":{"requires":["base","node","io","dom","dd","event-key","event-focus","moodle-core-notification"]},"moodle-core-actionmenu":{"requires":["base","event","node-event-simulate"]},"moodle-core-chooserdialogue":{"requires":["base","panel","moodle-core-notification"]},"moodle-core_availability-form":{"requires":["base","node","event","event-delegate","panel","moodle-core-notification-dialogue","json"]},"moodle-backup-backupselectall":{"requires":["node","event","node-event-simulate","anim"]},"moodle-backup-confirmcancel":{"requires":["node","node-event-simulate","moodle-core-notification-confirm"]},"moodle-course-util":{"requires":["node"],"use":["moodle-course-util-base"],"submodules":{"moodle-course-util-base":{},"moodle-course-util-section":{"requires":["node","moodle-course-util-base"]},"moodle-course-util-cm":{"requires":["node","moodle-course-util-base"]}}},"moodle-course-dragdrop":{"requires":["base","node","io","dom","dd","dd-scroll","moodle-core-dragdrop","moodle-core-notification","moodle-course-coursebase","moodle-course-util"]},"moodle-course-categoryexpander":{"requires":["node","event-key"]},"moodle-course-management":{"requires":["base","node","io-base","moodle-core-notification-exception","json-parse","dd-constrain","dd-proxy","dd-drop","dd-delegate","node-event-delegate"]},"moodle-form-shortforms":{"requires":["node","base","selector-css3","moodle-core-event"]},"moodle-form-dateselector":{"requires":["base","node","overlay","calendar"]},"moodle-question-searchform":{"requires":["base","node"]},"moodle-question-chooser":{"requires":["moodle-core-chooserdialogue"]},"moodle-question-preview":{"requires":["base","dom","event-delegate","event-key","core_question_engine"]},"moodle-availability_completion-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_date-form":{"requires":["base","node","event","io","moodle-core_availability-form"]},"moodle-availability_grade-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_group-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_grouping-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_profile-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_role-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-mod_assign-history":{"requires":["node","transition"]},"moodle-mod_attendance-groupfilter":{"requires":["base","node"]},"moodle-mod_checklist-linkselect":{"requires":["node","event-valuechange"]},"moodle-mod_customcert-rearrange":{"requires":["dd-delegate","dd-drag"]},"moodle-mod_quiz-modform":{"requires":["base","node","event"]},"moodle-mod_quiz-autosave":{"requires":["base","node","event","event-valuechange","node-event-delegate","io-form"]},"moodle-mod_quiz-questionchooser":{"requires":["moodle-core-chooserdialogue","moodle-mod_quiz-util","querystring-parse"]},"moodle-mod_quiz-quizbase":{"requires":["base","node"]},"moodle-mod_quiz-util":{"requires":["node","moodle-core-actionmenu"],"use":["moodle-mod_quiz-util-base"],"submodules":{"moodle-mod_quiz-util-base":{},"moodle-mod_quiz-util-slot":{"requires":["node","moodle-mod_quiz-util-base"]},"moodle-mod_quiz-util-page":{"requires":["node","moodle-mod_quiz-util-base"]}}},"moodle-mod_quiz-dragdrop":{"requires":["base","node","io","dom","dd","dd-scroll","moodle-core-dragdrop","moodle-core-notification","moodle-mod_quiz-quizbase","moodle-mod_quiz-util-base","moodle-mod_quiz-util-page","moodle-mod_quiz-util-slot","moodle-course-util"]},"moodle-mod_quiz-toolboxes":{"requires":["base","node","event","event-key","io","moodle-mod_quiz-quizbase","moodle-mod_quiz-util-slot","moodle-core-notification-ajaxexception"]},"moodle-message_airnotifier-toolboxes":{"requires":["base","node","io"]},"moodle-filter_glossary-autolinker":{"requires":["base","node","io-base","json-parse","event-delegate","overlay","moodle-core-event","moodle-core-notification-alert","moodle-core-notification-exception","moodle-core-notification-ajaxexception"]},"moodle-filter_mathjaxloader-loader":{"requires":["moodle-core-event"]},"moodle-editor_atto-rangy":{"requires":[]},"moodle-editor_atto-editor":{"requires":["node","transition","io","overlay","escape","event","event-simulate","event-custom","node-event-html5","node-event-simulate","yui-throttle","moodle-core-notification-dialogue","moodle-core-notification-confirm","moodle-editor_atto-rangy","handlebars","timers","querystring-stringify"]},"moodle-editor_atto-plugin":{"requires":["node","base","escape","event","event-outside","handlebars","event-custom","timers","moodle-editor_atto-menu"]},"moodle-editor_atto-menu":{"requires":["moodle-core-notification-dialogue","node","event","event-custom"]},"moodle-report_eventlist-eventfilter":{"requires":["base","event","node","node-event-delegate","datatable","autocomplete","autocomplete-filters"]},"moodle-report_loglive-fetchlogs":{"requires":["base","event","node","io","node-event-delegate"]},"moodle-gradereport_history-userselector":{"requires":["escape","event-delegate","event-key","handlebars","io-base","json-parse","moodle-core-notification-dialogue"]},"moodle-qbank_editquestion-chooser":{"requires":["moodle-core-chooserdialogue"]},"moodle-tool_lp-dragdrop-reorder":{"requires":["moodle-core-dragdrop"]},"moodle-assignfeedback_editpdf-editor":{"requires":["base","event","node","io","graphics","json","event-move","event-resize","transition","querystring-stringify-simple","moodle-core-notification-dialog","moodle-core-notification-alert","moodle-core-notification-warning","moodle-core-notification-exception","moodle-core-notification-ajaxexception"]},"moodle-atto_accessibilitychecker-button":{"requires":["color-base","moodle-editor_atto-plugin"]},"moodle-atto_accessibilityhelper-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_align-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_bold-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_charmap-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_clear-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_collapse-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_emojipicker-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_emoticon-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_equation-button":{"requires":["moodle-editor_atto-plugin","moodle-core-event","io","event-valuechange","tabview","array-extras"]},"moodle-atto_h5p-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_html-button":{"requires":["promise","moodle-editor_atto-plugin","moodle-atto_html-beautify","moodle-atto_html-codemirror","event-valuechange"]},"moodle-atto_html-codemirror":{"requires":["moodle-atto_html-codemirror-skin"]},"moodle-atto_html-beautify":{},"moodle-atto_image-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_indent-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_italic-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_link-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_managefiles-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_managefiles-usedfiles":{"requires":["node","escape"]},"moodle-atto_media-button":{"requires":["moodle-editor_atto-plugin","moodle-form-shortforms"]},"moodle-atto_noautolink-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_orderedlist-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_recordrtc-button":{"requires":["moodle-editor_atto-plugin","moodle-atto_recordrtc-recording"]},"moodle-atto_recordrtc-recording":{"requires":["moodle-atto_recordrtc-button"]},"moodle-atto_rtl-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_strike-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_subscript-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_superscript-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_table-button":{"requires":["moodle-editor_atto-plugin","moodle-editor_atto-menu","event","event-valuechange"]},"moodle-atto_teamsmeeting-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_title-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_underline-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_undo-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_unorderedlist-button":{"requires":["moodle-editor_atto-plugin"]}}},"gallery":{"name":"gallery","base":"https:\/\/cet.iitp.ac.in\/moodle\/lib\/yuilib\/gallery\/","combine":true,"comboBase":"https:\/\/cet.iitp.ac.in\/moodle\/theme\/yui_combo.php?","ext":false,"root":"gallery\/1706000481\/","patterns":{"gallery-":{"group":"gallery"}}}},"modules":{"core_filepicker":{"name":"core_filepicker","fullpath":"https:\/\/cet.iitp.ac.in\/moodle\/lib\/javascript.php\/1706000481\/repository\/filepicker.js","requires":["base","node","node-event-simulate","json","async-queue","io-base","io-upload-iframe","io-form","yui2-treeview","panel","cookie","datatable","datatable-sort","resize-plugin","dd-plugin","escape","moodle-core_filepicker","moodle-core-notification-dialogue"]},"core_comment":{"name":"core_comment","fullpath":"https:\/\/cet.iitp.ac.in\/moodle\/lib\/javascript.php\/1706000481\/comment\/comment.js","requires":["base","io-base","node","json","yui2-animation","overlay","escape"]},"mathjax":{"name":"mathjax","fullpath":"https:\/\/cdn.jsdelivr.net\/npm\/mathjax@2.7.9\/MathJax.js?delayStartupUntil=configured"}},"logInclude":[],"logExclude":[],"logLevel":null};
+M.yui.loader = {modules: {}};
+
+//]]>
+</script>
+<script
+                                    async
+                                    src='https://www.googletagmanager.com/gtag/js?id=DD9HXHR7WN'>
+                                </script>
+                                <script>
+                                    window.dataLayer = window.dataLayer || [];
+                                    function gtag() {
+                                        dataLayer.push(arguments);
+                                    }
+                                    gtag('js', new Date());
+                                    gtag('config', 'DD9HXHR7WN');
+                                </script><link rel="preconnect" href="https://fonts.googleapis.com">
+                       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                       <link href="https://fonts.googleapis.com/css2?family=Oxygen:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body  id="page-site-index" class="limitedwidth format-site course path-site chrome dir-ltr lang-en yui-skin-sam yui3-skin-sam cet-iitp-ac-in--moodle pagelayout-frontpage course-1 context-2 notloggedin uses-drawers">
+<div class="toast-wrapper mx-auto py-0 fixed-top" role="status" aria-live="polite"></div>
+<div id="page-wrapper" class="d-print-block">
+
+    <div>
+    <a class="sr-only sr-only-focusable" href="#maincontent">Skip to main content</a>
+</div><script src="https://cet.iitp.ac.in/moodle/lib/javascript.php/1706000481/lib/polyfills/polyfill.js"></script>
+<script src="https://cet.iitp.ac.in/moodle/theme/yui_combo.php?rollup/3.18.1/yui-moodlesimple-min.js"></script><script src="https://cet.iitp.ac.in/moodle/lib/javascript.php/1706000481/lib/javascript-static.js"></script>
+<script>
+//<![CDATA[
+document.body.className += ' jsenabled';
+//]]>
+</script>
+
+
+
+    <nav class="navbar fixed-top navbar-light bg-white navbar-expand shadow" aria-label="Site navigation">
+
+        <button class="navbar-toggler aabtn d-block d-md-none px-1 my-1 border-0" data-toggler="drawers" data-action="toggle" data-target="theme_moove-drawers-primary">
+            <span class="navbar-toggler-icon"></span>
+            <span class="sr-only">Side panel</span>
+        </button>
+
+        <a href="https://cet.iitp.ac.in/moodle/" class="navbar-brand d-none d-md-flex align-items-center m-0 mr-4 p-0 aabtn">
+                <img src="//cet.iitp.ac.in/moodle/pluginfile.php/1/theme_moove/logo/1706000481/IITP%20CET.png" class="logo mr-1" alt="LMS">
+        </a>
+
+            <div class="primary-navigation">
+                <nav class="moremenu navigation">
+                    <ul id="moremenu-6912f04fa2ea0-navbar-nav" role="menubar" class="nav more-nav navbar-nav">
+                                <li data-key="home" class="nav-item" role="none" data-forceintomoremenu="false">
+                                            <a role="menuitem" class="nav-link active "
+                                                href="https://cet.iitp.ac.in/moodle/"
+                                                aria-current="true"
+
+                                            >
+                                                Home
+                                            </a>
+                                </li>
+                                <li data-key="" class="nav-item" role="none" data-forceintomoremenu="false">
+                                            <a role="menuitem" class="nav-link  "
+                                                href="https://cet.iitp.ac.in/"
+
+                                                tabindex="-1"
+                                            >
+                                                CET-IIT Patna
+                                            </a>
+                                </li>
+                                <li data-key="" class="nav-item" role="none" data-forceintomoremenu="false">
+                                            <a role="menuitem" class="nav-link  "
+                                                href="https://library.iitp.ac.in/"
+
+                                                tabindex="-1"
+                                            >
+                                                Central Library
+                                            </a>
+                                </li>
+                        <li role="none" class="nav-item dropdown dropdownmoremenu d-none" data-region="morebutton">
+                            <a class="dropdown-toggle nav-link " href="#" id="moremenu-dropdown-6912f04fa2ea0" role="menuitem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="-1">
+                                More
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-left" data-region="moredropdown" aria-labelledby="moremenu-dropdown-6912f04fa2ea0" role="menu">
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+        <ul class="navbar-nav d-none d-md-flex my-1 px-1">
+            <!-- page_heading_menu -->
+
+        </ul>
+
+        <div id="usernavigation" class="navbar-nav ml-auto">
+            <div class="navbarcallbacks">
+
+            </div>
+
+            <div class="d-flex align-items-stretch usermenu-container" data-region="usermenu">
+                    <div class="usermenu">
+                            <span class="login pl-2">
+                                    <a href="https://cet.iitp.ac.in/moodle/login/index.php">Log in</a>
+                            </span>
+                    </div>
+            </div>
+
+        </div>
+    </nav>
+
+
+
+<div  class="drawer drawer-left drawer-primary d-print-none not-initialized" data-region="fixed-drawer" id="theme_moove-drawers-primary" data-preference="" data-state="show-drawer-primary" data-forceopen="0" data-close-on-resize="1">
+    <div class="drawerheader">
+        <button
+            class="btn drawertoggle icon-no-margin hidden"
+            data-toggler="drawers"
+            data-action="closedrawer"
+            data-target="theme_moove-drawers-primary"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Close drawer"
+        >
+            <i class="icon fa fa-times fa-fw " aria-hidden="true"  ></i>
+        </button>
+    </div>
+    <div class="drawercontent drag-container" data-usertour="scroller">
+                <div class="list-group">
+                <a href="https://cet.iitp.ac.in/moodle/" class="list-group-item list-group-item-action active " aria-current="true">
+                    Home
+                </a>
+                <a href="https://cet.iitp.ac.in/" class="list-group-item list-group-item-action  " >
+                    CET-IIT Patna
+                </a>
+                <a href="https://library.iitp.ac.in/" class="list-group-item list-group-item-action  " >
+                    Central Library
+                </a>
+        </div>
+
+    </div>
+</div>
+
+    <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers drag-container bg-white">
+            <div id="mooveslideshow" class="container-fluid">
+                <div id="carousel-indicators" class="carousel slide carousel-fade" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                            <li data-target="#carousel-indicators" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel-indicators" data-slide-to="1" ></li>
+                    </ol>
+                    <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="//cet.iitp.ac.in/moodle/pluginfile.php/1/theme_moove/sliderimage1/1706000481/mood_1.jpg" alt="" class="w-100">
+                            </div>
+                            <div class="carousel-item ">
+                                <img src="//cet.iitp.ac.in/moodle/pluginfile.php/1/theme_moove/sliderimage2/1706000481/Banner.jpeg" alt="" class="w-100">
+                            </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carousel-indicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel-indicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+
+            <section id="feature">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4 my-3">
+                            <h3 class="h1 mt-3 mb-3"></h3>
+                            <div class="marketing-content"><p dir="ltr" style="text-align:left;"><img src="https://img.freepik.com/free-photo/business-man-holding-clipboard-with-why-choose-us-question_23-2148932313.jpg?w=2000" alt="Why choose IITP?" class="img-fluid atto_image_button_text-bottom" width="600" height="600" /><br /></p></div>
+                        </div>
+                        <div class="col-lg-8 ps-xl-8">
+                            <div class="row">
+                                    <div class="col-sm-6 mt-4">
+                                        <div class="card card-body shadow">
+                                            <div class="d-flex">
+                                                <div class="icon-lg text-white rounded-circle">
+                                                    <img src="//cet.iitp.ac.in/moodle/pluginfile.php/1/theme_moove/marketing1icon/1706000481/MOE.png">
+                                                </div>
+                                                <div class="col ps-3">
+                                                    <h5>NEP Compliant</h5>
+                                                    <div class="box-content"><span>Full compliant with to NEP 2020 framework structure of Ministry of Education, GoI</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mt-4">
+                                        <div class="card card-body shadow">
+                                            <div class="d-flex">
+                                                <div class="icon-lg text-white rounded-circle">
+                                                    <img src="//cet.iitp.ac.in/moodle/pluginfile.php/1/theme_moove/marketing2icon/1706000481/IND.png">
+                                                </div>
+                                                <div class="col ps-3">
+                                                    <h5>Employer Orientated</h5>
+                                                    <div class="box-content"><span>Course learning outcomes mapped with employer skills demand in the job market</span><br /></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mt-4">
+                                        <div class="card card-body shadow">
+                                            <div class="d-flex">
+                                                <div class="icon-lg text-white rounded-circle">
+                                                    <img src="//cet.iitp.ac.in/moodle/pluginfile.php/1/theme_moove/marketing3icon/1706000481/ACC.png">
+                                                </div>
+                                                <div class="col ps-3">
+                                                    <h5>Global Acceptance</h5>
+                                                    <div class="box-content"><span>Internationally accepted course credit structure</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mt-4">
+                                        <div class="card card-body shadow">
+                                            <div class="d-flex">
+                                                <div class="icon-lg text-white rounded-circle">
+                                                    <img src="//cet.iitp.ac.in/moodle/pluginfile.php/1/theme_moove/marketing4icon/1706000481/AFF.png">
+                                                </div>
+                                                <div class="col ps-3">
+                                                    <h5>Affordability</h5>
+                                                    <div class="box-content"><span>Degree program at par with global standards at an affordable fee</span><br /></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="numbers">
+                <div class="moove-container-fluid">
+                    <div class="row customer-area-l1 justify-content-center align-items-center ">
+                        <div class="col-xl-5 col-lg-5 col-md-10">
+                            <div class="sectionheading">
+                                <div class="text_to_html"><h2><img src="https://www.pngmart.com/files/20/Study-PNG-Isolated-Pic.png" alt="Online Studying" class="img-fluid atto_image_button_text-bottom" width="302" height="300" /><br /></h2></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-7 col-md-10 offset-xl-1">
+                            <div class="row user-rating-box-area">
+                                <div class="col-sm-6 col-xs-8">
+                                    <div class="h-100 rate-box bg-primary">
+                                        <h3>
+                                            23194
+                                        </h3>
+                                        <p>Active users accessing our amazing resources</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-xs-8">
+                                    <div class="h-100 rate-box rate-box-2 bg-cloudburst">
+                                        <h3>
+                                            99
+                                        </h3>
+                                        <p>Courses made for you that you can trust!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        <div id="topofscroll">
+            <div id="page-content" class="d-print-block main-inner">
+                <div id="region-main-box">
+                    <section id="region-main" aria-label="Content">
+                        <span class="notifications" id="user-notifications"></span>
+                        <div role="main"><span id="maincontent"></span><a class="skip-block skip aabtn" href="#skipsitenews">Skip site announcements</a><div id="site-news-forum"><h2>Site announcements</h2><div id="discussion-list-6912f04fc90aa6912f04fc46eb2" data-contextid="329" data-cmid="187" data-name="Site announcements" data-group="" data-grading-component="" data-grading-component-subtype="" data-gradable-itemtype="forum" >
+
+
+
+
+
+    <div class="py-3">
+    </div>
+
+        <div class="forumnodiscuss alert alert-info">
+                There are no discussion topics yet in this forum
+        </div>
+
+</div></div><span class="skip-block-to" id="skipsitenews"></span><br /></div>
+
+                    </section>
+                </div>
+            </div>
+        </div>
+
+
+
+        <footer id="page-footer">
+            <div class="moove-container-fluid footer-columns">
+                <div class="row">
+                    <div class="col-md-4 column-left">
+                        <div class="contact">
+                            <h3 class="footer-title">Contact us</h3>
+
+                            <ul>
+                                    <li>
+                                        <a href="https://cet.iitp.ac.in" target="_blank" class="website btn btn-link">
+                                            <i class="fa fa-globe"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="tel:+91 6115 123 456" target="_blank" class="mobile btn btn-link">
+                                            <i class="fa fa-phone"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="mailto:cet_off@iitp.ac.in" target="_blank" class="mail btn btn-link">
+                                            <i class="fa fa-envelope"></i>
+                                        </a>
+                                    </li>
+                            </ul>
+                        </div>
+
+                        <div class="socialnetworks">
+                            <h3 class="footer-title">Follow us</h3>
+
+                            <ul class="mb-0">
+                                    <li>
+                                        <a href="https://www.facebook.com/iitp.ac.in/" target="_blank" class="facebook btn btn-link btn-rounded">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="https://twitter.com/IITPAT" target="_blank" class="twitter btn btn-link btn-rounded">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="https://in.linkedin.com/school/indian-institute-of-technology-patna/" target="_blank" class="linkedin btn btn-link btn-rounded">
+                                            <i class="fa fa-linkedin"></i>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="https://www.youtube.com/@iitpatna" target="_blank" class="youtube btn btn-link btn-rounded">
+                                            <i class="fa fa-youtube"></i>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="https://www.instagram.com/iit_patna_official/" target="_blank" class="instagram btn btn-link btn-rounded">
+                                            <i class="fa fa-instagram"></i>
+                                        </a>
+                                    </li>
+
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4 column-center">
+                            <div class="supportemail"><a href="https://cet.iitp.ac.in/moodle/user/contactsitesupport.php" class="btn contactsitesupport btn-outline-info"><i class="icon fa fa-life-ring fa-fw iconhelp icon-pre" aria-hidden="true"  ></i>Contact site support</a></div>
+
+                        <div class="logininfo">You are not logged in. (<a href="https://cet.iitp.ac.in/moodle/login/index.php">Log in</a>)</div>
+
+                        <div class="tool_dataprivacy"><a href="https://cet.iitp.ac.in/moodle/admin/tool/dataprivacy/summary.php">Data retention summary</a></div>
+
+                        <div class="tool_usertours-resettourcontainer"></div>
+                    </div>
+                    <div class="col-md-4 column-right">
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-content-debugging footer-dark bg-dark text-light">
+                <div class="moove-container-fluid footer-dark-inner">
+
+                </div>
+            </div>
+
+            <div data-region="footer-container-popover">
+                <button class="btn btn-icon bg-secondary icon-no-margin btn-footer-popover" data-action="footer-popover" aria-label="Show footer">
+                    <i class="icon fa fa-question fa-fw " aria-hidden="true"  ></i>
+                </button>
+            </div>
+            <div class="footer-content-popover container" data-region="footer-content-popover">
+                    <div class="footer-section p-3 border-bottom">
+
+                    </div>
+                <div class="footer-section p-3">
+                    <div>Powered by <a href="https://moodle.com">Moodle</a></div>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <div class="madeby">
+                    <p>This theme was developed by</p>
+                    <a href="https://conecti.me">
+                        <img src="https://cet.iitp.ac.in/moodle/theme/moove/pix/logo_conectime.svg" alt="Conecti.me" style="height: 40px;">
+                    </a>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+//<![CDATA[
+var require = {
+    baseUrl : 'https://cet.iitp.ac.in/moodle/lib/requirejs.php/1706000481/',
+    // We only support AMD modules with an explicit define() statement.
+    enforceDefine: true,
+    skipDataMain: true,
+    waitSeconds : 0,
+
+    paths: {
+        jquery: 'https://cet.iitp.ac.in/moodle/lib/javascript.php/1706000481/lib/jquery/jquery-3.6.4.min',
+        jqueryui: 'https://cet.iitp.ac.in/moodle/lib/javascript.php/1706000481/lib/jquery/ui-1.13.2/jquery-ui.min',
+        jqueryprivate: 'https://cet.iitp.ac.in/moodle/lib/javascript.php/1706000481/lib/requirejs/jquery-private'
+    },
+
+    // Custom jquery config map.
+    map: {
+      // '*' means all modules will get 'jqueryprivate'
+      // for their 'jquery' dependency.
+      '*': { jquery: 'jqueryprivate' },
+      // Stub module for 'process'. This is a workaround for a bug in MathJax (see MDL-60458).
+      '*': { process: 'core/first' },
+
+      // 'jquery-private' wants the real jQuery module
+      // though. If this line was not here, there would
+      // be an unresolvable cyclic dependency.
+      jqueryprivate: { jquery: 'jquery' }
+    }
+};
+
+//]]>
+</script>
+<script src="https://cet.iitp.ac.in/moodle/lib/javascript.php/1706000481/lib/requirejs/require.min.js"></script>
+<script>
+//<![CDATA[
+M.util.js_pending("core/first");
+require(['core/first'], function() {
+require(['core/prefetch'])
+;
+require(["media_videojs/loader"], function(loader) {
+    loader.setUp('en');
+});;
+M.util.js_pending('block_settings/settingsblock'); require(['block_settings/settingsblock'], function(amd) {amd.init("65", null); M.util.js_complete('block_settings/settingsblock');});;
+
+    require(['core/moremenu'], function(moremenu) {
+        moremenu(document.querySelector('#moremenu-6912f04fa2ea0-navbar-nav'));
+    });
+;
+
+    require(['core/usermenu', 'theme_moove/accessibilitysettings'], function(UserMenu, AccessibilitySettings) {
+        UserMenu.init();
+
+        AccessibilitySettings.init();
+    });
+;
+
+require(['theme_boost/drawers']);
+;
+
+    require(['theme_boost/footer-popover'], function(FooterPopover) {
+        FooterPopover.init();
+    });
+;
+
+M.util.js_pending('theme_boost/loader');
+require(['theme_boost/loader', 'theme_boost/drawer'], function(Loader, Drawer) {
+    Drawer.init();
+    M.util.js_complete('theme_boost/loader');
+});
+;
+
+    require(['jquery', 'mod_forum/discussion_list'], function($, View) {
+        var root = $('#discussion-list-6912f04fc90aa6912f04fc46eb2');
+        View.init(root);
+    });
+;
+M.util.js_pending('core/notification'); require(['core/notification'], function(amd) {amd.init(2, []); M.util.js_complete('core/notification');});;
+M.util.js_pending('core/log'); require(['core/log'], function(amd) {amd.setConfig({"level":"warn"}); M.util.js_complete('core/log');});;
+M.util.js_pending('core/page_global'); require(['core/page_global'], function(amd) {amd.init(); M.util.js_complete('core/page_global');});;
+M.util.js_pending('core/utility'); require(['core/utility'], function(amd) {M.util.js_complete('core/utility');});
+    M.util.js_complete("core/first");
+});
+//]]>
+</script>
+<script>
+//<![CDATA[
+M.str = {"moodle":{"lastmodified":"Last modified","name":"Name","error":"Error","info":"Information","yes":"Yes","no":"No","cancel":"Cancel","confirm":"Confirm","areyousure":"Are you sure?","closebuttontitle":"Close","unknownerror":"Unknown error","file":"File","url":"URL","collapseall":"Collapse all","expandall":"Expand all"},"repository":{"type":"Type","size":"Size","invalidjson":"Invalid JSON string","nofilesattached":"No files attached","filepicker":"File picker","logout":"Logout","nofilesavailable":"No files available","norepositoriesavailable":"Sorry, none of your current repositories can return files in the required format.","fileexistsdialogheader":"File exists","fileexistsdialog_editor":"A file with that name has already been attached to the text you are editing.","fileexistsdialog_filemanager":"A file with that name has already been attached","renameto":"Rename to \"{$a}\"","referencesexist":"There are {$a} links to this file","select":"Select"},"admin":{"confirmdeletecomments":"Are you sure you want to delete the selected comment(s)?","confirmation":"Confirmation"},"debug":{"debuginfo":"Debug info","line":"Line","stacktrace":"Stack trace"},"langconfig":{"labelsep":": "}};
+//]]>
+</script>
+<script>
+//<![CDATA[
+(function() {Y.use("moodle-filter_mathjaxloader-loader",function() {M.filter_mathjaxloader.configure({"mathjaxconfig":"\nMathJax.Hub.Config({\n    config: [\"Accessible.js\", \"Safe.js\"],\n    errorSettings: { message: [\"!\"] },\n    skipStartupTypeset: true,\n    messageStyle: \"none\"\n});\n","lang":"en"});
+});
+M.util.help_popups.setup(Y);
+ M.util.js_pending('random6912f04fc46eb3'); Y.on('domready', function() { M.util.js_complete("init");  M.util.js_complete('random6912f04fc46eb3'); });
+})();
+//]]>
+</script>
+
+
+    </div>
+
+</div>
+
+</body>
+</html>
