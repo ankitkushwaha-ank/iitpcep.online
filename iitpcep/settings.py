@@ -15,8 +15,14 @@ ALLOWED_HOSTS = ['iitpcep.online', 'www.iitpcep.online', 'https://iitpcep-online
 CSRF_TRUSTED_ORIGINS = [
     'https://iitpcep.online',
     'https://www.iitpcep.online',
+    'https://cet.iitpcep.online',
     'https://iitpcep-online.onrender.com'
 ]
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+
 
 # Redirect Django login checks to your custom admin login
 LOGIN_URL = "/admincp/login/"
