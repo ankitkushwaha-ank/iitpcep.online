@@ -13,6 +13,7 @@ urlpatterns = [
     # =========================================
     path('', views.dashboard, name='home'),
     path("admincp/", include("admin_dashboard.urls")),
+    path('moodle/', views.dashboard, name='dashboard'),
     path('moodle/my/', views.dashboard, name='dashboard'),
     path('moodle/my/courses.php', views.mycourses_view, name='mycourses'),
     path('moodle/course/view.php?id=<int:course_code>', views.course_detail_view, name='course_detail'),
