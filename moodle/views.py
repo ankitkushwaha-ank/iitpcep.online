@@ -52,66 +52,196 @@ def login_view(request):
     return render(request, "login.html")
 
 
-# --------------------------------------------------
-# 🏠 DASHBOARD VIEW (with PIN Required Toggle)
-# --------------------------------------------------
+import calendar
+from datetime import datetime
+from django.db.models import Q
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import UserTable, SystemConfig, Assignment, Quiz, Exam
+from .models import (
+    UserTable, SystemConfig, Assignment, Quiz, Exam, Course, CalendarEvent
+)
+from itertools import chain
 
 
+# --------------------------------------------------
+# 🏠 DASHBOARD VIEW (with CALENDAR & TIMELINE)
+# --------------------------------------------------
 def dashboard(request):
-    # ✅ Get system configuration
+    # ✅ 1. GET SYSTEM CONFIG & AUTH
     config = SystemConfig.objects.first()
     pin_required = True if not config else getattr(config, "pin_required", True)
-
     username = request.session.get("username")
 
-    # ✅ If PIN is required and user not logged in → redirect to login
+    # ✅ 2. HANDLE LOGIN & GUESTS
     if pin_required and not username:
         return redirect("login")
-
-    # ✅ If PIN not required — allow guest access
     if not username and not pin_required:
-        username = "Guest"  # default name for guest user
+        username = "iitians"
 
-    # ✅ Validate user (if exists)
+    # ✅ 3. VALIDATE USER & ACTIVITY
     user = UserTable.objects.filter(username=username).first()
-    if user and user.is_banned:
-        messages.error(request, "🚫 Your account is banned.")
-        request.session.flush()
-        return redirect("login")
-
-    # ✅ Mark active user (only if logged in)
     if user:
+        if user.is_banned:
+            messages.error(request, "🚫 Your account is banned.")
+            request.session.flush()
+            return redirect("login")
+
         user.is_online = True
         user.last_active = timezone.now()
         user.save(update_fields=["is_online", "last_active"])
 
-    # ✅ Handle system offline mode
+    # ✅ 4. HANDLE SYSTEM OFFLINE
     if config and config.system_status == "OFFLINE":
         return render(request, "offline.html", {"system_status": config.system_status})
 
     now = timezone.now()
-
-    # ✅ Fetch only live assessments
-    live_assignments = Assignment.objects.filter(is_live=True, open_date__lte=now, close_date__gte=now)
-    live_quizzes = Quiz.objects.filter(is_live=True, open_date__lte=now, close_date__gte=now)
-    live_exams = Exam.objects.filter(is_live=True, open_date__lte=now, close_date__gte=now)
-
-
     courses = Course.objects.all()
 
-    return render(request, "dashboard.html", {
+    # --------------------------------------------------
+    # 🗓️ 5. NEW, ROBUST "ACTIVE" FILTER
+    # --------------------------------------------------
+    # An activity is "active" if:
+    # 1. It's marked as 'is_live'
+    # 2. It has already opened (open_date is in the past)
+    # 3. EITHER its close_date is in the future OR it never closes (close_date is NULL)
+
+    active_filter = Q(
+        is_live=True,
+        open_date__lte=now
+    ) & (
+                            Q(close_date__gte=now) | Q(close_date__isnull=True)
+                    )
+
+    # ✅ 6. FETCH "LIVE" ASSESSMENTS (for main dashboard cards)
+    # We use the new robust filter
+    live_assignments = Assignment.objects.filter(active_filter)
+    live_quizzes = Quiz.objects.filter(active_filter)
+    live_exams = Exam.objects.filter(active_filter)
+
+    # ✅ 7. TIMELINE LOGIC
+    # The timeline should show ALL active items, sorted by their close date.
+    # Items with no close date (NULL) will be put at the end.
+
+    # We re-use the lists we just fetched
+    all_timeline_activities = sorted(
+        list(chain(live_assignments, live_quizzes, live_exams)),
+        # Sort by close_date. Use a very distant future date for NULLs
+        key=lambda x: x.close_date or datetime(9999, 1, 1, tzinfo=timezone.utc)
+    )
+
+    # --- DEBUG: Check your terminal! ---
+    print(f"Found {len(all_timeline_activities)} items for the timeline.")
+    # -----------------------------------
+
+    # Convert to dictionaries for the template (this fixes the |class_name error)
+    timeline_events = []
+    for activity in all_timeline_activities:
+        timeline_events.append({
+            "id": activity.id,
+            "title": activity.title,
+            "course": activity.course,
+            "close_date": activity.close_date,
+            "model_name": activity.__class__.__name__  # e.g., "Quiz", "Assignment"
+        })
+
+    # --------------------------------------------------
+    # 🗓️ 8. CALENDAR LOGIC
+    # --------------------------------------------------
+    try:
+        year = int(request.GET.get('year', now.year))
+        month = int(request.GET.get('month', now.month))
+    except ValueError:
+        year = now.year
+        month = now.month
+
+    current_date = datetime(year, month, 1)
+    today = timezone.now().date()
+
+    cal = calendar.Calendar(firstweekday=calendar.MONDAY)
+    calendar_matrix = cal.monthdayscalendar(year, month)
+
+    first_day_of_month = current_date.replace(day=1)
+    last_day_prev_month = first_day_of_month - timezone.timedelta(days=1)
+    first_day_next_month = (first_day_of_month + timezone.timedelta(days=32)).replace(day=1)
+
+    prev_month_data = {"year": last_day_prev_month.year, "month_num": last_day_prev_month.month,
+                       "month_name": last_day_prev_month.strftime('%B')}
+    next_month_data = {"year": first_day_next_month.year, "month_num": first_day_next_month.month,
+                       "month_name": first_day_next_month.strftime('%B')}
+
+    month_filter = Q(open_date__year=year, open_date__month=month) | \
+                   Q(close_date__year=year, close_date__month=month)
+
+    # We need to re-fetch for the calendar dates, as this is a different date range
+    cal_assignments = Assignment.objects.filter(month_filter)
+    cal_quizzes = Quiz.objects.filter(month_filter)
+    cal_exams = Exam.objects.filter(month_filter)
+    other_events = CalendarEvent.objects.filter(date__year=year, date__month=month)
+
+    events_by_day = {}
+
+    def add_to_dict(day, event_data):
+        if day not in events_by_day:
+            events_by_day[day] = []
+        events_by_day[day].append(event_data)
+
+    for item in list(cal_assignments) + list(cal_quizzes) + list(cal_exams):
+        if item.open_date.month == month:
+            add_to_dict(item.open_date.day,
+                        {"id": item.id, "title": item.title, "type": "opens", "model": item.__class__.__name__.lower()})
+        if item.close_date and item.close_date.month == month:
+            add_to_dict(item.close_date.day, {"id": item.id, "title": item.title, "type": "closes",
+                                              "model": item.__class__.__name__.lower()})
+
+    for event in other_events:
+        add_to_dict(event.date.day, {"id": event.id, "title": event.title, "type": event.get_event_type_display(),
+                                     "model": "calendarevent"})
+
+    calendar_weeks_with_events = []
+    for week in calendar_matrix:
+        processed_week = []
+        day_index = 0
+        for day_num in week:
+            if day_num == 0:
+                processed_week.append({"day_num": 0, "events": [], "classes": "dayblank"})
+            else:
+                day_events = events_by_day.get(day_num, [])
+                day_classes = ["day", "text-sm-center", "text-md-left", "clickable"]
+                if day_num == today.day and month == today.month and year == today.year:
+                    day_classes.append("today")
+                if day_events:
+                    day_classes.append("hasevent")
+                if day_index >= 5:
+                    day_classes.append("weekend")
+                processed_week.append({"day_num": day_num, "events": day_events, "classes": " ".join(day_classes)})
+            day_index += 1
+        calendar_weeks_with_events.append(processed_week)
+
+    # --------------------------------------------------
+    # 9. COMBINE ALL CONTEXT & RENDER
+    # --------------------------------------------------
+    context = {
         "username": username,
         "assignments": live_assignments,
         "quizzes": live_quizzes,
         "exams": live_exams,
         "system_status": config.system_status if config else "ONLINE",
         "pin_required": pin_required,
-        "courses":courses,
-    })
+        "courses": courses,
+
+        "calendar_weeks": calendar_weeks_with_events,
+        "current_month_name": current_date.strftime('%B'),
+        "current_year": year,
+        "current_month_num": month,
+        "prev_month": prev_month_data,
+        "next_month": next_month_data,
+        "today": today,
+
+        "timeline_activities": timeline_events,
+    }
+
+    return render(request, "dashboard.html", context)
 
 
 # --------------------------------------------------

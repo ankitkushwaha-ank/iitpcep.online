@@ -140,6 +140,7 @@
 
         <div class="card-text content mt-3">
             <div id="block-timeline-690b672daa52c690b672d9c8172-1" class="block-timeline" data-region="timeline">
+
     <div class="p-0 px-2">
         <div class="row no-gutters">
             <div class="mr-2 mb-1">
@@ -148,88 +149,18 @@
                             aria-label="Filter timeline by date" aria-controls="menudayfilter"
                             title="Filter timeline by date" aria-describedby="timeline-day-filter-current-selection">
                         <span id="timeline-day-filter-current-selection" data-active-item-text>
-                            
-                            
-                             Next 7 days 
-                            
-                            
-                            
+                             Next 30 days
                         </span>
                     </button>
                     <div id="menudayfilter" role="menu" class="dropdown-menu" data-show-active-item data-skip-active-class="true">
-                        <a
-                            class="dropdown-item"
-                            href="#"
-                            data-from="-14"
-                            data-filtername="all"
-                            
-                            aria-label="All filter option"
-                            role="menuitem"
-                        >
-                            All
-                        </a>
-                        <a
-                            class="dropdown-item"
-                            href="#"
-                            data-from="-14"
-                            data-to="1"
-                            data-filtername="overdue"
-                            
-                            aria-label="Overdue filter option"
-                            role="menuitem"
-                        >
-                            Overdue
-                        </a>
+                        <a class="dropdown-item" href="#" data-from="-14" data-filtername="all" role="menuitem">All</a>
+                        <a class="dropdown-item" href="#" data-from="-14" data-to="1" data-filtername="overdue" role="menuitem">Overdue</a>
                         <div class="dropdown-divider" role="separator"></div>
                         <h6 class="dropdown-header">Due date</h6>
-                        <a
-                            class="dropdown-item"
-                            href="#"
-                            data-from="0"
-                            data-to="7"
-                            data-filtername="next7days"
-                            aria-current="true"
-                            aria-label="Next 7 days filter option"
-                            role="menuitem"
-                        >
-                            Next 7 days
-                        </a>
-                        <a
-                            class="dropdown-item"
-                            href="#"
-                            data-from="0"
-                            data-to="30"
-                            data-filtername="next30days"
-                            
-                            aria-label="Next 30 days filter option"
-                            role="menuitem"
-                        >
-                            Next 30 days
-                        </a>
-                        <a
-                            class="dropdown-item"
-                            href="#"
-                            data-from="0"
-                            data-to="90"
-                            data-filtername="next3months"
-                            
-                            aria-label="Next 3 months filter option"
-                            role="menuitem"
-                        >
-                            Next 3 months
-                        </a>
-                        <a
-                            class="dropdown-item"
-                            href="#"
-                            data-from="0"
-                            data-to="180"
-                            data-filtername="next6months"
-                            
-                            aria-label="Next 6 months filter option"
-                            role="menuitem"
-                        >
-                            Next 6 months
-                        </a>
+                        <a class="dropdown-item" href="#" data-from="0" data-to="7" data-filtername="next7days" role="menuitem">Next 7 days</a>
+                        <a class="dropdown-item" href="#" data-from="0" data-to="30" data-filtername="next30days" aria-current="true" role="menuitem">Next 30 days</a>
+                        <a class="dropdown-item" href="#" data-from="0" data-to="90" data-filtername="next3months" role="menuitem">Next 3 months</a>
+                        <a class="dropdown-item" href="#" data-from="0" data-to="180" data-filtername="next6months" role="menuitem">Next 6 months</a>
                     </div>
                 </div>
             </div>
@@ -239,31 +170,14 @@
                             aria-label="Sort timeline items" aria-controls="menusortby"
                             title="Sort timeline items" aria-describedby="timeline-view-selector-current-selection">
                         <span id="timeline-view-selector-current-selection" data-active-item-text>
-                            
                             Sort by dates
                         </span>
                     </button>
                     <div id="menusortby" role="menu" class="dropdown-menu dropdown-menu-right list-group hidden" data-show-active-item data-skip-active-class="true">
-                        <a
-                            class="dropdown-item"
-                            href="#view_dates_690b672daa52c690b672d9c8172-1"
-                            data-toggle="tab"
-                            data-filtername="sortbydates"
-                            aria-current="true"
-                            aria-label="Sort by dates sort option"
-                            role="menuitem"
-                        >
+                        <a class="dropdown-item" href="#view_dates_690b672daa52c690b672d9c8172-1" data-toggle="tab" data-filtername="sortbydates" aria-current="true" role="menuitem">
                             Sort by dates
                         </a>
-                        <a
-                            class="dropdown-item"
-                            href="#view_courses_690b672daa52c690b672d9c8172-1"
-                            data-toggle="tab"
-                            data-filtername="sortbycourses"
-                            
-                            aria-label="Sort by courses sort option"
-                            role="menuitem"
-                        >
+                        <a class="dropdown-item" href="#view_courses_690b672daa52c690b672d9c8172-1" data-toggle="tab" data-filtername="sortbycourses" role="menuitem">
                             Sort by courses
                         </a>
                     </div>
@@ -286,7 +200,6 @@
                            name="search"
                            value=""
                            autocomplete="off"
-                           
                         >
                         <button
                             class="btn btn-clear d-none"
@@ -303,6 +216,8 @@
         </div>
         <div class="pb-3 px-2 border-bottom"></div>
     </div>
+
+
     <div class="p-0">
         <div data-region="timeline-view">
             <div class="tab-content">
@@ -310,111 +225,95 @@
                     <div data-region="timeline-view-dates">
                         <div data-region="event-list-container"
                              data-days-offset="0"
-                             data-days-limit="7"
+                             data-days-limit="30"
                              data-course-id=""
                              data-midnight="1762281000"
                         >
-                                <div data-region="event-list-loading-placeholder">
-                                    <ul class="pl-0 list-group list-group-flush">
-                                        <li class="list-group-item px-2">
-                                            <div class="row">
-                                                <div class="col-8 pr-0">
-                                                    <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                        <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                        <div style="flex: 1" class="pl-2">
-                                                            <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                            <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
+
+                            <div data-region="event-list-content">
+
+                                {% if timeline_activities %}
+
+                                    {% regroup timeline_activities by course as course_list %}
+
+                                    <ul class="list-group unstyled">
+                                    {% for course_group in course_list %}
+                                        <li class="list-group-item mt-3 p-0 px-2 border-0">
+                                            <h5 class="h6 font-weight-bold mb-2" data-region="course-heading">
+                                                <a href="#">{{ course_group.grouper.title }}</a>
+                                            </h5>
+
+                                            {% regroup course_group.list by close_date.date as activity_list_by_date %}
+
+                                            <ul class="pl-0 list-group list-group-flush">
+                                            {% for day_group in activity_list_by_date %}
+                                                <li class_="list-group-item p-0">
+
+                                                    <div class="font-weight-bold" data-region="date-heading">
+                                                        <span>{{ day_group.grouper|date:"l, j F Y" }}</span>
+                                                    </div>
+
+                                                    {% for activity in day_group.list %}
+                                                        <div class="row my-2">
+                                                            <div class="col-1 text-center text-muted" data-region="event-time">
+                                                                {{ activity.close_date|date:"H:i" }}
+                                                            </div>
+                                                            <div class="col-1 text-center" data-region="event-icon-container">
+
+                                                                {% if activity.model_name == "Quiz" %}
+                                                                    <img class="icon " alt="Quiz" title="Quiz" aria-hidden="true" src="https://i.imgur.com/v80ig3G.png">
+                                                                {% elif activity.model_name == "Assignment" %}
+                                                                    <img class="icon " alt="Assignment" title="Assignment" aria-hidden="true" src="https://i.imgur.com/sPMpBqj.png">
+                                                                {% else %}
+                                                                    <img class="icon " alt="Exam" title="Exam" aria-hidden="true" src="https://i.imgur.com/v80ig3G.png">
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-7" data-region="event-text-container">
+
+                                                                {% if activity.model_name == "Quiz" %}{% url 'quiz_detail' activity.id as attempt_url %}{% endif %}
+                                                                {% if activity.model_name == "Assignment" %}{% url 'assignment_detail' activity.id as attempt_url %}{% endif %}
+                                                                {% if activity.model_name == "Exam" %}{% url 'exam_detail' activity.id as attempt_url %}{% endif %}
+
+                                                                <a href="{{ attempt_url }}" class="font-weight-bold" style="color: #007bff;">{{ activity.title }}</a>
+                                                                <div class="text-muted small">
+                                                                    {{ activity.model_name }} closes
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-3 text-right" data-region="event-action-container">
+                                                                <a href="{{ attempt_url }}" class="btn btn-outline-secondary btn-sm" role="button">
+                                                                    Attempt {{ activity.model_name|lower }} now
+                                                                </a>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4 pr-3">
-                                                    <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                        <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                    {% endfor %}
+                                                </li>
+                                            {% endfor %}
+                                            </ul>
                                         </li>
-                                        <li class="list-group-item px-2">
-                                            <div class="row">
-                                                <div class="col-8 pr-0">
-                                                    <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                        <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                        <div style="flex: 1" class="pl-2">
-                                                            <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                            <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4 pr-3">
-                                                    <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                        <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item px-2">
-                                            <div class="row">
-                                                <div class="col-8 pr-0">
-                                                    <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                        <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                        <div style="flex: 1" class="pl-2">
-                                                            <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                            <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4 pr-3">
-                                                    <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                        <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item px-2">
-                                            <div class="row">
-                                                <div class="col-8 pr-0">
-                                                    <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                        <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                        <div style="flex: 1" class="pl-2">
-                                                            <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                            <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4 pr-3">
-                                                    <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                        <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item px-2">
-                                            <div class="row">
-                                                <div class="col-8 pr-0">
-                                                    <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                        <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                        <div style="flex: 1" class="pl-2">
-                                                            <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                            <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4 pr-3">
-                                                    <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                        <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
+                                    {% endfor %}
                                     </ul>
-                                    <div class="pt-3 pb-2 d-flex justify-content-between">
-                                        <div class="w-25 bg-pulse-grey" style="height: 35px"></div>
+
+                                {% else %}
+                                    <div class="text-xs-center text-center mt-3" data-region="no-events-empty-message" style="display: block !important;">
+                                        <img
+                                            src="https://i.imgur.com/E8wOkE2.png"
+                                            alt=""
+                                            style="height: 70px; width: 70px"
+                                        >
+                                        <p class="text-muted mt-1">No activities require action</p>
                                     </div>
-                                </div>
-                            <div data-region="event-list-content"></div>
+                                {% endif %}
+
+                            </div>
+
+                            <div data-region="event-list-loading-placeholder" class="hidden">
+                                <ul class="pl-0 list-group list-group-flush">
+                                    </ul>
+                            </div>
+
                             <div class="hidden text-xs-center text-center mt-3" data-region="no-events-empty-message">
                                 <img
-                                    src=""
+                                    src="https."
                                     alt=""
                                     style="height: 70px; width: 70px"
                                 >
@@ -423,6 +322,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div
                     class="tab-pane  fade"
                     data-region="view-courses"
@@ -432,214 +332,11 @@
                     data-days-limit="7"
                     data-days-offset="0"
                     data-no-events-url=""
-                    
+
                     id="view_courses_690b672daa52c690b672d9c8172-1"
                 >
                         <div data-region="course-items-loading-placeholder">
-                            <ul class="list-group unstyled">
-                                <li class="list-group-item mt-3 p-0 px-2 border-0">
-                                    <div class="w-50 bg-pulse-grey mt-1 mb-2" style="height: 20px"></div>
-                                    <div>
-                                        <ul class="pl-0 list-group list-group-flush">
-                                            <li class="list-group-item px-2">
-                                                <div class="row">
-                                                    <div class="col-8 pr-0">
-                                                        <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                            <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                            <div style="flex: 1" class="pl-2">
-                                                                <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                                <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4 pr-3">
-                                                        <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                            <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item px-2">
-                                                <div class="row">
-                                                    <div class="col-8 pr-0">
-                                                        <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                            <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                            <div style="flex: 1" class="pl-2">
-                                                                <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                                <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4 pr-3">
-                                                        <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                            <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item px-2">
-                                                <div class="row">
-                                                    <div class="col-8 pr-0">
-                                                        <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                            <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                            <div style="flex: 1" class="pl-2">
-                                                                <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                                <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4 pr-3">
-                                                        <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                            <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item px-2">
-                                                <div class="row">
-                                                    <div class="col-8 pr-0">
-                                                        <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                            <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                            <div style="flex: 1" class="pl-2">
-                                                                <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                                <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4 pr-3">
-                                                        <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                            <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item px-2">
-                                                <div class="row">
-                                                    <div class="col-8 pr-0">
-                                                        <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                            <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                            <div style="flex: 1" class="pl-2">
-                                                                <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                                <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4 pr-3">
-                                                        <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                            <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="pt-3 pb-2 d-flex justify-content-between">
-                                            <div class="w-25 bg-pulse-grey" style="height: 35px"></div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item mt-3 p-0 px-2 border-0">
-                                    <div class="w-50 bg-pulse-grey mt-1 mb-2" style="height: 20px"></div>
-                                    <div>
-                                        <ul class="pl-0 list-group list-group-flush">
-                                            <li class="list-group-item px-2">
-                                                <div class="row">
-                                                    <div class="col-8 pr-0">
-                                                        <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                            <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                            <div style="flex: 1" class="pl-2">
-                                                                <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                                <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4 pr-3">
-                                                        <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                            <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item px-2">
-                                                <div class="row">
-                                                    <div class="col-8 pr-0">
-                                                        <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                            <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                            <div style="flex: 1" class="pl-2">
-                                                                <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                                <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4 pr-3">
-                                                        <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                            <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item px-2">
-                                                <div class="row">
-                                                    <div class="col-8 pr-0">
-                                                        <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                            <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                            <div style="flex: 1" class="pl-2">
-                                                                <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                                <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4 pr-3">
-                                                        <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                            <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item px-2">
-                                                <div class="row">
-                                                    <div class="col-8 pr-0">
-                                                        <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                            <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                            <div style="flex: 1" class="pl-2">
-                                                                <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                                <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4 pr-3">
-                                                        <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                            <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item px-2">
-                                                <div class="row">
-                                                    <div class="col-8 pr-0">
-                                                        <div class="d-flex flex-row align-items-center" style="height: 32px">
-                                                            <div class="bg-pulse-grey rounded-circle" style="height: 32px; width: 32px;"></div>
-                                                            <div style="flex: 1" class="pl-2">
-                                                                <div class="bg-pulse-grey w-100" style="height: 15px;"></div>
-                                                                <div class="bg-pulse-grey w-75 mt-1" style="height: 10px;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4 pr-3">
-                                                        <div class="d-flex flex-row justify-content-end" style="height: 32px; padding-top: 2px">
-                                                            <div class="bg-pulse-grey w-75" style="height: 15px;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="pt-3 pb-2 d-flex justify-content-between">
-                                            <div class="w-25 bg-pulse-grey" style="height: 35px"></div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="bg-pulse-grey mt-1" style="width: 100px; height: 30px; margin-left: auto; margin-right: auto"></div>
-                        </div>
+                           </div>
                     <ul class="list-group unstyled" data-region="courses-list"></ul>
                     <div class="hidden text-xs-center text-center pt-3" data-region="more-courses-button-container">
                         <button type="button" class="btn btn-primary" data-action="more-courses">
@@ -649,20 +346,20 @@
                             </span>
                         </button>
                     </div>
-<div class="hidden text-xs-center text-center mt-3" data-region="no-events-empty-message">
-    <img
-        src=""
-        alt=""
-        style="height: 70px; width: 70px"
-    >
-    <p class="text-muted mt-1">No activities require action</p>
-</div>
+                    <div class="hidden text-xs-center text-center mt-3" data-region="no-events-empty-message">
+                        <img
+                            src=""
+                            alt=""
+                            style="height: 70px; width: 70px"
+                        >
+                        <p class="text-muted mt-1">No activities require action</p>
+                    </div>
                 </div>
             </div>
         </div>    </div>
 </div>
             <div class="footer"></div>
-            
+
         </div>
 
     </div>
@@ -680,878 +377,140 @@
      >
 
     <div class="card-body p-3">
+    <h5 id="instance-36295-header" class="card-title d-inline">Calendar</h5>
+    <div class="card-text content mt-3">
+        <div data-region="calendar" class="maincalendar">
+            <div id="calendar-month-dynamic-1" data-template="core_calendar/month_detailed">
 
-            <h5 id="instance-36295-header" class="card-title d-inline">Calendar</h5>
+                <div class="header d-flex flex-wrap p-1">
+                    <label class="sr-only" for="calendar-course-filter-1">List of courses</label>
+                    <select class="select custom-select cal_courses_flt ml-1 mr-auto" id="calendar-course-filter-1" name="course">
+                        <option selected="selected" value="1">All courses</option>
+                        {% for course in courses %}
+                        <option value="{{ course.id }}">{{ course.title }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-primary float-sm-right float-right" data-context-id="2" data-action="new-event-button">
+                        New event
+                    </button>
+                </div>
+
+                <div class="calendarwrapper" data-courseid="1" data-context-id="2" data-month="{{ current_month_num }}" data-year="{{ current_year }}" data-view="monthblock">
+
+                    <div id="month-navigation-dynamic-1" class="controls">
+                        <div class="calendar-controls">
+
+                            <a class="arrow_link previous" title="Previous month"
+                               data-year="{{ prev_month.year }}" data-month="{{ prev_month.month_num }}" data-drop-zone="nav-link"
+                               href="?year={{ prev_month.year }}&month={{ prev_month.month_num }}">
+                                <span class="arrow">&#x25C4;</span>
+                                &nbsp;
+                                <span class="arrow_text">{{ prev_month.month_name }}</span>
+                            </a>
+
+                            <span class="hide"> | </span>
+                            <h4 class="current">{{ current_month_name }} {{ current_year }}</h4>
+                            <span class="hide"> | </span>
+
+                            <a class="arrow_link next" title="Next month"
+                               data-year="{{ next_month.year }}" data-month="{{ next_month.month_num }}" data-drop-zone="nav-link"
+                               href="?year={{ next_month.year }}&month={{ next_month.month_num }}">
+                                <span class="arrow_text">{{ next_month.month_name }}</span>
+                                &nbsp;
+                                <span class="arrow">&#x25BA;</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <span class="overlay-icon-container hidden" data-region="overlay-icon-container">
+                        <span class="loading-icon icon-no-margin"><i class="icon fa fa-circle-o-notch fa-spin fa-fw " title="Loading" role="img" aria-label="Loading"></i></span>
+                    </span>
+
+                    <table id="month-detailed-dynamic-1" class="calendarmonth calendartable mb-0">
+                        <thead>
+                            <tr>
+                                <th class="header text-xs-center"><span class="sr-only">Monday</span><span aria-hidden="true">Mon</span></th>
+                                <th class="header text-xs-center"><span class="sr-only">Tuesday</span><span aria-hidden="true">Tue</span></th>
+                                <th class="header text-xs-center"><span class="sr-only">Wednesday</span><span aria-hidden="true">Wed</span></th>
+                                <th class="header text-xs-center"><span class="sr-only">Thursday</span><span aria-hidden="true">Thu</span></th>
+                                <th class="header text-xs-center"><span class="sr-only">Friday</span><span aria-hidden="true">Fri</span></th>
+                                <th class="header text-xs-center"><span class="sr-only">Saturday</span><span aria-hidden="true">Sat</span></th>
+                                <th class="header text-xs-center"><span class="sr-only">Sunday</span><span aria-hidden="true">Sun</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% comment %} Loop through each week from the view {% endcomment %}
+                            {% for week in calendar_weeks %}
+                            <tr data-region="month-view-week">
+
+                                {% comment %} Loop through each day object in the week {% endcomment %}
+                                {% for day_data in week %}
+
+                                    {% comment %}
+                                      This is now much simpler.
+                                      The view already gave us the day_num, events, and classes.
+                                    {% endcomment %}
+                                    <td class="{{ day_data.classes }}"
+                                        data-day="{{ day_data.day_num }}"
+                                        data-drop-zone="month-view-day"
+                                        data-region="day"
+                                        >
+
+                                        {% if day_data.day_num != 0 %}
+                                            {% with day=day_data.day_num day_events=day_data.events %}
+
+                                            <div class="d-none d-md-block hidden-phone text-xs-center">
+                                                {% if day_events %}
+                                                    <span class="sr-only">{{ day_events|length }} events, {{ today|date:"l" }}, {{ day }} {{ current_month_name }}</span>
+                                                    <a data-action="view-day-link"  class="aalink day"
+                                                       data-year="{{ current_year }}" data-month="{{ current_month_num }}" data-day="{{ day }}">
+                                                       <span class="day-number-circle"><span class="day-number">{{ day }}</span></span>
+                                                    </a>
+                                                    <div data-region="day-content">
+                                                        <ul>
+                                                            {% for event in day_events %}
+                                                            <li data-region="event-item" data-event-component="mod_{{ event.model }}">
+                                                                <a data-action="view-event" data-event-id="0" title="{{ event.title }} {{ event.type }}">
+                                                                    <span class="calendar-circle calendar_event_course">
+                                                                        &nbsp;
+                                                                    </span>
+                                                                    <span class="eventname" style="color: #0f47ad;">{{ event.title }} {{ event.type }}</span>
+                                                                </a>
+                                                            </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                {% else %}
+                                                    <span class="sr-only">No events, {{ today|date:"l" }}, {{ day }} {{ current_month_name }}</span>
+                                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">{{ day }}</span></span></span>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="d-md-none hidden-desktop hidden-tablet">
+                                                 {% if day_events %}
+                                                    <span class="sr-only">{{ day_events|length }} events, {{ today|date:"l" }}, {{ day }} {{ current_month_name }}</span>
+                                                    <a data-action="view-day-link"  class="day aalink"
+                                                        data-year="{{ current_year }}" data-month="{{ current_month_num }}" data-day="{{ day }}">
+                                                        <span class="day-number-circle"><span class="day-number">{{ day }}</span></span>
+                                                    </a>
+                                                 {% else %}
+                                                    <span class="sr-only">No events, {{ today|date:"l" }}, {{ day }} {{ current_month_name }}</span>
+                                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">{{ day }}</span></span></span>
+                                                 {% endif %}
+                                            </div>
+                                            {% endwith %}
+                                        {% else %}
+                                            &nbsp;
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
 
-        <div class="card-text content mt-3">
-            <div data-region="calendar" class="maincalendar"><div id="calendar-month-690b672ddd126690b672d9c8173-1" data-template="core_calendar/month_detailed">
-    <div class="header d-flex flex-wrap p-1">
-            <label class="sr-only" for="calendar-course-filter-1">List of courses</label><select class="select custom-select cal_courses_flt ml-1 mr-auto" id="calendar-course-filter-1" name="course"><option selected="selected" value="1">All courses</option><option value="209">BO CDA 201 Autumn 2024 Sem III</option><option value="210">BO CDA 203 Autumn 2024 Sem III</option><option value="211">BO CDA 205 Autumn 2024 Sem III</option><option value="212">BO CDA 207 Autumn 2024 Sem III</option><option value="159">CDA 102-b Autumn 2024</option><option value="136">cda 103-2</option><option value="160">CDA 104-b Autumn 2024</option><option value="137">CDA 105-2</option><option value="161">CDA 106-b Autumn2024</option><option value="162">CDA 108-2 Autumn 2024</option><option value="135">CDA101-2</option><option value="134">CDA107/BMC101</option></select>
-        <button class="btn btn-primary float-sm-right float-right" data-context-id="2" data-action="new-event-button">
-            New event
-        </button>
-    </div>    <div class="calendarwrapper" data-courseid="1" data-context-id="2" data-month="11" data-year="2025" data-view="monthblock">
-        <div id="month-navigation-690b672ddd126690b672d9c8173-1" class="controls">
-            <div class="calendar-controls">
-                <a class="arrow_link previous" title="Previous month" data-year="2025" data-month="10" data-drop-zone="nav-link" >
-                    <span class="arrow">&#x25C4;</span>
-                    &nbsp;
-                    <span class="arrow_text">October</span>
-                </a>
-                <span class="hide"> | </span>
-                    <h4 class="current">November 2025</h4>
-                <span class="hide"> | </span>
-                <a class="arrow_link next" title="Next month" data-year="2025" data-month="12" data-drop-zone="nav-link" >
-                    <span class="arrow_text">December</span>
-                    &nbsp;
-                    <span class="arrow">&#x25BA;</span>
-                </a>
-            </div>
-        </div>
-        <span class="overlay-icon-container hidden" data-region="overlay-icon-container">
-            <span class="loading-icon icon-no-margin"><i class="icon fa fa-circle-o-notch fa-spin fa-fw "  title="Loading" role="img" aria-label="Loading"></i></span>
-        </span>
-        <table id="month-detailed-690b672ddd126690b672d9c8173-1" class="calendarmonth calendartable mb-0">
-            <thead>
-                <tr>
-                    <th class="header text-xs-center">
-                        <span class="sr-only">Monday</span>
-                        <span aria-hidden="true">Mon</span>
-                    </th>
-                    <th class="header text-xs-center">
-                        <span class="sr-only">Tuesday</span>
-                        <span aria-hidden="true">Tue</span>
-                    </th>
-                    <th class="header text-xs-center">
-                        <span class="sr-only">Wednesday</span>
-                        <span aria-hidden="true">Wed</span>
-                    </th>
-                    <th class="header text-xs-center">
-                        <span class="sr-only">Thursday</span>
-                        <span aria-hidden="true">Thu</span>
-                    </th>
-                    <th class="header text-xs-center">
-                        <span class="sr-only">Friday</span>
-                        <span aria-hidden="true">Fri</span>
-                    </th>
-                    <th class="header text-xs-center">
-                        <span class="sr-only">Saturday</span>
-                        <span aria-hidden="true">Sat</span>
-                    </th>
-                    <th class="header text-xs-center">
-                        <span class="sr-only">Sunday</span>
-                        <span aria-hidden="true">Sun</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-region="month-view-week">
-                        <td class="dayblank">&nbsp;</td>
-                        <td class="dayblank">&nbsp;</td>
-                        <td class="dayblank">&nbsp;</td>
-                        <td class="dayblank">&nbsp;</td>
-                        <td class="dayblank">&nbsp;</td>
-                        <td class="day text-sm-center text-md-left weekend clickable"
-                            data-day="1"
-                            data-day-timestamp="1761935400"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762009389"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Saturday, 1 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">1</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Saturday, 1 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">1</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left weekend clickable"
-                            data-day="2"
-                            data-day-timestamp="1762021800"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762095789"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Sunday, 2 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">2</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Sunday, 2 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">2</span></span></span>
-                            </div>
-                        </td>
-                </tr>
-                <tr data-region="month-view-week">
-                        <td class="day text-sm-center text-md-left clickable hasevent"
-                            data-day="3"
-                            data-day-timestamp="1762108200"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762182189"
-                             data-title="Monday, 3 November events">
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">2 events, Monday, 3 November</span>
-                                    <a data-action="view-day-link" href="#" class="aalink day" aria-label="Monday, 3 November events"
-                                        data-year="2025" data-month="11" data-day="3"
-                                        data-courseid="1" data-categoryid="0"
-                                        data-timestamp="1762108200"><span class="day-number-circle"><span class="day-number">3</span></span></a>
-                                    <div data-region="day-content">
-                                        <ul>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="open"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11466" title="Assignment 3 opens">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Assignment 3 opens</span>
-                                                    </a>
-                                                </li>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="open"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11470" title="Assignment 3 opens">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Assignment 3 opens</span>
-                                                    </a>
-                                                </li>
-                                            <li data-action="view-more-events" style="display: none">
-                                                <strong>
-                                                    <a data-action="view-day-link" href="#" class="aalink day" aria-label="Monday, 3 November events"
-                                                       data-year="2025" data-month="11" data-day="3"
-                                                       data-courseid="1" data-categoryid="0"
-                                                       data-timestamp="1762108200">
-                                                        more
-                                                    </a>
-                                                </strong>
-                                            </li>
-                                        </ul>
-                                        <div class="hidden">
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Assignment 3 opens
-                                                </div>
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Assignment 3 opens
-                                                </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">2 events, Monday, 3 November</span>
-                                    <a data-action="view-day-link" href="#" class="day aalink" aria-label="Monday, 3 November events"
-                                        data-year="2025" data-month="11" data-day="3"
-                                        data-courseid="1" data-categoryid="0"
-                                        data-timestamp="1762108200"><span class="day-number-circle"><span class="day-number">3</span></span></a>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="4"
-                            data-day-timestamp="1762194600"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762268589"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Tuesday, 4 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">4</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Tuesday, 4 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">4</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left today clickable hasevent"
-                            data-day="5"
-                            data-day-timestamp="1762281000"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762354989" title="Today"
-                             data-title="Today Wednesday, 5 November">
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">2 events, Wednesday, 5 November</span>
-                                    <a data-action="view-day-link" href="#" class="aalink day" aria-label="Today Wednesday, 5 November"
-                                        data-year="2025" data-month="11" data-day="5"
-                                        data-courseid="1" data-categoryid="0"
-                                        data-timestamp="1762281000"><span class="day-number-circle"><span class="day-number">5</span></span></a>
-                                    <div data-region="day-content">
-                                        <ul>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="open"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11468" title="Quiz - II opens">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Quiz - II opens</span>
-                                                    </a>
-                                                </li>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="open"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11510" title="Quiz - II opens">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Quiz - II opens</span>
-                                                    </a>
-                                                </li>
-                                            <li data-action="view-more-events" style="display: none">
-                                                <strong>
-                                                    <a data-action="view-day-link" href="#" class="aalink day" aria-label="Today Wednesday, 5 November"
-                                                       data-year="2025" data-month="11" data-day="5"
-                                                       data-courseid="1" data-categoryid="0"
-                                                       data-timestamp="1762281000">
-                                                        more
-                                                    </a>
-                                                </strong>
-                                            </li>
-                                        </ul>
-                                        <div class="hidden">
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Quiz - II opens
-                                                </div>
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Quiz - II opens
-                                                </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">2 events, Wednesday, 5 November</span>
-                                    <a data-action="view-day-link" href="#" class="day aalink" aria-label="Today Wednesday, 5 November"
-                                        data-year="2025" data-month="11" data-day="5"
-                                        data-courseid="1" data-categoryid="0"
-                                        data-timestamp="1762281000"><span class="day-number-circle"><span class="day-number">5</span></span></a>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="6"
-                            data-day-timestamp="1762367400"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762441389"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Thursday, 6 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">6</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Thursday, 6 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">6</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable hasevent"
-                            data-day="7"
-                            data-day-timestamp="1762453800"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762527789"
-                             data-title="Friday, 7 November events">
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">3 events, Friday, 7 November</span>
-                                    <a data-action="view-day-link" href="#" class="aalink day" aria-label="Friday, 7 November events"
-                                        data-year="2025" data-month="11" data-day="7"
-                                        data-courseid="1" data-categoryid="0"
-                                        data-timestamp="1762453800"><span class="day-number-circle"><span class="day-number">7</span></span></a>
-                                    <div data-region="day-content">
-                                        <ul>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="close"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11383" title="Assignment 2 closes">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Assignment 2 closes</span>
-                                                    </a>
-                                                </li>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="close"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11393" title="Assignment 3 closes">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Assignment 3 closes</span>
-                                                    </a>
-                                                </li>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="close"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11395" title="Assignment 3 closes">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Assignment 3 closes</span>
-                                                    </a>
-                                                </li>
-                                            <li data-action="view-more-events" style="display: none">
-                                                <strong>
-                                                    <a data-action="view-day-link" href="#" class="aalink day" aria-label="Friday, 7 November events"
-                                                       data-year="2025" data-month="11" data-day="7"
-                                                       data-courseid="1" data-categoryid="0"
-                                                       data-timestamp="1762453800">
-                                                        more
-                                                    </a>
-                                                </strong>
-                                            </li>
-                                        </ul>
-                                        <div class="hidden">
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Assignment 2 closes
-                                                </div>
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Assignment 3 closes
-                                                </div>
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Assignment 3 closes
-                                                </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">3 events, Friday, 7 November</span>
-                                    <a data-action="view-day-link" href="#" class="day aalink" aria-label="Friday, 7 November events"
-                                        data-year="2025" data-month="11" data-day="7"
-                                        data-courseid="1" data-categoryid="0"
-                                        data-timestamp="1762453800"><span class="day-number-circle"><span class="day-number">7</span></span></a>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left weekend clickable"
-                            data-day="8"
-                            data-day-timestamp="1762540200"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762614189"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Saturday, 8 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">8</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Saturday, 8 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">8</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left weekend clickable"
-                            data-day="9"
-                            data-day-timestamp="1762626600"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762700589"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Sunday, 9 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">9</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Sunday, 9 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">9</span></span></span>
-                            </div>
-                        </td>
-                </tr>
-                <tr data-region="month-view-week">
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="10"
-                            data-day-timestamp="1762713000"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762786989"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Monday, 10 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">10</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Monday, 10 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">10</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable hasevent"
-                            data-day="11"
-                            data-day-timestamp="1762799400"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762873389"
-                             data-title="Tuesday, 11 November events">
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">2 events, Tuesday, 11 November</span>
-                                    <a data-action="view-day-link" href="#" class="aalink day" aria-label="Tuesday, 11 November events"
-                                        data-year="2025" data-month="11" data-day="11"
-                                        data-courseid="1" data-categoryid="0"
-                                        data-timestamp="1762799400"><span class="day-number-circle"><span class="day-number">11</span></span></a>
-                                    <div data-region="day-content">
-                                        <ul>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="close"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11469" title="Quiz - II closes">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Quiz - II closes</span>
-                                                    </a>
-                                                </li>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="close"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11511" title="Quiz - II closes">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Quiz - II closes</span>
-                                                    </a>
-                                                </li>
-                                            <li data-action="view-more-events" style="display: none">
-                                                <strong>
-                                                    <a data-action="view-day-link" href="#" class="aalink day" aria-label="Tuesday, 11 November events"
-                                                       data-year="2025" data-month="11" data-day="11"
-                                                       data-courseid="1" data-categoryid="0"
-                                                       data-timestamp="1762799400">
-                                                        more
-                                                    </a>
-                                                </strong>
-                                            </li>
-                                        </ul>
-                                        <div class="hidden">
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Quiz - II closes
-                                                </div>
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Quiz - II closes
-                                                </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">2 events, Tuesday, 11 November</span>
-                                    <a data-action="view-day-link" href="#" class="day aalink" aria-label="Tuesday, 11 November events"
-                                        data-year="2025" data-month="11" data-day="11"
-                                        data-courseid="1" data-categoryid="0"
-                                        data-timestamp="1762799400"><span class="day-number-circle"><span class="day-number">11</span></span></a>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable hasevent"
-                            data-day="12"
-                            data-day-timestamp="1762885800"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1762959789"
-                             data-title="Wednesday, 12 November events">
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">2 events, Wednesday, 12 November</span>
-                                    <a data-action="view-day-link" href="#" class="aalink day" aria-label="Wednesday, 12 November events"
-                                        data-year="2025" data-month="11" data-day="12"
-                                        data-courseid="1" data-categoryid="0"
-                                        data-timestamp="1762885800"><span class="day-number-circle"><span class="day-number">12</span></span></a>
-                                    <div data-region="day-content">
-                                        <ul>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="close"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11467" title="Assignment 3 closes">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Assignment 3 closes</span>
-                                                    </a>
-                                                </li>
-                                                <li data-region="event-item"
-                                                    data-event-component="mod_quiz"
-                                                    data-event-eventtype="close"
-                                                    data-event-folded="false"
-                                                    data-eventtype-course="1"
->
-    
-                                                    <a data-action="view-event" data-event-id="11471" title="Assignment 3 closes">
-                                                        <span class="calendar-circle calendar_event_course">
-                                                            &nbsp;
-                                                        </span>
-                                                        <span class="eventname">Assignment 3 closes</span>
-                                                    </a>
-                                                </li>
-                                            <li data-action="view-more-events" style="display: none">
-                                                <strong>
-                                                    <a data-action="view-day-link" href="#" class="aalink day" aria-label="Wednesday, 12 November events"
-                                                       data-year="2025" data-month="11" data-day="12"
-                                                       data-courseid="1" data-categoryid="0"
-                                                       data-timestamp="1762885800">
-                                                        more
-                                                    </a>
-                                                </strong>
-                                            </li>
-                                        </ul>
-                                        <div class="hidden">
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Assignment 3 closes
-                                                </div>
-                                                <div data-popover-eventtype-course="1">
-                                                        <img class="icon " alt="" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo" />
-                                                    Assignment 3 closes
-                                                </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">2 events, Wednesday, 12 November</span>
-                                    <a data-action="view-day-link" href="#" class="day aalink" aria-label="Wednesday, 12 November events"
-                                        data-year="2025" data-month="11" data-day="12"
-                                        data-courseid="1" data-categoryid="0"
-                                        data-timestamp="1762885800"><span class="day-number-circle"><span class="day-number">12</span></span></a>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="13"
-                            data-day-timestamp="1762972200"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763046189"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Thursday, 13 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">13</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Thursday, 13 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">13</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="14"
-                            data-day-timestamp="1763058600"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763132589"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Friday, 14 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">14</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Friday, 14 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">14</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left weekend clickable"
-                            data-day="15"
-                            data-day-timestamp="1763145000"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763218989"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Saturday, 15 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">15</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Saturday, 15 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">15</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left weekend clickable"
-                            data-day="16"
-                            data-day-timestamp="1763231400"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763305389"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Sunday, 16 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">16</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Sunday, 16 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">16</span></span></span>
-                            </div>
-                        </td>
-                </tr>
-                <tr data-region="month-view-week">
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="17"
-                            data-day-timestamp="1763317800"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763391789"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Monday, 17 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">17</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Monday, 17 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">17</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="18"
-                            data-day-timestamp="1763404200"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763478189"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Tuesday, 18 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">18</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Tuesday, 18 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">18</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="19"
-                            data-day-timestamp="1763490600"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763564589"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Wednesday, 19 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">19</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Wednesday, 19 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">19</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="20"
-                            data-day-timestamp="1763577000"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763650989"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Thursday, 20 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">20</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Thursday, 20 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">20</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="21"
-                            data-day-timestamp="1763663400"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763737389"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Friday, 21 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">21</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Friday, 21 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">21</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left weekend clickable"
-                            data-day="22"
-                            data-day-timestamp="1763749800"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763823789"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Saturday, 22 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">22</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Saturday, 22 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">22</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left weekend clickable"
-                            data-day="23"
-                            data-day-timestamp="1763836200"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763910189"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Sunday, 23 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">23</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Sunday, 23 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">23</span></span></span>
-                            </div>
-                        </td>
-                </tr>
-                <tr data-region="month-view-week">
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="24"
-                            data-day-timestamp="1763922600"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1763996589"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Monday, 24 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">24</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Monday, 24 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">24</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="25"
-                            data-day-timestamp="1764009000"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1764082989"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Tuesday, 25 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">25</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Tuesday, 25 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">25</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="26"
-                            data-day-timestamp="1764095400"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1764169389"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Wednesday, 26 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">26</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Wednesday, 26 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">26</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="27"
-                            data-day-timestamp="1764181800"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1764255789"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Thursday, 27 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">27</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Thursday, 27 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">27</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left clickable"
-                            data-day="28"
-                            data-day-timestamp="1764268200"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1764342189"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Friday, 28 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">28</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Friday, 28 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">28</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left weekend clickable"
-                            data-day="29"
-                            data-day-timestamp="1764354600"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1764428589"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Saturday, 29 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">29</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Saturday, 29 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">29</span></span></span>
-                            </div>
-                        </td>
-                        <td class="day text-sm-center text-md-left weekend clickable"
-                            data-day="30"
-                            data-day-timestamp="1764441000"
-                            data-drop-zone="month-view-day"
-                            data-region="day"
-                            data-new-event-timestamp="1764514989"
-                            >
-                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                <span class="sr-only">No events, Sunday, 30 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">30</span></span></span>
-                            </div>
-                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                <span class="sr-only">No events, Sunday, 30 November</span>
-                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">30</span></span></span>
-                            </div>
-                        </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 </div></div>
             <div class="footer"><div class="bottom">
         <span class="footer-link">

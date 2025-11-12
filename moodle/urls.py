@@ -5,8 +5,8 @@ urlpatterns = [
     # =========================================
     # 🔐 AUTHENTICATION ROUTES
     # =========================================
-    path('moodle/login/', views.login_view, name='login'),
-    path('moodle/logout/', views.logout_view, name='logout'),
+    path('moodle/login.php', views.login_view, name='login'),
+    path('moodle/logout', views.logout_view, name='logout'),
 
     # =========================================
     # 🏠 DASHBOARD + COURSES
@@ -15,7 +15,7 @@ urlpatterns = [
     path("admincp/", include("admin_dashboard.urls")),
     path('moodle/my/', views.dashboard, name='dashboard'),
     path('moodle/my/courses.php', views.mycourses_view, name='mycourses'),
-    path('moodle/course/view.php?id=<int:course_code>/', views.course_detail_view, name='course_detail'),
+    path('moodle/course/view.php?id=<int:course_code>', views.course_detail_view, name='course_detail'),
 
     # =========================================
     # 🧠 ASSESSMENTS (Assignments, Quizzes, Exams)
