@@ -752,10 +752,10 @@ document.body.className += ' jsenabled';
 
                     <!-- ✅ Show image or text safely -->
                     <div class="qtext">
+                        <p dir="ltr" style="text-align: left;">{{ question.text|safe }}</p>
                         {% if question.image %}
                             <img src="{{ question.image.url }}" alt="Question Image" class="img-fluid mb-2" />
                         {% endif %}
-                        <p dir="ltr" style="text-align: left;">{{ question.text|safe }}</p>
                     </div>
 
 {% if options %}
