@@ -23,7 +23,7 @@ urlpatterns = [
     # =========================================
 
     # -- Direct detail pages (info / instructions)
-    path('moodle/mod/<str:test_type>/view.php?id=<int:test_id>/', views.test_detail_view, name='test_detail'),
+    path('moodle/mod/<str:test_type>/view.php?id=<int:test_id>', views.test_detail_view, name='test_detail'),
 
     # -- Attempt entry (handles single-question view)
     path("moodle/mod/<str:test_type>/cmid=<int:test_id>/attempt.php", views.test_attempt_view, name="test_attempt"),
