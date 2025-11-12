@@ -247,10 +247,17 @@ document.body.className += ' jsenabled';
                                                             Preferences
                                                         </a>
                                                     <div class="dropdown-divider"></div>
+                                                    {% if username %}
                                                         <a href="{% url 'logout' %}" class="dropdown-item" role="menuitem" tabindex="-1">
 
                                                             Log out
                                                         </a>
+                                                    {% else %}
+                                                        <a href="{% url 'login' %}" class="dropdown-item" role="menuitem" tabindex="-1">
+
+                                                            Login
+                                                        </a>
+                                                    {% endif %}
 
                                             </div>
                                         </div>
