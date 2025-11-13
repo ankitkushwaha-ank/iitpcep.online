@@ -459,7 +459,7 @@ document.body.className += ' jsenabled';
     <div class="qn_buttons clearfix multipages">
         {% for q in questions_list %}
             <a class="qnbutton answered
-                free btn
+                free btn complete
                 {% if q.id == question.id %} thispage {% endif %}"
                id="quiznavbutton{{ q.id }}"
                title="Question {{ forloop.counter }} - Answered"

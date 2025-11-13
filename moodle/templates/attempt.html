@@ -396,11 +396,17 @@ document.body.className += ' jsenabled';
                                                             Preferences
                                                         </a>
                                                     <div class="dropdown-divider"></div>
+                                                          {% if username %}
                                                         <a href="{% url 'logout' %}" class="dropdown-item" role="menuitem" tabindex="-1">
 
                                                             Log out
                                                         </a>
+                                                    {% else %}
+                                                        <a href="{% url 'login' %}" class="dropdown-item" role="menuitem" tabindex="-1">
 
+                                                            Login
+                                                        </a>
+                                                    {% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -592,7 +598,7 @@ document.body.className += ' jsenabled';
     {% for q in questions_list %}
         <a class="qnbutton
             {% if q.user_answer %} answered {% else %} notyetanswered {% endif %}
-            free btn
+            free btn complete
             {% if q.id == question.id %} thispage {% endif %}"
            id="quiznavbutton{{ q.id }}"
            title="Question {{ forloop.counter }} - {% if q.user_answer %}Answered{% else %}Not yet answered{% endif %}"

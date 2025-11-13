@@ -76,8 +76,6 @@ def dashboard(request):
     # ✅ 2. HANDLE LOGIN & GUESTS
     if pin_required and not username:
         return redirect("login")
-    if not username and not pin_required:
-        username = "iitians"
 
     # ✅ 3. VALIDATE USER & ACTIVITY
     user = UserTable.objects.filter(username=username).first()

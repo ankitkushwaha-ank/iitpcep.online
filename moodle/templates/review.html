@@ -492,7 +492,7 @@ document.body.className += ' jsenabled';
     {% for q in questions %}
       <a class="qnbutton
 
-          free btn"
+          free btn complete"
          id="quiznavbutton{{ q.id }}"
          title="Question {{ forloop.counter }} - {% if q.user_answer %}Answered{% else %}Not yet answered{% endif %}"
          data-quiz-page="{{ forloop.counter0 }}"
