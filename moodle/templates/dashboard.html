@@ -260,13 +260,8 @@
                                                             </div>
                                                             <div class="col-1 text-center" data-region="event-icon-container">
 
-                                                                {% if activity.model_name == "Quiz" %}
-                                                                    <img class="icon " alt="Quiz" title="Quiz" aria-hidden="true" src="https://i.imgur.com/v80ig3G.png">
-                                                                {% elif activity.model_name == "Assignment" %}
-                                                                    <img class="icon " alt="Assignment" title="Assignment" aria-hidden="true" src="https://i.imgur.com/sPMpBqj.png">
-                                                                {% else %}
-                                                                    <img class="icon " alt="Exam" title="Exam" aria-hidden="true" src="https://i.imgur.com/v80ig3G.png">
-                                                                {% endif %}
+                                                                    <img class="icon " alt="Quiz" title="Quiz" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo?filtericon=1">
+
                                                             </div>
                                                             <div class="col-7" data-region="event-text-container">
 
@@ -281,7 +276,7 @@
                                                             </div>
                                                             <div class="col-3 text-right" data-region="event-action-container">
                                                                 <a href="{{ attempt_url }}" class="btn btn-outline-secondary btn-sm" role="button">
-                                                                    Attempt {{ activity.model_name|lower }} now
+                                                                    Attempt quiz now
                                                                 </a>
                                                             </div>
                                                         </div>
