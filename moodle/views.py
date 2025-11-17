@@ -62,6 +62,7 @@ from .models import (
     UserTable, SystemConfig, Assignment, Quiz, Exam, Course, CalendarEvent
 )
 from itertools import chain
+from collections import defaultdict
 
 
 # --------------------------------------------------
@@ -76,6 +77,8 @@ def dashboard(request):
     # ✅ 2. HANDLE LOGIN & GUESTS
     if pin_required and not username:
         return redirect("login")
+    if not username and not pin_required:
+        username = "Guest"
 
     # ✅ 3. VALIDATE USER & ACTIVITY
     user = UserTable.objects.filter(username=username).first()
@@ -84,7 +87,6 @@ def dashboard(request):
             messages.error(request, "🚫 Your account is banned.")
             request.session.flush()
             return redirect("login")
-
         user.is_online = True
         user.last_active = timezone.now()
         user.save(update_fields=["is_online", "last_active"])
@@ -97,54 +99,55 @@ def dashboard(request):
     courses = Course.objects.all()
 
     # --------------------------------------------------
-    # 🗓️ 5. NEW, ROBUST "ACTIVE" FILTER
+    # 🗓️ 5. LIVE ASSESSMENTS (for main dashboard cards)
     # --------------------------------------------------
-    # An activity is "active" if:
-    # 1. It's marked as 'is_live'
-    # 2. It has already opened (open_date is in the past)
-    # 3. EITHER its close_date is in the future OR it never closes (close_date is NULL)
-
-    active_filter = Q(
+    live_now_filter = Q(
         is_live=True,
         open_date__lte=now
     ) & (
-                            Q(close_date__gte=now) | Q(close_date__isnull=True)
-                    )
+                              Q(close_date__gte=now) | Q(close_date__isnull=True)
+                      )
+    live_assignments = Assignment.objects.filter(live_now_filter)
+    live_quizzes = Quiz.objects.filter(live_now_filter)
+    live_exams = Exam.objects.filter(live_now_filter)
 
-    # ✅ 6. FETCH "LIVE" ASSESSMENTS (for main dashboard cards)
-    # We use the new robust filter
-    live_assignments = Assignment.objects.filter(active_filter)
-    live_quizzes = Quiz.objects.filter(active_filter)
-    live_exams = Exam.objects.filter(active_filter)
+    # --------------------------------------------------
+    # 🗓️ 6. TIMELINE LOGIC
+    # --------------------------------------------------
+    timeline_filter = Q(
+        is_live=True
+    ) & (
+                              Q(close_date__gte=now) | Q(close_date__isnull=True)
+                      )
 
-    # ✅ 7. TIMELINE LOGIC
-    # The timeline should show ALL active items, sorted by their close date.
-    # Items with no close date (NULL) will be put at the end.
-
-    # We re-use the lists we just fetched
-    all_timeline_activities = sorted(
-        list(chain(live_assignments, live_quizzes, live_exams)),
-        # Sort by close_date. Use a very distant future date for NULLs
+    all_activities = sorted(
+        list(chain(
+            Assignment.objects.filter(timeline_filter).select_related('course'),
+            Quiz.objects.filter(timeline_filter).select_related('course'),
+            Exam.objects.filter(timeline_filter).select_related('course')
+        )),
         key=lambda x: x.close_date or datetime(9999, 1, 1, tzinfo=timezone.utc)
     )
 
-    # --- DEBUG: Check your terminal! ---
-    print(f"Found {len(all_timeline_activities)} items for the timeline.")
-    # -----------------------------------
-
-    # Convert to dictionaries for the template (this fixes the |class_name error)
+    # --- Pre-process the data for the template ---
     timeline_events = []
-    for activity in all_timeline_activities:
+    for activity in all_activities:
+        date_group = "Open Indefinitely"
+        if activity.close_date:
+            date_group = activity.close_date.date()
+
         timeline_events.append({
             "id": activity.id,
             "title": activity.title,
             "course": activity.course,
             "close_date": activity.close_date,
-            "model_name": activity.__class__.__name__  # e.g., "Quiz", "Assignment"
+            "model_name": activity.__class__.__name__,
+            "model_name_lower": activity.__class__.__name__.lower(),  # <-- ⭐ THIS WAS THE MISSING KEY
+            "close_date_group": date_group
         })
 
     # --------------------------------------------------
-    # 🗓️ 8. CALENDAR LOGIC
+    # 🗓️ 7. CALENDAR LOGIC
     # --------------------------------------------------
     try:
         year = int(request.GET.get('year', now.year))
@@ -155,14 +158,12 @@ def dashboard(request):
 
     current_date = datetime(year, month, 1)
     today = timezone.now().date()
-
     cal = calendar.Calendar(firstweekday=calendar.MONDAY)
     calendar_matrix = cal.monthdayscalendar(year, month)
 
     first_day_of_month = current_date.replace(day=1)
     last_day_prev_month = first_day_of_month - timezone.timedelta(days=1)
     first_day_next_month = (first_day_of_month + timezone.timedelta(days=32)).replace(day=1)
-
     prev_month_data = {"year": last_day_prev_month.year, "month_num": last_day_prev_month.month,
                        "month_name": last_day_prev_month.strftime('%B')}
     next_month_data = {"year": first_day_next_month.year, "month_num": first_day_next_month.month,
@@ -171,7 +172,6 @@ def dashboard(request):
     month_filter = Q(open_date__year=year, open_date__month=month) | \
                    Q(close_date__year=year, close_date__month=month)
 
-    # We need to re-fetch for the calendar dates, as this is a different date range
     cal_assignments = Assignment.objects.filter(month_filter)
     cal_quizzes = Quiz.objects.filter(month_filter)
     cal_exams = Exam.objects.filter(month_filter)
@@ -191,7 +191,6 @@ def dashboard(request):
         if item.close_date and item.close_date.month == month:
             add_to_dict(item.close_date.day, {"id": item.id, "title": item.title, "type": "closes",
                                               "model": item.__class__.__name__.lower()})
-
     for event in other_events:
         add_to_dict(event.date.day, {"id": event.id, "title": event.title, "type": event.get_event_type_display(),
                                      "model": "calendarevent"})
@@ -217,7 +216,7 @@ def dashboard(request):
         calendar_weeks_with_events.append(processed_week)
 
     # --------------------------------------------------
-    # 9. COMBINE ALL CONTEXT & RENDER
+    # 8. COMBINE ALL CONTEXT & RENDER
     # --------------------------------------------------
     context = {
         "username": username,
@@ -227,7 +226,6 @@ def dashboard(request):
         "system_status": config.system_status if config else "ONLINE",
         "pin_required": pin_required,
         "courses": courses,
-
         "calendar_weeks": calendar_weeks_with_events,
         "current_month_name": current_date.strftime('%B'),
         "current_year": year,
@@ -236,11 +234,11 @@ def dashboard(request):
         "next_month": next_month_data,
         "today": today,
 
+        # Pass the correctly named list
         "timeline_activities": timeline_events,
     }
 
     return render(request, "dashboard.html", context)
-
 
 # --------------------------------------------------
 # 🧩 ASSESSMENT VIEW (Assignment, Quiz, Exam)

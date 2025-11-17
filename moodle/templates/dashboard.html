@@ -1,5 +1,6 @@
 {% include '_head.html' %}
 {% include '_header.html' %}
+{% load user_extras %}
 <title>Dashboard</title>
 
 
@@ -17,7 +18,7 @@
     <div class="d-sm-flex align-items-center">
             <h2>
     {% if username %}
-      Welcome back, {{ username|title }}! 👋
+      Welcome back, {{ username.split|first|title }}! 👋
     {% else %}
       Welcome back, IItians! 👋
     {% endif %}</h2>
@@ -67,7 +68,7 @@
 
 
         <div class="card-text content mt-3">
-            <h5>{% if username %} {{ username|title }}, you are currently {% else %} IItians, you are currently {% endif %} <span class="notifysuccess">connected</span> to Microsoft 365</h5><ul>
+            <h5>{% if username %} {{ username.split|first|title }}, you are currently {% else %} IItians, you are currently {% endif %} <span class="notifysuccess">connected</span> to Microsoft 365</h5><ul>
 <li><a class="servicelink block_microsoft_outlook" target="_blank" >My Email</a></li>
 <li></li>
 <li><a target="_blank" class="servicelink block_microsoft_onedrive" >My OneDrive</a></li>
@@ -221,14 +222,6 @@
     <div class="p-0">
         <div data-region="timeline-view">
             <div class="tab-content">
-                <div class="tab-pane active show fade" data-limit="5" data-region="view-dates" id="view_dates_690b672daa52c690b672d9c8172-1">
-                    <div data-region="timeline-view-dates">
-                        <div data-region="event-list-container"
-                             data-days-offset="0"
-                             data-days-limit="30"
-                             data-course-id=""
-                             data-midnight="1762281000"
-                        >
 
                             <div data-region="event-list-content">
 
@@ -239,43 +232,45 @@
                                     <ul class="list-group unstyled">
                                     {% for course_group in course_list %}
                                         <li class="list-group-item mt-3 p-0 px-2 border-0">
-                                            <h5 class="h6 font-weight-bold mb-2" data-region="course-heading">
-                                                <a href="#">{{ course_group.grouper.title }}</a>
-                                            </h5>
+                                            <h2 class="h5 font-weight-bold mb-2" data-region="course-heading">
+                                                BO CDA {{ course_group.grouper.code }}:{{ course_group.grouper.title }}
+                                            </h2>
 
-                                            {% regroup course_group.list by close_date.date as activity_list_by_date %}
+                                            {% regroup course_group.list by close_date_group as activity_list_by_date %}
 
                                             <ul class="pl-0 list-group list-group-flush">
                                             {% for day_group in activity_list_by_date %}
-                                                <li class_="list-group-item p-0">
+                                                <li class="list-group-item p-0">
 
                                                     <div class="font-weight-bold" data-region="date-heading">
-                                                        <span>{{ day_group.grouper|date:"l, j F Y" }}</span>
+                                                        <span>{{ day_group.grouper|date:"l, j F Y"|default:day_group.grouper }}</span>
                                                     </div>
 
                                                     {% for activity in day_group.list %}
                                                         <div class="row my-2">
-                                                            <div class="col-1 text-center text-muted" data-region="event-time">
-                                                                {{ activity.close_date|date:"H:i" }}
+                                                            <div class="col-auto text-center text-muted" data-region="event-time">
+                                                                {{ activity.close_date|date:"H:i"|default:"-" }}
                                                             </div>
-                                                            <div class="col-1 text-center" data-region="event-icon-container">
-
-                                                                    <img class="icon " alt="Quiz" title="Quiz" aria-hidden="true" src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo?filtericon=1">
-
+                                                            <div class="activityiconcontainer assessment courseicon align-self-start mr-3">
+                                                                <img src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/quiz/1706000481/monologo?filtericon=1" class="activityicon" alt="quiz icon">
                                                             </div>
                                                             <div class="col-7" data-region="event-text-container">
 
-                                                                {% if activity.model_name == "Quiz" %}{% url 'quiz_detail' activity.id as attempt_url %}{% endif %}
-                                                                {% if activity.model_name == "Assignment" %}{% url 'assignment_detail' activity.id as attempt_url %}{% endif %}
-                                                                {% if activity.model_name == "Exam" %}{% url 'exam_detail' activity.id as attempt_url %}{% endif %}
+                                                                {% if activity.model_name == "Quiz" %}{% url 'quiz_detail' 'quiz' activity.id as attempt_url %}{% endif %}
+                                                                {% if activity.model_name == "Assignment" %}{% url 'assignment_detail' 'assignment' activity.id as attempt_url %}{% endif %}
+                                                                {% if activity.model_name == "Exam" %}{% url 'exam_detail' 'exam' activity.id as attempt_url %}{% endif %}
 
-                                                                <a href="{{ attempt_url }}" class="font-weight-bold" style="color: #007bff;">{{ activity.title }}</a>
+                                                                <a href="{% url 'test_detail' test_type=activity.model_name_lower test_id=activity.id %}" class="font-weight-bold" style="color: #0f47ad;">{{ activity.title }}</a>
                                                                 <div class="text-muted small">
-                                                                    {{ activity.model_name }} closes
+                                                                    {% if activity.close_date %}
+                                                                        {{ activity.model_name }} closes
+                                                                    {% else %}
+                                                                        {{ activity.model_name }} is open
+                                                                    {% endif %}
                                                                 </div>
                                                             </div>
                                                             <div class="col-3 text-right" data-region="event-action-container">
-                                                                <a href="{{ attempt_url }}" class="btn btn-outline-secondary btn-sm" role="button">
+                                                                <a href="{% url 'test_detail' test_type=activity.model_name_lower test_id=activity.id %}" class="btn btn-outline-secondary btn-sm" role="button">
                                                                     Attempt quiz now
                                                                 </a>
                                                             </div>
@@ -283,6 +278,7 @@
                                                     {% endfor %}
                                                 </li>
                                             {% endfor %}
+                                                    <hr>
                                             </ul>
                                         </li>
                                     {% endfor %}
@@ -291,7 +287,7 @@
                                 {% else %}
                                     <div class="text-xs-center text-center mt-3" data-region="no-events-empty-message" style="display: block !important;">
                                         <img
-                                            src="https://i.imgur.com/E8wOkE2.png"
+                                            src="https://cet.iitp.ac.in/moodle/theme/image.php/moove/block_timeline/1706000481/activities"
                                             alt=""
                                             style="height: 70px; width: 70px"
                                         >
@@ -319,7 +315,7 @@
                 </div>
 
                 <div
-                    class="tab-pane  fade"
+                    class.="tab-pane  fade"
                     data-region="view-courses"
                     data-midnight="1762281000"
                     data-limit="2"
@@ -351,13 +347,10 @@
                     </div>
                 </div>
             </div>
-        </div>    </div>
+        </div>
 </div>
             <div class="footer"></div>
 
-        </div>
-
-    </div>
 
 </section>
 
@@ -613,7 +606,7 @@
 
         <div class="card-text content mt-3">
             <div class="info">98 online users (last 5 minutes)</div><ul class='list'>
-<li class="listentry"><div class="user"><a title="2 secs"><img src="https://cet.iitp.ac.in/moodle/pluginfile.php/56852/user/icon/moove/f2?rev=16334111" class="userpicture align-middle" width="30" height="30" alt="" />Ankit Kumar</a></div><div class="uservisibility"><a title="Show my online status to other users" data-action="show" data-userid="27291" id="change-user-visibility" ><i class="icon fa fa-eye-slash fa-fw "  title="Show my online status to other users" role="img" aria-label="Show my online status to other users"></i></a></div></li>
+<li class="listentry"><div class="user"><a title="2 secs"><span class="userinitials size-30">{{ username|default:"I"|user_initials }}</span>{{ username }}</a></div><div class="uservisibility"><a title="Show my online status to other users" data-action="show" data-userid="27291" id="change-user-visibility" ><i class="icon fa fa-eye-slash fa-fw "  title="Show my online status to other users" role="img" aria-label="Show my online status to other users"></i></a></div></li>
 <li class="listentry"><div class="user"><a title="3 secs"><span class="userinitials size-30">AS</span>Amlanjyoti Sarma</a></div><div class="message"><a title="Send a message"><i class="icon fa fa-comment-o fa-fw "  title="Send a message" role="img" aria-label="Send a message"></i></a></div></li>
 <li class="listentry"><div class="user"><a title="3 secs"><span class="userinitials size-30">AK</span>Ayush Krishna</a></div><div class="message"><a title="Send a message"><i class="icon fa fa-comment-o fa-fw "  title="Send a message" role="img" aria-label="Send a message"></i></a></div></li>
 <li class="listentry"><div class="user"><a title="3 secs"><span class="userinitials size-30">AK</span>Aashay Kumar Sinha</a></div><div class="message"><a title="Send a message"><i class="icon fa fa-comment-o fa-fw "  title="Send a message" role="img" aria-label="Send a message"></i></a></div></li>

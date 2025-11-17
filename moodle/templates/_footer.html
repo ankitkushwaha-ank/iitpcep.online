@@ -68,7 +68,7 @@
                         <div class="logininfo">
                           {% if username %}
                             You are logged in as
-                            <span class="user-name">{{ username|title }}</span>
+                            <span class="user-name">{{ username.split|first|title }}</span>
                             (<a href="{% url 'logout' %}" class="logout-link">Log out</a>)
                           {% else %}
                             You are logged in as

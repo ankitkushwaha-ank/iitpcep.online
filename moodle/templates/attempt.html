@@ -792,7 +792,7 @@ document.body.className += ' jsenabled';
             <label for="q{{ question.id }}_answer{{ forloop.counter0 }}" class="d-flex align-items-center" style="cursor:pointer;">
 
                 <span class="answernumber mr-2" style="font-weight:400;">
-                    {{ letter|to_chr }}.
+                    {{ letter|to_chr|lower }}.
                 </span>
 
                 {% if opt.image %}
