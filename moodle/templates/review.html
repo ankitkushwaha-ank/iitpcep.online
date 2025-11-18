@@ -680,7 +680,7 @@ document.body.className += ' jsenabled';
 
                     <!-- A., B., C., D. (from model) -->
                     <span class="answernumber mr-2" style="font-weight:400;">
-                      {{ opt.option_label }}.
+                      {{ opt.option_label|lower }}.
                     </span>
 
                     {% if opt.image %}
