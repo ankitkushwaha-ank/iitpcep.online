@@ -1,35 +1,30 @@
 import os
+import json
+import warnings
 from pathlib import Path
-import dj_database_url
-
-# --------------------------------------------------
-# 🔒 Safe Import (from config.py)
-# --------------------------------------------------
-try:
-    from config import DATABASE, SYSTEM
-except ImportError:
-    DATABASE = {}
-    SYSTEM = {"SYSTEM_ON": True}
+from config import DATABASE, SYSTEM  # ✅ import DB + system config safely
 
 # --------------------------------------------------
 # 📁 BASE CONFIG
 # --------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Reverted to using environment variables for safety
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-local-dev-key")
 
 # --------------------------------------------------
-# ⚙️ DEBUG & HOSTS
+# ⚙️ DEBUG & ALLOWED HOSTS
 # --------------------------------------------------
-DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
+# This is the MASTER switch for your environments
+# Set to True to use local SQLite and local media, as you requested.
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "iitpcep.online",
     "www.iitpcep.online",
-    "iitpcep-online.onrender.com",
+    "iitpcep-online.onrender.com",  # This is the correct Render domain
     "cet.iitpcep.online",
-    ".onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -52,15 +47,15 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-
-    "cloudinary_storage",       # Must be before staticfiles
     "django.contrib.staticfiles",
 
+    # Your apps
     "moodle",
     "admin_dashboard",
 
+    # 3rd Party Apps
     "ckeditor",
-    "cloudinary",
+    "storages",  # for Google Cloud Storage
 ]
 
 # --------------------------------------------------
@@ -68,17 +63,13 @@ INSTALLED_APPS = [
 # --------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-
-    # Whitenoise (STATIC ONLY, NOT MEDIA)
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Should be near the top
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
     "moodle.middleware.SystemStatusMiddleware",
 ]
 
@@ -89,12 +80,12 @@ ROOT_URLCONF = "iitpcep.urls"
 WSGI_APPLICATION = "iitpcep.wsgi.application"
 
 # --------------------------------------------------
-# 🎨 TEMPLATE CONFIG
+# 🎨 TEMPLATES
 # --------------------------------------------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "moodle" / "templates"],
+        "DIRS": [os.path.join(BASE_DIR, "moodle", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -110,90 +101,139 @@ TEMPLATES = [
 ]
 
 # --------------------------------------------------
-# 🧾 DATABASE CONFIG
+# 📦 DATABASE, STATIC & MEDIA SETTINGS
 # --------------------------------------------------
+
+# This flag is no longer needed for local-only setup
+# USE_CLOUD_SQL = True
+
+# if DEBUG:
+# --- 🌞 DEVELOPMENT SETTINGS ---
+# This block is now ACTIVE because DEBUG = True
+print("--------------------------------------------------")
+print(f"[SETTINGS] Environment: Development")
+print(f"[SETTINGS] Using Database Engine: SQLite")
+print(f"[SETTINGS] System Online: {SYSTEM.get('SYSTEM_ON', True)}")
 print("--------------------------------------------------")
 
-if DEBUG:
-    print("[SETTINGS] Environment: DEVELOPMENT")
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+# Local SQLite
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
+}
 
-else:
-    print("[SETTINGS] Environment: PRODUCTION")
-    DATABASES = {
-        "default": dj_database_url.config(conn_max_age=600, ssl_require=True)
-    }
-
-    if not DATABASES["default"]:
-        print("⚠️ DATABASE_URL missing — using SQLite fallback.")
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-                "NAME": BASE_DIR / "db.sqlite3",
-            }
-        }
-
-# --------------------------------------------------
-# 🧱 STATIC FILES (FIXED WHITENOISE + CKEDITOR)
-# --------------------------------------------------
-
+# Local Static Files
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_dev")
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
-STATICFILES_DIRS = [
-    BASE_DIR / "moodle" / "static",
-]
-
-# ⚠️ FIX FOR CKEDITOR BUILD FAILURE:
-# Whitenoise cannot compress CKEditor files → use SafeStorage
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-WHITENOISE_SKIP_COMPRESS_EXTENSIONS = [
-    ".map",
-    ".json",
-    ".md",
-]
-
-# --------------------------------------------------
-# ☁️ MEDIA STORAGE (CLOUDINARY)
-# --------------------------------------------------
-
-CLOUDINARY_NAME = os.getenv("CLOUDINARY_CLOUD_NAME", "dexyu0v8j")
-CLOUDINARY_KEY = os.getenv("CLOUDINARY_API_KEY", "225798755461141")
-CLOUDINARY_SECRET = os.getenv("CLOUDINARY_API_SECRET", "<your_api_secret_here>")
-
-if CLOUDINARY_SECRET and CLOUDINARY_KEY:
-    print("[SETTINGS] Cloudinary → ENABLED")
-    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-    CLOUDINARY_STORAGE = {
-        "CLOUD_NAME": CLOUDINARY_NAME,
-        "API_KEY": CLOUDINARY_KEY,
-        "API_SECRET": CLOUDINARY_SECRET,
-        "SECURE": True,
-    }
-else:
-    print("[SETTINGS] Cloudinary → DISABLED (fallback local)")
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-
+# Local Media Files
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+#
+# else:
+#     # --- 🚀 PRODUCTION SETTINGS ---
+#     # This block is now INACTIVE
+#     print("--------------------------------------------------")
+#     print("[SETTINGS] Environment: Production")
+#     print(f"[SETTINGS] System Online: {SYSTEM.get('SYSTEM_ON', True)}")
+#     print("--------------------------------------------------")
+#
+#     # --- 1. LOAD CREDENTIALS (FOR DB & STORAGE) ---
+#     credentials = None
+#     GS_CREDENTIALS = None  # <-- This is required for django-storages
+#
+#     # Reverted to using environment variables for safety
+#     GOOGLE_CREDENTIALS_JSON_STR = os.getenv("GOOGLE_CREDENTIALS_JSON")
+#
+#     if GOOGLE_CREDENTIALS_JSON_STR:
+#         try:
+#             # 👇 THIS IS THE FIX 👇
+#             from google.oauth2 import service_account
+#
+#             info = json.loads(GOOGLE_CREDENTIALS_JSON_STR)
+#             credentials = service_account.Credentials.from_service_account_info(info)
+#             GS_CREDENTIALS = credentials  # <-- Pass credentials to django-storages
+#         except Exception as e:
+#             warnings.warn(f"CRITICAL Error loading Google credentials: {e}")
+#     else:
+#         warnings.warn("CRITICAL WARNING: 'GOOGLE_CREDENTIALS_JSON' env var not set.")
+#
+#     # --- 2. CONFIGURE DATABASE ---
+#     USE_CLOUD_SQL = os.getenv("USE_CLOUD_SQL", "False") == "True"
+#     if USE_CLOUD_SQL:
+#         print("[SETTINGS] Attempting to use Google Cloud SQL...")
+#         try:
+#             import pymysql
+#             from cloud_sql_python_connector import connector
+#
+#             # Fix for PyMySQL
+#             pymysql.version_info = (1, 4, 6)
+#             pymysql.install_as_MySQLdb()
+#
+#             db_connector = connector.Connector(credentials=credentials)
+#
+#
+#             def get_db_conn():
+#                 return db_connector.connect(
+#                     os.getenv("DB_HOST", ""),  # Cloud SQL instance name
+#                     "pymysql",
+#                     user=os.getenv("DB_USER", ""),
+#                     password=os.getenv("DB_PASS", ""),
+#                     db=os.getenv("DB_NAME", ""),
+#                 )
+#
+#
+#             DATABASES = {
+#                 "default": {
+#                     "ENGINE": "django.db.backends.mysql",
+#                     "NAME": os.getenv("DB_NAME"),
+#                     "CONN_CALLABLE": get_db_conn,
+#                 }
+#             }
+#             print("[SETTINGS] Google Cloud SQL configured.")
+#
+#         except ModuleNotFoundError:
+#             warnings.warn("⚠️ cloud_sql_python_connector not installed. Falling back.")
+#             DATABASES = {"default": DATABASE if DATABASE else {"ENGINE": "django.db.backends.sqlite3",
+#                                                                "NAME": BASE_DIR / "db.sqlite3"}}
+#     else:
+#         print("[SETTINGS] USE_CLOUD_SQL is False. Using fallback database.")
+#         DATABASES = {"default": DATABASE if DATABASE else {"ENGINE": "django.db.backends.sqlite3",
+#                                                            "NAME": BASE_DIR / "db.sqlite3"}}
+#
+#     # --- 3. CONFIGURE STATIC FILES (Whitenoise) ---
+#     STATIC_URL = "/static/"
+#     STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
+#     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+#     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+#
+#     # --- 4. CONFIGURE MEDIA FILES (Google Cloud Storage) ---
+#     GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME")
+#     if GS_BUCKET_NAME and GS_CREDENTIALS:  # Check for both
+#         DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+#         GS_FILE_OVERWRITE = False
+#         MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
+#         print("[SETTINGS] Google Cloud Storage (Media) configured.")
+#     else:
+#         warnings.warn("⚠️ GS_BUCKET_NAME or credentials not set. Media will use local storage.")
+#         MEDIA_URL = "/media/"
+#         MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # Fallback to local
+#         DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 # --------------------------------------------------
-# 🧾 DEFAULT FIELD TYPE
+# 🧾 DEFAULT PRIMARY KEY FIELD
 # --------------------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
 # --------------------------------------------------
-# 🌍 GLOBAL CONTEXT PROCESSOR
+# 🌐 GLOBAL CONTEXT PROCESSOR
 # --------------------------------------------------
 def system_context(request):
+    """Inject SYSTEM settings globally into templates"""
     return {"SYSTEM": SYSTEM}
-
-
-print(f"[SETTINGS] Media Storage: {DEFAULT_FILE_STORAGE}")
-print("--------------------------------------------------")
