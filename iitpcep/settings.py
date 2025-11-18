@@ -51,7 +51,11 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    # This is CRITICAL for collectstatic:
+
+    # Cloudinary Storage must be before django.contrib.staticfiles if you were using it for static,
+    # but since we use Whitenoise for static, we just place it here for Media.
+    "cloudinary_storage",
+
     "django.contrib.staticfiles",
 
     # Your apps
@@ -60,7 +64,7 @@ INSTALLED_APPS = [
 
     # 3rd Party Apps
     "ckeditor",
-    "storages",
+    "cloudinary",  # Main Cloudinary app
 ]
 
 # --------------------------------------------------
@@ -106,9 +110,8 @@ TEMPLATES = [
 ]
 
 # --------------------------------------------------
-# 📦 DATABASE, STATIC & MEDIA SETTINGS
+# 📦 DATABASE SETTINGS
 # --------------------------------------------------
-
 print("--------------------------------------------------")
 if DEBUG:
     print(f"[SETTINGS] Environment: Development (DEBUG=True)")
@@ -131,7 +134,7 @@ else:
         )
     }
 
-    # Fallback if DATABASE_URL is missing (prevents crash during build if DB isn't ready)
+    # Fallback if DATABASE_URL is missing
     if not DATABASES['default']:
         print("⚠️ WARNING: DATABASE_URL not found. Using SQLite fallback.")
         DATABASES = {
@@ -143,43 +146,40 @@ else:
     else:
         print("[SETTINGS] Render PostgreSQL configured.")
 
-# --- Static Files (Always same logic for simplicity) ---
+# --------------------------------------------------
+# 📦 STATIC FILES (CSS/JS)
+# --------------------------------------------------
+# We keep Whitenoise for Static files as it is faster/cheaper for CSS/JS
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-# Use Whitenoise for storage
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# --- Media Files (GCS or Local) ---
-GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME")
-GOOGLE_CREDENTIALS_JSON_STR = os.getenv("GOOGLE_CREDENTIALS_JSON")
+# --------------------------------------------------
+# ☁️ MEDIA FILES (CLOUDINARY)
+# --------------------------------------------------
+# Using Cloudinary for Media (Images, Videos, User Uploads)
 
-# Check if we have everything needed for Google Cloud Storage
-use_gcs = not DEBUG and GS_BUCKET_NAME and GOOGLE_CREDENTIALS_JSON_STR
+# Retrieve API Secret from Environment Variable for security
+# OR Fallback to a string if you really must hardcode it (not recommended for git)
+CLOUDINARY_API_SECRET = os.getenv("CLOUDINARY_API_SECRET", "<your_api_secret_here>")
 
-if use_gcs:
-    try:
-        import json
-        from google.oauth2 import service_account
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dexyu0v8j',
+    'API_KEY': '225798755461141',
+    'API_SECRET': CLOUDINARY_API_SECRET,
+    'SECURE': True,
+    'MEDIA_TAG': 'media',
+}
 
-        info = json.loads(GOOGLE_CREDENTIALS_JSON_STR)
-        GS_CREDENTIALS = service_account.Credentials.from_service_account_info(info)
+# Set the storage backend to Cloudinary
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-        DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
-        GS_FILE_OVERWRITE = False
-        MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
-        print("[SETTINGS] Google Cloud Storage (Media) configured.")
+# Media URL is handled automatically by the storage backend, but good to have defined
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-    except Exception as e:
-        print(f"⚠️ ERROR initializing GCS: {e}")
-        use_gcs = False
-
-if not use_gcs:
-    # Local Media Fallback
-    print("[SETTINGS] Using Local Media Storage.")
-    MEDIA_URL = "/media/"
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+print(f"[SETTINGS] Cloudinary Storage Configured for Cloud Name: {CLOUDINARY_STORAGE['CLOUD_NAME']}")
 
 print("--------------------------------------------------")
 

@@ -41,3 +41,9 @@ python-dotenv==1.0.1
 # Connect External Databases
 dj-database-url>=2.1.0
 psycopg2-binary>=2.9.9
+#===============================
+#☁️ Cloudinary Media Storage
+#===============================
+#Packages for Cloudinary storage
+cloudinary==1.41.0
+django-cloudinary-storage==0.3.0
