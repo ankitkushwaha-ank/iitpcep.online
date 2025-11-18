@@ -152,10 +152,12 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-# FIX: Removed 'Manifest' from the storage class name.
-# This version (CompressedStaticFilesStorage) does NOT check for missing file references,
-# so it won't crash on the broken CKEditor image link.
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+# === CRITICAL BUILD FIX ===
+# We are switching to the default Django storage backend.
+# This disables Whitenoise's file compression/hashing step which is currently failing
+# due to missing files in the CKEditor package.
+# Whitenoise Middleware (enabled above) will STILL serve these files, just without pre-compression.
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 # --------------------------------------------------
 # ☁️ MEDIA FILES (CLOUDINARY)
