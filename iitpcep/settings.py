@@ -237,4 +237,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 def system_context(request):
     """Inject SYSTEM settings globally into templates"""
     return {"SYSTEM": SYSTEM}
-#old
+#old settings.py
