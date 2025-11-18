@@ -138,7 +138,8 @@ STATICFILES_DIRS = [BASE_DIR / "moodle" / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Whitenoise will serve static files efficiently
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
 
 # --------------------------------------------------
 # ☁️ MEDIA STORAGE (Cloudinary)
