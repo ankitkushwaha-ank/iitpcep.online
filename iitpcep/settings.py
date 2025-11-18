@@ -52,10 +52,13 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "cloudinary_storage",       # ✅ Must be before staticfiles
+
+    "cloudinary_storage",       # Must be before staticfiles
     "django.contrib.staticfiles",
+
     "moodle",
     "admin_dashboard",
+
     "ckeditor",
     "cloudinary",
 ]
@@ -65,13 +68,17 @@ INSTALLED_APPS = [
 # --------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+
+    # Whitenoise (STATIC ONLY, NOT MEDIA)
     "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
     "moodle.middleware.SystemStatusMiddleware",
 ]
 
@@ -106,23 +113,24 @@ TEMPLATES = [
 # 🧾 DATABASE CONFIG
 # --------------------------------------------------
 print("--------------------------------------------------")
+
 if DEBUG:
     print("[SETTINGS] Environment: DEVELOPMENT")
-
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+
 else:
     print("[SETTINGS] Environment: PRODUCTION")
     DATABASES = {
         "default": dj_database_url.config(conn_max_age=600, ssl_require=True)
     }
 
-    if not DATABASES.get("default"):
-        print("⚠️ DATABASE_URL not found. Using SQLite fallback.")
+    if not DATABASES["default"]:
+        print("⚠️ DATABASE_URL missing — using SQLite fallback.")
         DATABASES = {
             "default": {
                 "ENGINE": "django.db.backends.sqlite3",
@@ -131,28 +139,36 @@ else:
         }
 
 # --------------------------------------------------
-# 🧱 STATIC FILES
+# 🧱 STATIC FILES (FIXED WHITENOISE + CKEDITOR)
 # --------------------------------------------------
+
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Fix for CKEditor + Whitenoise
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATICFILES_DIRS = [
+    BASE_DIR / "moodle" / "static",
+]
 
-# Whitenoise for production
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+# ⚠️ FIX FOR CKEDITOR BUILD FAILURE:
+# Whitenoise cannot compress CKEditor files → use SafeStorage
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = [
+    ".map",
+    ".json",
+    ".md",
+]
 
 # --------------------------------------------------
-# ☁️ MEDIA STORAGE (Cloudinary)
+# ☁️ MEDIA STORAGE (CLOUDINARY)
 # --------------------------------------------------
+
 CLOUDINARY_NAME = os.getenv("CLOUDINARY_CLOUD_NAME", "dexyu0v8j")
 CLOUDINARY_KEY = os.getenv("CLOUDINARY_API_KEY", "225798755461141")
 CLOUDINARY_SECRET = os.getenv("CLOUDINARY_API_SECRET", "<your_api_secret_here>")
 
 if CLOUDINARY_SECRET and CLOUDINARY_KEY:
-    print("[SETTINGS] ✅ Cloudinary connected.")
+    print("[SETTINGS] Cloudinary → ENABLED")
     DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
     CLOUDINARY_STORAGE = {
         "CLOUD_NAME": CLOUDINARY_NAME,
@@ -161,7 +177,7 @@ if CLOUDINARY_SECRET and CLOUDINARY_KEY:
         "SECURE": True,
     }
 else:
-    print("⚠️ Cloudinary not configured — using local media fallback.")
+    print("[SETTINGS] Cloudinary → DISABLED (fallback local)")
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 MEDIA_URL = "/media/"
@@ -176,8 +192,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # 🌍 GLOBAL CONTEXT PROCESSOR
 # --------------------------------------------------
 def system_context(request):
-    """Inject SYSTEM settings globally into templates"""
     return {"SYSTEM": SYSTEM}
+
 
 print(f"[SETTINGS] Media Storage: {DEFAULT_FILE_STORAGE}")
 print("--------------------------------------------------")
