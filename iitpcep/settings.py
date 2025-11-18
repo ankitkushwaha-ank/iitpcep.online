@@ -152,12 +152,10 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-# Use Whitenoise for storage
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-# CRITICAL FIX FOR RENDER BUILD:
-# This allows the build to succeed even if CKEditor references a missing image file.
-WHITENOISE_MANIFEST_STRICT = False
+# FIX: Removed 'Manifest' from the storage class name.
+# This version (CompressedStaticFilesStorage) does NOT check for missing file references,
+# so it won't crash on the broken CKEditor image link.
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 # --------------------------------------------------
 # ☁️ MEDIA FILES (CLOUDINARY)
