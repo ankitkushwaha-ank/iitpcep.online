@@ -52,8 +52,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
 
-    # Cloudinary Storage must be before django.contrib.staticfiles if you were using it for static,
-    # but since we use Whitenoise for static, we just place it here for Media.
+    # Cloudinary Storage must be before django.contrib.staticfiles
     "cloudinary_storage",
 
     "django.contrib.staticfiles",
@@ -64,7 +63,7 @@ INSTALLED_APPS = [
 
     # 3rd Party Apps
     "ckeditor",
-    "cloudinary",  # Main Cloudinary app
+    "cloudinary",
 ]
 
 # --------------------------------------------------
@@ -149,19 +148,20 @@ else:
 # --------------------------------------------------
 # 📦 STATIC FILES (CSS/JS)
 # --------------------------------------------------
-# We keep Whitenoise for Static files as it is faster/cheaper for CSS/JS
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# Use Whitenoise for storage
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# CRITICAL FIX FOR RENDER BUILD:
+# This allows the build to succeed even if CKEditor references a missing image file.
+WHITENOISE_MANIFEST_STRICT = False
 
 # --------------------------------------------------
 # ☁️ MEDIA FILES (CLOUDINARY)
 # --------------------------------------------------
-# Using Cloudinary for Media (Images, Videos, User Uploads)
-
-# Retrieve API Secret from Environment Variable for security
-# OR Fallback to a string if you really must hardcode it (not recommended for git)
 CLOUDINARY_API_SECRET = os.getenv("CLOUDINARY_API_SECRET", "<your_api_secret_here>")
 
 CLOUDINARY_STORAGE = {
@@ -172,10 +172,8 @@ CLOUDINARY_STORAGE = {
     'MEDIA_TAG': 'media',
 }
 
-# Set the storage backend to Cloudinary
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# Media URL is handled automatically by the storage backend, but good to have defined
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
