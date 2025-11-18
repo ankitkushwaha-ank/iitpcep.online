@@ -1,9 +1,13 @@
 import os
-import json
-import warnings
-import dj_database_url  # <--- 1. ADDED THIS IMPORT
+import dj_database_url
 from pathlib import Path
-from config import DATABASE, SYSTEM  # ✅ import DB + system config safely
+
+# Import config safely; if it fails, we continue with defaults
+try:
+    from config import DATABASE, SYSTEM
+except ImportError:
+    DATABASE = {}
+    SYSTEM = {"SYSTEM_ON": True}
 
 # --------------------------------------------------
 # 📁 BASE CONFIG
@@ -14,8 +18,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-local-dev-key")
 # --------------------------------------------------
 # ⚙️ DEBUG & ALLOWED HOSTS
 # --------------------------------------------------
-# ⭐ 2. MADE DEBUG DYNAMIC
-# Set DJANGO_DEBUG="True" locally, and "False" in Render
+# Default to False in production. Only True if explicitly set to "True".
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
@@ -23,10 +26,64 @@ ALLOWED_HOSTS = [
     "localhost",
     "iitpcep.online",
     "www.iitpcep.online",
-    "iitpcep-online.onrender.com",  # This is the correct Render domain
+    "iitpcep-online.onrender.com",
     "cet.iitpcep.online",
+    ".onrender.com",  # Allow all render subdomains
 ]
-# ... (rest of your file from CSRF_TRUSTED_ORIGINS to TEMPLATES) ...
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://iitpcep.online",
+    "https://www.iitpcep.online",
+    "https://iitpcep-online.onrender.com",
+    "https://cet.iitpcep.online",
+]
+
+LOGIN_URL = "/admincp/login/"
+LOGIN_REDIRECT_URL = "/admincp/"
+LOGOUT_REDIRECT_URL = "/admincp/login/"
+
+# --------------------------------------------------
+# 🧩 INSTALLED APPS
+# --------------------------------------------------
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    # This is CRITICAL for collectstatic:
+    "django.contrib.staticfiles",
+
+    # Your apps
+    "moodle",
+    "admin_dashboard",
+
+    # 3rd Party Apps
+    "ckeditor",
+    "storages",
+]
+
+# --------------------------------------------------
+# ⚙️ MIDDLEWARE
+# --------------------------------------------------
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "moodle.middleware.SystemStatusMiddleware",
+]
+
+# --------------------------------------------------
+# 🌐 URL + WSGI
+# --------------------------------------------------
+ROOT_URLCONF = "iitpcep.urls"
+WSGI_APPLICATION = "iitpcep.wsgi.application"
+
 # --------------------------------------------------
 # 🎨 TEMPLATES
 # --------------------------------------------------
@@ -52,14 +109,9 @@ TEMPLATES = [
 # 📦 DATABASE, STATIC & MEDIA SETTINGS
 # --------------------------------------------------
 
-# ⭐ 3. UN-COMMENTED THE IF/ELSE BLOCK
+print("--------------------------------------------------")
 if DEBUG:
-    # --- 🌞 DEVELOPMENT SETTINGS ---
-    print("--------------------------------------------------")
-    print(f"[SETTINGS] Environment: Development")
-    print(f"[SETTINGS] Using Database Engine: SQLite")
-    print(f"[SETTINGS] System Online: {SYSTEM.get('SYSTEM_ON', True)}")
-    print("--------------------------------------------------")
+    print(f"[SETTINGS] Environment: Development (DEBUG=True)")
 
     # Local SQLite
     DATABASES = {
@@ -68,72 +120,68 @@ if DEBUG:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-
-    # Local Static Files
-    STATIC_URL = "/static/"
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_dev")
-    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
-
-    # Local Media Files
-    MEDIA_URL = "/media/"
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-
 else:
-    # --- 🚀 PRODUCTION SETTINGS ---
-    print("--------------------------------------------------")
-    print("[SETTINGS] Environment: Production")
-    print(f"[SETTINGS] System Online: {SYSTEM.get('SYSTEM_ON', True)}")
-    print("--------------------------------------------------")
+    print("[SETTINGS] Environment: Production (DEBUG=False)")
 
-    # --- 2. CONFIGURE DATABASE (Render PostgreSQL) ---
-    # This automatically reads the 'DATABASE_URL' env variable
-    # that Render provides.
+    # Render PostgreSQL
     DATABASES = {
         'default': dj_database_url.config(
-            conn_max_age=600,    # How long connections persist
-            ssl_require=True     # Force SSL for security
+            conn_max_age=600,
+            ssl_require=True
         )
     }
-    print("[SETTINGS] Render PostgreSQL configured.")
 
-
-    # --- 3. CONFIGURE STATIC FILES (Whitenoise) ---
-    STATIC_URL = "/static/"
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-    # --- 4. CONFIGURE MEDIA FILES (Your choice: GCS, R2, etc.) ---
-    # (Leaving your GCS logic here, as you only asked to update the DB)
-    credentials = None
-    GS_CREDENTIALS = None
-    GOOGLE_CREDENTIALS_JSON_STR = os.getenv("GOOGLE_CREDENTIALS_JSON")
-
-    if GOOGLE_CREDENTIALS_JSON_STR:
-        try:
-            from google.oauth2 import service_account
-            info = json.loads(GOOGLE_CREDENTIALS_JSON_STR)
-            credentials = service_account.Credentials.from_service_account_info(info)
-            GS_CREDENTIALS = credentials
-        except Exception as e:
-            warnings.warn(f"CRITICAL Error loading Google credentials: {e}")
+    # Fallback if DATABASE_URL is missing (prevents crash during build if DB isn't ready)
+    if not DATABASES['default']:
+        print("⚠️ WARNING: DATABASE_URL not found. Using SQLite fallback.")
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": BASE_DIR / "db.sqlite3",
+            }
+        }
     else:
-        warnings.warn("CRITICAL WARNING: 'GOOGLE_CREDENTIALS_JSON' env var not set.")
+        print("[SETTINGS] Render PostgreSQL configured.")
 
-    GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME")
-    if GS_BUCKET_NAME and GS_CREDENTIALS:
+# --- Static Files (Always same logic for simplicity) ---
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Use Whitenoise for storage
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# --- Media Files (GCS or Local) ---
+GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME")
+GOOGLE_CREDENTIALS_JSON_STR = os.getenv("GOOGLE_CREDENTIALS_JSON")
+
+# Check if we have everything needed for Google Cloud Storage
+use_gcs = not DEBUG and GS_BUCKET_NAME and GOOGLE_CREDENTIALS_JSON_STR
+
+if use_gcs:
+    try:
+        import json
+        from google.oauth2 import service_account
+
+        info = json.loads(GOOGLE_CREDENTIALS_JSON_STR)
+        GS_CREDENTIALS = service_account.Credentials.from_service_account_info(info)
+
         DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
         GS_FILE_OVERWRITE = False
         MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
         print("[SETTINGS] Google Cloud Storage (Media) configured.")
-    else:
-        warnings.warn("⚠️ GS_BUCKET_NAME or credentials not set. Media will use local storage.")
-        MEDIA_URL = "/media/"
-        MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-        DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
+    except Exception as e:
+        print(f"⚠️ ERROR initializing GCS: {e}")
+        use_gcs = False
+
+if not use_gcs:
+    # Local Media Fallback
+    print("[SETTINGS] Using Local Media Storage.")
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+print("--------------------------------------------------")
 
 # --------------------------------------------------
 # 🧾 DEFAULT PRIMARY KEY FIELD
