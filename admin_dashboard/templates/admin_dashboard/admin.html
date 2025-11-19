@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - IIT Patna</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgMain: '#f0f2f5', card: '#ffffff', primary: '#2563eb',
+                        secondary: '#64748b', success: '#10b981', danger: '#ef4444',
+                        warning: '#f59e0b', textMain: '#1e293b', textMuted: '#64748b',
+                        border: '#e2e8f0'
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; color: #1e293b; }
+        .nav-item.active { background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; font-weight: 600; }
+        .nav-item:hover { background-color: #f8fafc; color: #2563eb; }
+        .ql-container { height: 150px; }
+        .modal { transition: opacity 0.2s ease; }
+        body.modal-active { overflow-x: hidden; overflow-y: visible !important; }
+        .sidebar-transition { transition: transform 0.3s ease-in-out; }
+        .toggle-checkbox:checked { right: 0; border-color: #10b981; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
+        .stat-card { transition: transform 0.2s; cursor: pointer; }
+        .stat-card:hover { transform: translateY(-3px); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden text-sm">
+
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
+
+    <aside id="sidebar" class="sidebar-transition fixed inset-y-0 left-0 z-30 w-64 bg-card border-r border-border transform -translate-x-full md:relative md:translate-x-0 flex flex-col shadow-2xl md:shadow-none">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-border">
+            <div class="flex items-center gap-2">
+                <div class="h-8 w-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xs">IP</div>
+                <div><h1 class="text-lg font-bold text-primary leading-tight">IIT Patna</h1><p class="text-[10px] text-textMuted">Admin Console</p></div>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-textMuted hover:text-danger"><i class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+        <div class="flex-1 overflow-y-auto py-4">
+            <nav class="space-y-1">
+                <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active flex items-center px-6 py-3 transition-colors"><i class="fa-solid fa-gauge w-5 mr-3"></i> <span>Dashboard</span></a>
+                <div class="px-6 py-2 text-xs font-bold uppercase tracking-wider text-textMuted mt-4">Academics</div>
+                <a href="#" onclick="switchTab('courses')" id="nav-courses" class="nav-item flex items-center px-6 py-3 transition-colors"><i class="fa-solid fa-book w-5 mr-3"></i> <span>My Courses</span></a>
+                <a href="#" onclick="switchTab('quizzes')" id="nav-quizzes" class="nav-item flex items-center px-6 py-3 transition-colors"><i class="fa-solid fa-clock w-5 mr-3"></i> <span>Quizzes</span></a>
+                <a href="#" onclick="switchTab('assignments')" id="nav-assignments" class="nav-item flex items-center px-6 py-3 transition-colors"><i class="fa-solid fa-file-signature w-5 mr-3"></i> <span>Assignments</span></a>
+                <a href="#" onclick="switchTab('exams')" id="nav-exams" class="nav-item flex items-center px-6 py-3 transition-colors"><i class="fa-solid fa-graduation-cap w-5 mr-3"></i> <span>Exams</span></a>
+                <a href="#" onclick="switchTab('questions')" id="nav-questions" class="nav-item flex items-center px-6 py-3 transition-colors"><i class="fa-solid fa-database w-5 mr-3"></i> <span>Question Bank</span></a>
+                <div class="px-6 py-2 text-xs font-bold uppercase tracking-wider text-textMuted mt-4">Administration</div>
+                <a href="#" onclick="switchTab('users')" id="nav-users" class="nav-item flex items-center px-6 py-3 transition-colors"><i class="fa-solid fa-users w-5 mr-3"></i> <span>Users</span></a>
+                <a href="#" onclick="switchTab('settings')" id="nav-settings" class="nav-item flex items-center px-6 py-3 transition-colors"><i class="fa-solid fa-gear w-5 mr-3"></i> <span>Settings</span></a>
+            </nav>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden bg-bgMain w-full">
+        <header class="h-16 bg-card flex items-center justify-between px-4 md:px-8 shadow-sm z-10 border-b border-border">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="md:hidden text-textMain hover:text-primary"><i class="fa-solid fa-bars text-xl"></i></button>
+                <div class="flex items-center bg-bgMain rounded-full px-4 py-2 w-48 md:w-96 border border-border focus-within:ring-2 focus-within:ring-primary/20 transition">
+                    <i class="fa-solid fa-magnifying-glass text-textMuted"></i>
+                    <input type="text" id="globalSearch" onkeyup="filterContent()" placeholder="Search courses, users, tests..." class="bg-transparent border-none outline-none text-sm ml-2 text-textMain w-full placeholder-gray-400">
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-6">
+                <div class="relative group">
+                    <button onclick="toggleNotifications()" class="text-textMuted hover:text-primary relative focus:outline-none">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <span id="notifDot" class="absolute top-0 right-0 h-2 w-2 bg-danger rounded-full border-2 border-white hidden"></span>
+                    </button>
+                    <div id="notificationPanel" class="absolute right-0 top-10 w-80 bg-white rounded-xl shadow-xl border border-border hidden z-50 p-0 overflow-hidden">
+                        <div class="flex justify-between items-center px-4 py-3 border-b border-border bg-gray-50">
+                            <h4 class="text-xs font-bold text-textMain uppercase">Notifications</h4>
+                            <button onclick="clearNotifications()" class="text-xs text-primary hover:underline">Clear All</button>
+                        </div>
+                        <div id="notificationList" class="max-h-64 overflow-y-auto">
+                            <p class="text-xs text-center text-textMuted py-4">No new notifications</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 group relative cursor-pointer">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-bold text-textMain">{{ request.user.username }}</p>
+                        <p class="text-xs text-textMuted">{% if request.user.is_superuser %}Super Admin{% else %}Staff{% endif %}</p>
+                    </div>
+                    <div class="h-9 w-9 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-lg">
+                        {{ request.user.username|slice:":1"|upper }}
+                    </div>
+                    <div class="absolute right-0 top-10 w-48 bg-white rounded-lg shadow-xl border border-gray-100 hidden group-hover:block z-50">
+                         <a href="{% url 'admin_dashboard:admin_logout' %}" class="block px-4 py-3 text-danger hover:bg-red-50 rounded-lg transition flex items-center">
+                             <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+                         </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-8" id="main-container">
+
+            {% if messages %}
+            <div class="mb-6 space-y-2" id="flashContainer">
+                {% for message in messages %}
+                <div class="flash-msg p-4 rounded-lg shadow-sm flex items-center justify-between {% if message.tags == 'error' %}bg-red-50 text-red-700 border border-red-200{% else %}bg-green-50 text-green-700 border border-green-200{% endif %}"
+                     data-text="{{ message }}" data-type="{{ message.tags }}" data-time="{% now 'H:i' %}">
+                    <div class="flex items-center"><i class="{% if message.tags == 'error' %}fa-solid fa-circle-exclamation{% else %}fa-solid fa-circle-check{% endif %} mr-3 text-lg"></i><span>{{ message }}</span></div>
+                    <button onclick="this.parentElement.remove()" class="text-sm hover:opacity-75"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div id="dashboard" class="section-content">
+                <h2 class="text-2xl font-bold text-textMain mb-6">Dashboard Overview</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div onclick="switchTab('settings')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center border-l-4 {% if config.system_status == 'ONLINE' %}border-success{% else %}border-danger{% endif %}">
+                        <div><p class="text-textMuted text-xs font-bold uppercase">System Status</p><h3 class="text-xl font-bold {% if config.system_status == 'ONLINE' %}text-success{% else %}text-danger{% endif %}">{{ config.system_status }}</h3></div><div class="bg-gray-50 p-3 rounded-lg"><i class="fa-solid fa-server text-xl"></i></div>
+                    </div>
+                    <div onclick="switchTab('users')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Total Users</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_users }}</h3></div><div class="bg-blue-50 text-primary p-3 rounded-lg"><i class="fa-solid fa-users text-xl"></i></div></div>
+                    <div onclick="switchTab('courses')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Courses</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_courses }}</h3></div><div class="bg-purple-50 text-purple-600 p-3 rounded-lg"><i class="fa-solid fa-book text-xl"></i></div></div>
+                    <div onclick="switchTab('quizzes')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Quizzes</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_quizzes }}</h3></div><div class="bg-indigo-50 text-indigo-600 p-3 rounded-lg"><i class="fa-solid fa-clock text-xl"></i></div></div>
+                    <div onclick="switchTab('assignments')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Assignments</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_assignments }}</h3></div><div class="bg-teal-50 text-teal-600 p-3 rounded-lg"><i class="fa-solid fa-file-signature text-xl"></i></div></div>
+                    <div onclick="switchTab('exams')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Exams</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_exams }}</h3></div><div class="bg-red-50 text-danger p-3 rounded-lg"><i class="fa-solid fa-graduation-cap text-xl"></i></div></div>
+                    <div onclick="switchTab('questions')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Questions</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_questions }}</h3></div><div class="bg-orange-50 text-warning p-3 rounded-lg"><i class="fa-solid fa-database text-xl"></i></div></div>
+                </div>
+            </div>
+
+            <div id="courses" class="section-content hidden">
+                <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-textMain">My Courses</h2><button onclick="toggleModal('courseModal')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition flex items-center"><i class="fa-solid fa-plus mr-2"></i> Add Course</button></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 searchable-container">
+                    {% for course in courses %}
+                    <div class="bg-card rounded-xl overflow-hidden shadow-sm border border-border group hover:shadow-md transition searchable-item" data-search="{{ course.title }} {{ course.code }}">
+                        <div class="h-32 bg-blue-600 relative overflow-hidden">
+                            {% if course.image %}<img src="{{ course.image.url }}" class="w-full h-full object-cover opacity-80">{% else %}<div class="w-full h-full bg-gradient-to-r from-blue-600 to-indigo-600 opacity-80"></div>{% endif %}
+                            <span class="absolute top-3 left-3 bg-black/30 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">{{ course.description }}</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-textMain text-lg mb-2 truncate">{{ course.code }}:{{ course.title }}</h3>
+                            <div class="flex justify-between items-center mt-4 pt-4 border-t border-border">
+                                <button onclick="openEditCourse('{{ course.id }}', '{{ course.title|escapejs }}', '{{ course.code|escapejs }}', '{{ course.description|escapejs }}')" class="text-primary text-xs font-bold hover:underline"><i class="fa-solid fa-pen mr-1"></i> Edit</button>
+                                <button onclick="confirmDelete('course/delete/{{ course.id }}')" class="text-danger text-xs font-bold hover:underline"><i class="fa-solid fa-trash mr-1"></i> Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div id="quizzes" class="section-content hidden">
+                <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-textMain">Quizzes</h2><button onclick="openAssessmentModal('add', 'quiz')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition"><i class="fa-solid fa-plus mr-2"></i> Add Quiz</button></div>
+                <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
+                    <table class="w-full text-left min-w-[700px] searchable-table">
+                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Title</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Course</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Status</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
+                        <tbody class="divide-y divide-border">
+                            {% for item in quizzes %}
+                            <tr class="hover:bg-gray-50 searchable-row" data-search="{{ item.title }} {{ item.course.code }}">
+                                <td class="p-4 font-medium text-textMain">{{ item.title }}</td>
+                                <td class="p-4 text-textMuted">{{ item.course.code }}</td>
+                                <td class="p-4 text-xs text-textMuted">{{ item.open_date|date:"M d" }}</td>
+                                <td class="p-4">{% if item.is_live %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs font-bold">Live</span>{% else %}<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">Draft</span>{% endif %}</td>
+                                <td class="p-4 text-right">
+                                    <button onclick="viewQuestions('{{ item.title|escapejs }}', '{{ item.id }}')" class="text-secondary p-2 hover:text-primary" title="View Questions"><i class="fa-solid fa-eye"></i></button>
+                                    <button onclick="openEditAssessment('{{ item.id }}', '{{ item.title|escapejs }}', 'quiz', '{{ item.description|escapejs }}', '{{ item.open_date|date:'Y-m-d' }}', '{{ item.open_date|time:'H:i' }}', '{{ item.close_date|date:'Y-m-d' }}', '{{ item.close_date|time:'H:i' }}', '{{ item.duration_minutes }}', '{{ item.max_attempts }}', '{{ item.is_live }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="confirmDelete('assessment/delete/{{ item.id }}')" class="text-danger p-2"><i class="fa-solid fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="assignments" class="section-content hidden">
+                <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-textMain">Assignments</h2><button onclick="openAssessmentModal('add', 'assignment')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition"><i class="fa-solid fa-plus mr-2"></i> Add Assignment</button></div>
+                <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
+                    <table class="w-full text-left min-w-[700px] searchable-table">
+                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Title</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Course</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Status</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
+                        <tbody class="divide-y divide-border">
+                            {% for item in assignments %}
+                            <tr class="hover:bg-gray-50 searchable-row" data-search="{{ item.title }} {{ item.course.code }}">
+                                <td class="p-4 font-medium text-textMain">{{ item.title }}</td>
+                                <td class="p-4 text-textMuted">{{ item.course.code }}</td>
+                                <td class="p-4 text-xs text-textMuted">{{ item.open_date|date:"M d" }}</td>
+                                <td class="p-4">{% if item.is_live %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs font-bold">Live</span>{% else %}<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">Draft</span>{% endif %}</td>
+                                <td class="p-4 text-right">
+                                    <button onclick="viewQuestions('{{ item.title|escapejs }}', '{{ item.id }}')" class="text-secondary p-2 hover:text-primary" title="View Questions"><i class="fa-solid fa-eye"></i></button>
+                                    <button onclick="openEditAssessment('{{ item.id }}', '{{ item.title|escapejs }}', 'assignment', '{{ item.description|escapejs }}', '{{ item.open_date|date:'Y-m-d' }}', '{{ item.open_date|time:'H:i' }}', '{{ item.close_date|date:'Y-m-d' }}', '{{ item.close_date|time:'H:i' }}', '{{ item.duration_minutes }}', '{{ item.max_attempts }}', '{{ item.is_live }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="confirmDelete('assessment/delete/{{ item.id }}')" class="text-danger p-2"><i class="fa-solid fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="exams" class="section-content hidden">
+                <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-textMain">Exams</h2><button onclick="openAssessmentModal('add', 'exam')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition"><i class="fa-solid fa-plus mr-2"></i> Add Exam</button></div>
+                <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
+                    <table class="w-full text-left min-w-[700px] searchable-table">
+                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Title</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Course</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Status</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
+                        <tbody class="divide-y divide-border">
+                            {% for item in exams %}
+                            <tr class="hover:bg-gray-50 searchable-row" data-search="{{ item.title }} {{ item.course.code }}">
+                                <td class="p-4 font-medium text-textMain">{{ item.title }}</td>
+                                <td class="p-4 text-textMuted">{{ item.course.code }}</td>
+                                <td class="p-4 text-xs text-textMuted">{{ item.open_date|date:"M d" }}</td>
+                                <td class="p-4">{% if item.is_live %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs font-bold">Live</span>{% else %}<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">Draft</span>{% endif %}</td>
+                                <td class="p-4 text-right">
+                                    <button onclick="viewQuestions('{{ item.title|escapejs }}', '{{ item.id }}')" class="text-secondary p-2 hover:text-primary" title="View Questions"><i class="fa-solid fa-eye"></i></button>
+                                    <button onclick="openEditAssessment('{{ item.id }}', '{{ item.title|escapejs }}', 'exam', '{{ item.description|escapejs }}', '{{ item.open_date|date:'Y-m-d' }}', '{{ item.open_date|time:'H:i' }}', '{{ item.close_date|date:'Y-m-d' }}', '{{ item.close_date|time:'H:i' }}', '{{ item.duration_minutes }}', '{{ item.max_attempts }}', '{{ item.is_live }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="confirmDelete('assessment/delete/{{ item.id }}')" class="text-danger p-2"><i class="fa-solid fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="questions" class="section-content hidden">
+                <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-textMain">Question Bank</h2><button onclick="openQuestionModal('add')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition flex items-center"><i class="fa-solid fa-plus mr-2"></i> Add Question</button></div>
+                <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
+                     <table class="w-full text-left min-w-[600px] searchable-table">
+                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Question</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Type</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Parent</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
+                        <tbody class="divide-y divide-border">
+                            {% for q in questions %}
+                            <tr class="hover:bg-gray-50 searchable-row" data-search="{{ q.text }}">
+                                <td class="p-4 text-textMain truncate max-w-md">{{ q.text|striptags }}</td>
+                                <td class="p-4"><span class="bg-blue-100 text-primary px-2 py-1 rounded text-xs">{{ q.get_question_type_display }}</span></td>
+                                <td class="p-4 text-textMuted">{{ q.parent_type }} #{{ q.parent_id }}</td>
+                                <td class="p-4 text-right">
+                                    <button onclick="viewSingleQuestion('{{ q.text|escapejs }}', '{{ q.question_type }}')" class="text-secondary p-2 hover:text-primary"><i class="fa-solid fa-eye"></i></button>
+                                    <button onclick="openQuestionModal('edit', '{{ q.id }}', '{{ q.text|escapejs }}', '{{ q.question_type }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="confirmDelete('question/delete/{{ q.id }}')" class="text-danger p-2"><i class="fa-solid fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="users" class="section-content hidden">
+                <h2 class="text-2xl font-bold text-textMain mb-6">User Management</h2>
+                <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
+                    <table class="w-full text-left min-w-[900px] searchable-table">
+                        <thead class="bg-gray-50 border-b border-border">
+                            <tr>
+                                <th class="p-4 text-xs font-bold text-textMuted uppercase">User</th>
+                                <th class="p-4 text-xs font-bold text-textMuted uppercase">Status</th>
+                                <th class="p-4 text-xs font-bold text-textMuted uppercase">Last Login</th>
+                                <th class="p-4 text-xs font-bold text-textMuted uppercase">Joined At</th>
+                                <th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-border">
+                            {% for user in users %}
+                            <tr class="hover:bg-gray-50 searchable-row" data-search="{{ user.username }}">
+                                <td class="p-4 font-bold text-textMain">
+                                    {{ user.username }}
+                                    {% if user.is_superuser %}<span class="ml-2 bg-yellow-100 text-yellow-800 text-[10px] px-1 rounded">ADMIN</span>{% endif %}
+                                </td>
+                                <td class="p-4">
+                                    {% if user.is_banned %}<span class="bg-red-100 text-danger px-2 py-1 rounded text-xs font-bold">Banned</span>
+                                    {% else %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs">Active</span>{% endif %}
+                                </td>
+                                <td class="p-4 text-textMuted text-xs">{{ user.last_active|date:"M d, Y H:i" }}</td>
+                                <td class="p-4 text-textMuted text-xs">{{ user.created_at|date:"M d, Y" }}</td>
+                                                                <td class="p-4 text-right"><button onclick="openEditUser('{{ user.username }}')" class="text-primary mx-2"><i class="fa-solid fa-pen"></i></button><a href="{% url 'admin_dashboard:toggle_ban_user' user.id %}" class="text-warning mx-2"><i class="fa-solid fa-ban"></i></a><button onclick="confirmDelete('user/delete/{{ user.id }}')" class="text-danger mx-2"><i class="fa-solid fa-trash"></i></button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="settings" class="section-content hidden">
+                <h2 class="text-2xl font-bold text-textMain mb-6 flex items-center">SystemConfig <span class="{% if config.system_status == 'ONLINE' %}bg-green-100 text-success{% else %}bg-red-100 text-danger{% endif %} text-xs px-2 py-1 rounded ml-3 uppercase font-bold">{{ config.system_status }}</span></h2>
+                <div class="bg-card rounded-xl p-6 shadow-sm border border-border max-w-3xl">
+                    <form action="{% url 'admin_dashboard:update_settings' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="settings">
+                        <div class="flex items-center justify-between mb-6 pb-6 border-b border-border">
+                            <div><p class="font-bold text-textMain">System Status</p><p class="text-xs text-textMuted">Take the site offline.</p></div>
+                            <div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" name="system_status_toggle" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" {% if config.system_status == 'ONLINE' %}checked{% endif %}/><label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label></div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div><label class="block text-xs font-bold text-textMuted uppercase mb-2">System Root</label><input type="text" name="system_root" value="{{ config.system_root }}" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>
+                            <div><label class="block text-xs font-bold text-textMuted uppercase mb-2">Loggin PIN</label><input type="text" name="system_pin" value="{{ config.system_pin }}" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>
+                        </div>
+                        <div class="mb-6"><label class="block text-xs font-bold text-textMuted uppercase mb-2">Pin Required</label><div class="flex items-start mt-3 p-3 bg-bgMain rounded border border-border"><input type="checkbox" name="pin_required" value="Yes" {% if config.pin_required %}checked{% endif %} class="w-5 h-5 accent-primary mr-3 mt-0.5"><label class="text-sm text-textMuted">If disabled, PIN not required for login.</label></div></div>
+                        <div class="mt-8 pt-4 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4"><div class="text-xs text-textMuted"><span class="font-bold">Last updated:</span> {{ config.last_updated }}</div><button class="bg-primary text-white px-8 py-2.5 rounded font-bold hover:bg-blue-700 shadow-md transition w-full md:w-auto">Save Changes</button></div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="viewQuestionsModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleModal('viewQuestionsModal')"></div>
+        <div class="bg-card w-full max-w-3xl mx-4 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-border flex justify-between items-center bg-gray-50"><h3 class="text-xl font-bold text-textMain" id="viewQuestionsTitle">Test Questions</h3><button onclick="toggleModal('viewQuestionsModal')" class="text-textMuted hover:text-danger"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+            <div class="flex-1 overflow-y-auto p-6 bg-bgMain space-y-4" id="viewQuestionsList"></div>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleModal('deleteConfirmModal')"></div>
+        <div class="bg-white w-full max-w-sm mx-4 rounded-xl shadow-2xl z-50 p-6 text-center"><h3 class="text-lg font-bold text-gray-900">Are you sure?</h3><div class="mt-6 flex justify-center gap-3"><button onclick="toggleModal('deleteConfirmModal')" class="bg-gray-200 px-4 py-2 rounded-lg">Cancel</button><button onclick="executeDelete()" class="bg-danger text-white px-4 py-2 rounded-lg">Delete</button></div></div>
+    </div>
+
+    <div id="courseModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleModal('courseModal')"></div>
+        <div class="bg-card w-full max-w-lg mx-4 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-border flex justify-between items-center bg-gray-50"><h3 class="text-xl font-bold text-textMain" id="courseModalTitle">Add New Course</h3><button onclick="toggleModal('courseModal')" class="text-textMuted hover:text-danger"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+            <form id="courseForm" action="{% url 'admin_dashboard:add_course' %}" method="POST" enctype="multipart/form-data" class="flex-1 overflow-y-auto p-6 space-y-4">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="courses">
+                <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Title</label><input type="text" name="title" id="c_title" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>
+                <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Code</label><input type="text" name="code" id="c_code" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>
+                <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Description</label><textarea name="description" id="c_desc" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none h-32"></textarea></div>
+                <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Image</label><input type="file" name="image" class="w-full text-sm text-textMuted"></div>
+                <div class="pt-4 border-t border-border"><button type="submit" class="w-full bg-primary text-white py-3 rounded font-bold hover:bg-blue-700 transition shadow-md">Save Course</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="quizModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleModal('quizModal')"></div>
+        <div class="bg-card w-full max-w-2xl mx-4 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-border flex justify-between items-center bg-gray-50"><h3 class="text-xl font-bold text-textMain" id="assessmentModalTitle">Add Assessment</h3><button onclick="toggleModal('quizModal')" class="text-textMuted hover:text-danger"><i class="fa-solid fa-xmark text-xl"></i></button></div>
+            <form id="assessmentForm" action="{% url 'admin_dashboard:add_assessment' %}" method="POST" class="flex-1 overflow-y-auto p-6">
+                {% csrf_token %}
+                <input type="hidden" name="next" id="assessmentNext"> <input type="hidden" name="assessment_type" id="assessmentTypeInput" value="quiz">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="col-span-2"><label class="block text-xs font-bold text-textMuted uppercase mb-1">Select Course</label><select name="course_id" id="a_course" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none">{% for c in courses %}<option value="{{ c.id }}">{{ c.code }} - {{ c.title }}</option>{% endfor %}</select></div>
+                    <div class="col-span-2"><label class="block text-xs font-bold text-textMuted uppercase mb-1">Title</label><input type="text" name="title" id="a_title" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>
+                    <div class="col-span-2"><label class="block text-xs font-bold text-textMuted uppercase mb-1">Description</label><div id="assessmentEditor"></div><input type="hidden" name="description" id="assessmentDescInput"></div>
+                    <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Open Date</label><input type="date" name="open_date" id="a_odate" class="w-full bg-bgMain border border-border rounded p-2"><input type="time" name="open_time" id="a_otime" class="w-full bg-bgMain border border-border rounded p-2 mt-1"></div>
+                    <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Close Date</label><input type="date" name="close_date" id="a_cdate" class="w-full bg-bgMain border border-border rounded p-2"><input type="time" name="close_time" id="a_ctime" class="w-full bg-bgMain border border-border rounded p-2 mt-1"></div>
+                    <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Duration (Mins)</label><input type="number" name="duration_minutes" id="a_duration" class="w-full bg-bgMain border border-border rounded p-3"></div>
+                    <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Max Attempts</label><input type="number" name="max_attempts" id="a_attempts" class="w-full bg-bgMain border border-border rounded p-3"></div>
+                    <div class="col-span-2 flex items-center mt-4"><input type="checkbox" name="is_live" id="a_islive" class="w-5 h-5 accent-primary mr-2"><label for="a_islive" class="text-textMain font-medium">Is Live?</label></div>
+                </div>
+                <div class="pt-4 border-t border-border text-right"><button type="submit" class="bg-primary text-white px-6 py-2.5 rounded font-bold hover:bg-blue-700 transition shadow-md">Save Assessment</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="questionModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleModal('questionModal')"></div>
+        <div class="bg-card w-full max-w-4xl mx-4 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-border flex justify-between items-center bg-gray-50">
+                <h3 class="text-xl font-bold text-textMain" id="questionModalTitle">Add Questions</h3>
+                <button onclick="toggleModal('questionModal')" class="text-textMuted hover:text-danger"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <form action="{% url 'admin_dashboard:add_question' %}" method="POST" enctype="multipart/form-data" class="flex-1 overflow-y-auto p-6 bg-bgMain" id="questionForm">
+                {% csrf_token %}
+
+                <div class="bg-white p-4 rounded shadow-sm mb-6 border border-border grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="text-xs font-bold text-textMuted uppercase">1. Test Type</label><select id="q_parent_type" name="parent_type" class="w-full bg-gray-50 border border-border rounded p-2 mt-1" onchange="filterTests()"><option value="QUIZ">Quiz</option><option value="ASSIGNMENT">Assignment</option><option value="EXAM">Exam</option></select></div>
+                    <div><label class="text-xs font-bold text-textMuted uppercase">2. Select Course</label><select id="q_course_select" class="w-full bg-gray-50 border border-border rounded p-2 mt-1" onchange="filterTests()">{% for c in courses %}<option value="{{ c.id }}">{{ c.code }}</option>{% endfor %}</select></div>
+                    <div><label class="text-xs font-bold text-textMuted uppercase">3. Select Test</label>
+                        <select id="q_parent_id" name="parent_id" class="w-full bg-gray-50 border border-border rounded p-2 mt-1">
+                            {% for q in quizzes %}<option class="test-option" data-type="QUIZ" data-course="{{ q.course.id }}" value="{{ q.id }}">{{ q.title }}</option>{% endfor %}
+                            {% for a in assignments %}<option class="test-option" data-type="ASSIGNMENT" data-course="{{ a.course.id }}" value="{{ a.id }}">{{ a.title }}</option>{% endfor %}
+                            {% for e in exams %}<option class="test-option" data-type="EXAM" data-course="{{ e.course.id }}" value="{{ e.id }}">{{ e.title }}</option>{% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div id="questionsWrapper" class="space-y-6">
+                    <div class="question-block bg-white p-6 rounded shadow-sm border border-blue-200 relative">
+                        <span class="absolute top-0 left-0 bg-blue-600 text-white text-xs px-2 py-1 rounded-br">Q1</span>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                             <div><label class="text-xs font-bold text-textMuted uppercase">Type</label><select id="q_type_0" name="question_type[]" class="w-full border border-border rounded p-2 mt-1" onchange="handleTypeChange(this)"><option value="MCQ">Multiple Choice</option><option value="TEXT">Text Answer</option><option value="CODE">Coding</option></select></div>
+                             <div class="col-span-2"><label class="text-xs font-bold text-textMuted uppercase">Question Text</label><textarea id="q_text_0" name="question_text[]" class="w-full border border-border rounded p-2 mt-1 h-10"></textarea></div>
+                             <div class="col-span-3"><label class="text-xs font-bold text-textMuted uppercase">Question Image</label><input type="file" name="question_image[]" class="text-xs"></div>
+                        </div>
+                        <div class="mcq-section">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2"><span class="font-bold w-6 text-center">A</span><input type="text" name="opt_a_text[]" class="flex-1 border border-border rounded p-2 text-sm" placeholder="Text"><input type="file" name="opt_a_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_0" value="A" class="w-4 h-4 accent-primary"></div>
+                                <div class="flex items-center gap-2"><span class="font-bold w-6 text-center">B</span><input type="text" name="opt_b_text[]" class="flex-1 border border-border rounded p-2 text-sm" placeholder="Text"><input type="file" name="opt_b_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_0" value="B" class="w-4 h-4 accent-primary"></div>
+                                <div class="flex items-center gap-2"><span class="font-bold w-6 text-center">C</span><input type="text" name="opt_c_text[]" class="flex-1 border border-border rounded p-2 text-sm" placeholder="Text"><input type="file" name="opt_c_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_0" value="C" class="w-4 h-4 accent-primary"></div>
+                                <div class="flex items-center gap-2"><span class="font-bold w-6 text-center">D</span><input type="text" name="opt_d_text[]" class="flex-1 border border-border rounded p-2 text-sm" placeholder="Text"><input type="file" name="opt_d_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_0" value="D" class="w-4 h-4 accent-primary"></div>
+                            </div>
+                        </div>
+                        <div class="text-section hidden mt-4"><label class="text-xs font-bold text-textMuted uppercase">Correct Answer Key</label><textarea name="correct_answer_text[]" class="w-full border border-border rounded p-2 h-20 bg-gray-50 text-sm"></textarea></div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-between items-center mt-6 pt-4 border-t border-border gap-4">
+                    <button type="button" onclick="addNextQuestion()" class="w-full md:w-auto text-primary font-bold hover:bg-blue-50 px-4 py-2 rounded border border-blue-200 flex items-center justify-center transition"><i class="fa-solid fa-plus-circle mr-2"></i> Add Next Question</button>
+                    <button type="submit" class="w-full md:w-auto bg-success text-white px-8 py-3 rounded font-bold shadow hover:bg-green-600 transition">Save Questions</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="editUserModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleModal('editUserModal')"></div>
+        <div class="bg-card w-full max-w-md mx-4 rounded-xl shadow-2xl z-50 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-textMain">Edit User</h3>
+                <button onclick="toggleModal('editUserModal')" class="text-textMuted hover:text-danger"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="space-y-4">
+                <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Username</label><input type="text" id="edit_username" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>
+                <div class="flex items-center bg-gray-50 p-3 rounded border border-border"><input type="checkbox" class="w-5 h-5 mr-3 accent-primary"><span class="text-textMain font-medium">Grant Admin Privileges?</span></div>
+                <div class="flex justify-end gap-3 mt-6"><button onclick="toggleModal('editUserModal')" class="px-4 py-2 text-textMuted hover:bg-gray-100 rounded transition">Cancel</button><button class="bg-primary text-white px-6 py-2 rounded font-bold hover:bg-blue-700 transition shadow">Update User</button></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. NOTIFICATIONS (Persistent)
+        document.addEventListener("DOMContentLoaded", () => {
+            const activeTab = localStorage.getItem('activeTab') || 'dashboard';
+            switchTab(activeTab);
+            // Load history
+            const flashMsgs = document.querySelectorAll('.flash-msg');
+            let history = JSON.parse(localStorage.getItem('notifHistory') || '[]');
+            flashMsgs.forEach(msg => {
+                history.unshift({ text: msg.dataset.text, type: msg.dataset.type, time: msg.dataset.time });
+            });
+            localStorage.setItem('notifHistory', JSON.stringify(history.slice(0, 15)));
+            renderNotifications();
+        });
+        function renderNotifications() {
+            const history = JSON.parse(localStorage.getItem('notifHistory') || '[]');
+            const list = document.getElementById('notificationList');
+            const dot = document.getElementById('notifDot');
+            if(history.length > 0) {
+                list.innerHTML = "";
+                dot.classList.remove('hidden');
+                history.forEach(n => {
+                    const d = document.createElement('div');
+                    d.className = `p-3 border-b border-border text-xs ${n.type === 'error' ? 'text-red-600' : 'text-green-600'}`;
+                    d.innerHTML = `<b>${n.time}</b>: ${n.text}`;
+                    list.appendChild(d);
+                });
+            }
+        }
+        function toggleNotifications() { document.getElementById('notificationPanel').classList.toggle('hidden'); }
+        function clearNotifications() { localStorage.removeItem('notifHistory'); renderNotifications(); document.getElementById('notificationList').innerHTML='<p class="text-xs text-center py-4">No notifications</p>'; document.getElementById('notifDot').classList.add('hidden'); }
+
+        // 2. NAVIGATION & MODALS
+        function switchTab(tabId) {
+            localStorage.setItem('activeTab', tabId);
+            document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(tabId).classList.remove('hidden');
+            const nav = document.getElementById('nav-' + tabId); if(nav) nav.classList.add('active');
+        }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebarOverlay').classList.toggle('hidden'); }
+        function toggleModal(id) { document.getElementById(id).classList.toggle('opacity-0'); document.getElementById(id).classList.toggle('pointer-events-none'); }
+        function filterContent() {
+            const term = document.getElementById('globalSearch').value.toLowerCase();
+            document.querySelectorAll('.searchable-row, .searchable-item').forEach(el => el.style.display = el.dataset.search.toLowerCase().includes(term) ? "" : "none");
+        }
+        function confirmDelete(url) { window.pendingDeleteUrl = "{% url 'admin_dashboard:admin_dashboard' %}" + url; toggleModal('deleteConfirmModal'); }
+        function executeDelete() { window.location.href = window.pendingDeleteUrl; }
+
+        // 3. EDIT LOGIC
+        var assessQuill = new Quill('#assessmentEditor', { theme: 'snow' });
+        assessQuill.on('text-change', () => document.getElementById('assessmentDescInput').value = assessQuill.root.innerHTML);
+
+        function openEditCourse(id, title, code, desc) {
+            document.getElementById('courseModalTitle').innerText = "Edit Course";
+            document.getElementById('c_title').value = title;
+            document.getElementById('c_code').value = code;
+            document.getElementById('c_desc').value = desc;
+            document.getElementById('courseForm').action = "{% url 'admin_dashboard:admin_dashboard' %}course/edit/" + id + "/";
+            toggleModal('courseModal');
+        }
+
+        function openEditAssessment(id, title, type, desc, odate, otime, cdate, ctime, dur, max, live) {
+             document.getElementById('assessmentModalTitle').innerText = "Edit " + type.toUpperCase();
+             document.getElementById('assessmentTypeInput').value = type;
+             document.getElementById('a_title').value = title;
+             assessQuill.root.innerHTML = desc;
+             // Pre-fill (Mock logic assumes strings are passed correctly)
+             document.getElementById('a_odate').value = odate || "";
+             document.getElementById('a_otime').value = otime || "";
+             document.getElementById('a_cdate').value = cdate || "";
+             document.getElementById('a_ctime').value = ctime || "";
+             document.getElementById('a_duration').value = dur;
+             document.getElementById('a_attempts').value = max;
+             document.getElementById('a_islive').checked = (live === 'True');
+             document.getElementById('assessmentForm').action = `{% url 'admin_dashboard:admin_dashboard' %}assessment/edit/${id}/`; // Make sure backend supports this
+             toggleModal('quizModal');
+        }
+
+        function openAssessmentModal(mode, type) {
+            document.getElementById('assessmentModalTitle').innerText = "Add " + type.toUpperCase();
+            document.getElementById('assessmentTypeInput').value = type;
+            document.getElementById('assessmentForm').reset();
+            assessQuill.root.innerHTML = "";
+            document.getElementById('assessmentForm').action = "{% url 'admin_dashboard:add_assessment' %}";
+            toggleModal('quizModal');
+        }
+
+        function openEditUser(id, username, isAdmin, isBanned) {
+            document.getElementById('u_id').value = id;
+            document.getElementById('u_name').value = username;
+            document.getElementById('u_admin').checked = (isAdmin === 'true');
+            document.getElementById('u_ban').checked = (isBanned === 'true');
+            toggleModal('editUserModal');
+        }
+
+        // 4. VIEW QUESTIONS & ADD QUESTIONS Logic (Identical to previous robust logic)
+        function viewQuestions(title, id) {
+             document.getElementById('viewQuestionsTitle').innerText = "Questions: " + title;
+             // Simulate render - In production fetch via ID
+             document.getElementById('viewQuestionsList').innerHTML = `
+                <div class="bg-white p-4 rounded border border-border mb-2"><p class="font-bold mb-2">Q. Sample Question?</p>
+                <div class="flex gap-2 mt-2"><img src="https://via.placeholder.com/50" class="h-10 rounded"><span class="text-xs">Question Image</span></div>
+                <ul class="text-xs text-gray-600 list-disc pl-4 mt-2"><li>Option A</li><li class="text-green-600 font-bold">Option B (Correct)</li><li>Option C</li></ul></div>`;
+             toggleModal('viewQuestionsModal');
+        }
+        function viewSingleQuestion(text, type) {
+             document.getElementById('viewQuestionsTitle').innerText = type + " Question";
+             document.getElementById('viewQuestionsList').innerHTML = `<div class="bg-white p-4 rounded border border-border"><p class="font-bold text-lg">${text}</p><span class="bg-blue-100 text-primary text-xs px-2 py-1 rounded">${type}</span></div>`;
+             toggleModal('viewQuestionsModal');
+        }
+
+        function openQuestionModal(mode) { document.getElementById('questionModalTitle').innerText = "Add Questions"; document.getElementById('questionForm').reset(); toggleModal('questionModal'); }
+
+        function openEditQuestion(id, text, type) {
+             document.getElementById('questionModalTitle').innerText = "Edit Question";
+             toggleModal('questionModal');
+             // Simulating pre-fill
+             document.getElementById('q_type_0').value = type;
+             document.getElementById('q_text_0').value = text;
+             handleTypeChange(document.getElementById('q_type_0'));
+        }
+
+        function filterTests() {
+            const type = document.getElementById('q_parent_type').value;
+            const courseId = document.getElementById('q_course_select').value;
+            document.querySelectorAll('.test-option').forEach(opt => { opt.style.display = (opt.dataset.type === type && opt.dataset.course === courseId) ? 'block' : 'none'; });
+        }
+        filterTests();
+        function handleTypeChange(sel) {
+            const block = sel.closest('.question-block');
+            if (sel.value === 'MCQ') { block.querySelector('.mcq-section').classList.remove('hidden'); block.querySelector('.text-section').classList.add('hidden'); }
+            else { block.querySelector('.mcq-section').classList.add('hidden'); block.querySelector('.text-section').classList.remove('hidden'); }
+        }
+        let qCount=0;
+        function addNextQuestion() {
+            qCount++; const wrapper = document.getElementById('questionsWrapper'); const div = document.createElement('div');
+            div.className = "question-block bg-white p-6 rounded shadow-sm border border-blue-200 relative mt-6";
+            div.innerHTML = `<span class="absolute top-0 left-0 bg-blue-600 text-white text-xs px-2 py-1 rounded-br">Q${qCount+1}</span><button type="button" onclick="this.closest('.question-block').remove()" class="absolute top-2 right-2 text-danger"><i class="fa-solid fa-trash"></i></button>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"><div><label class="text-xs font-bold text-textMuted uppercase">Type</label><select name="question_type[]" class="w-full border border-border rounded p-2 mt-1" onchange="handleTypeChange(this)"><option value="MCQ">Multiple Choice</option><option value="TEXT">Text Answer</option><option value="CODE">Coding</option></select></div>
+            <div class="col-span-2"><label class="text-xs font-bold text-textMuted uppercase">Question</label><textarea name="question_text[]" class="w-full border border-border rounded p-2 mt-1 h-10"></textarea></div>
+            <div class="col-span-3"><label class="text-xs font-bold text-textMuted uppercase">Image</label><input type="file" name="question_image[]" class="text-xs"></div></div>
+            <div class="mcq-section"><div class="space-y-2">
+            <div class="flex items-center gap-2"><span class="font-bold w-6">A</span><input type="text" name="opt_a_text[]" class="flex-1 border rounded p-2 text-sm"><input type="file" name="opt_a_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_${qCount}" value="A" class="w-4 h-4 accent-primary"></div>
+            <div class="flex items-center gap-2"><span class="font-bold w-6">B</span><input type="text" name="opt_b_text[]" class="flex-1 border rounded p-2 text-sm"><input type="file" name="opt_b_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_${qCount}" value="B" class="w-4 h-4 accent-primary"></div>
+            <div class="flex items-center gap-2"><span class="font-bold w-6">C</span><input type="text" name="opt_c_text[]" class="flex-1 border rounded p-2 text-sm"><input type="file" name="opt_c_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_${qCount}" value="C" class="w-4 h-4 accent-primary"></div>
+            <div class="flex items-center gap-2"><span class="font-bold w-6">D</span><input type="text" name="opt_d_text[]" class="flex-1 border rounded p-2 text-sm"><input type="file" name="opt_d_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_${qCount}" value="D" class="w-4 h-4 accent-primary"></div></div></div>
+            <div class="text-section hidden mt-4"><label class="text-xs font-bold text-textMuted">Answer Key</label><textarea name="correct_answer_text[]" class="w-full border rounded p-2 h-20 text-sm"></textarea></div>`;
+            wrapper.appendChild(div);
+        }
+    </script>
+</body>
+</html>

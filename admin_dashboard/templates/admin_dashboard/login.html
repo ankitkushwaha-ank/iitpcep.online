@@ -1,93 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login | IITP CEP LMS</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    body {
-      background: linear-gradient(135deg, #f59e0b, #1e3a8a);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Inter', sans-serif;
-    }
-    .login-card {
-      background: white;
-      border-radius: 1rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      padding: 2.5rem;
-      width: 100%;
-      max-width: 400px;
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #1e3a8a;
-    }
-    .logo span {
-      color: #f59e0b;
-    }
-    input {
-      outline: none;
-    }
-    button:hover {
-      transform: scale(1.02);
-      transition: 0.2s ease;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - IIT Patna</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { bgMain: '#f0f2f5', primary: '#2563eb', card: '#ffffff', textMain: '#1e293b' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; }</style>
 </head>
-<body>
+<body class="h-screen flex items-center justify-center">
 
-  <div class="login-card">
-    <div class="logo mb-6">
-      <span>IITP CEP</span>&nbsp;Admin
+    <div class="bg-card w-full max-w-md p-8 rounded-xl shadow-xl border border-gray-200">
+        <div class="text-center mb-6">
+            <div class="h-14 w-14 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 shadow-lg">IP</div>
+            <h1 class="text-2xl font-bold text-textMain">Admin Portal</h1>
+            <p class="text-sm text-gray-500 mt-1">Please login to continue</p>
+        </div>
+
+        {% if messages %}
+            <div class="mb-5">
+                {% for message in messages %}
+                <div class="p-3 text-sm rounded font-medium text-center {% if message.tags == 'error' %}bg-red-100 text-red-600{% else %}bg-green-100 text-green-600{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'admin_dashboard:admin_login' %}">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Username</label>
+                <input type="text" name="username" class="w-full bg-bgMain border border-gray-300 rounded p-3 text-textMain outline-none focus:ring-2 focus:ring-primary transition" required placeholder="Admin Username">
+            </div>
+            <div class="mb-6">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Password</label>
+                <input type="password" name="password" class="w-full bg-bgMain border border-gray-300 rounded p-3 text-textMain outline-none focus:ring-2 focus:ring-primary transition" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow-md transform hover:-translate-y-0.5">
+                Login Dashboard
+            </button>
+        </form>
+
+        <div class="mt-6 text-center border-t pt-4 border-gray-100">
+            <p class="text-xs text-gray-400">&copy; 2025 IIT Patna. Authorized Personnel Only.</p>
+        </div>
     </div>
-
-    {% if form.errors %}
-      <div class="bg-red-100 text-red-700 p-3 mb-4 rounded-lg text-sm">
-        ⚠️ Invalid username or password.
-      </div>
-    {% endif %}
-
-    <form method="post" class="space-y-5">
-      {% csrf_token %}
-      <div>
-        <label for="id_username" class="block text-gray-700 text-sm font-medium mb-1">Username</label>
-        <input type="text" name="username" id="id_username"
-               class="w-full border border-gray-300 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
-               required autofocus>
-      </div>
-
-      <div>
-        <label for="id_password" class="block text-gray-700 text-sm font-medium mb-1">Password</label>
-        <input type="password" name="password" id="id_password"
-               class="w-full border border-gray-300 px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
-               required>
-      </div>
-
-      <div class="flex justify-between items-center">
-        <label class="flex items-center text-sm text-gray-600">
-          <input type="checkbox" name="remember" class="mr-2"> Remember me
-        </label>
-        <a href="#" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
-      </div>
-
-      <button type="submit"
-              class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700">
-        Login
-      </button>
-    </form>
-
-    <div class="mt-6 text-center text-xs text-gray-500">
-      © 2025 IITP CEP LMS · All rights reserved.
-    </div>
-  </div>
 
 </body>
 </html>

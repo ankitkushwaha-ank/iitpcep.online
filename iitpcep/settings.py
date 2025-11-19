@@ -34,10 +34,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://cet.iitpcep.online",
 ]
 
-LOGIN_URL = "/admincp/login/"
-LOGIN_REDIRECT_URL = "/admincp/"
-LOGOUT_REDIRECT_URL = "/admincp/login/"
-
+LOGIN_URL = 'admin_dashboard:admin_login'
+LOGIN_REDIRECT_URL = 'admin_dashboard:admin_dashboard'
 # --------------------------------------------------
 # 🧩 INSTALLED APPS
 # --------------------------------------------------

@@ -1,58 +1,33 @@
 from django.urls import path
 from . import views
 
+app_name = 'admin_dashboard'
+
 urlpatterns = [
-    # ==========================================
-    # 🏠 DASHBOARD
-    # ==========================================
-    path("", views.dashboard, name="admin_dashboard"),
+    path('', views.admin_dashboard, name='admin_dashboard'),
+    path('login/', views.admin_login, name='admin_login'),
+    path('logout/', views.admin_logout, name='admin_logout'),
 
-    # ==========================================
-    # 👥 USERS
-    # ==========================================
-    path("users/", views.users_view, name="admin_users"),
-    path("offline/", views.offline_view, name="admin_offline"),
+    # Courses
+    path('course/add/', views.add_course, name='add_course'),
+    path('course/edit/<int:course_id>/', views.edit_course, name='edit_course'),
+    path('course/delete/<int:course_id>/', views.delete_course, name='delete_course'),
 
-    # ==========================================
-    # 📘 COURSES
-    # ==========================================
-    path("courses/", views.courses_view, name="admin_courses"),
-    path("courses/delete/<int:course_id>/", views.delete_course, name="admin_delete_course"),
+    # Assessments (Quiz, Assignment, Exam)
+    path('assessment/add/', views.add_assessment, name='add_assessment'),
 
-    # ==========================================
-    # 🧩 TESTS (Assignments / Quizzes / Exams)
-    # ==========================================
-    path("tests/", views.tests_view, name="admin_tests"),
+    # ✅ ADD THIS LINE BELOW TO FIX THE 404
+    path('assessment/edit/<int:id>/', views.edit_assessment, name='edit_assessment'),
 
-    # Assignment CRUD
-    path("tests/assignments/add/", views.add_assignment, name="admin_add_assignment"),
+    path('assessment/delete/<int:id>/', views.delete_assessment, name='delete_assessment'),
 
-    # Quiz CRUD
-    path("tests/quizzes/add/", views.add_quiz, name="admin_add_quiz"),
+    # Questions
+    path('question/add/', views.add_question, name='add_question'),
+    path('question/delete/<int:id>/', views.delete_question, name='delete_question'),
 
-    # Exam CRUD
-    path("tests/exams/add/", views.add_exam, name="admin_add_exam"),
-
-    # ==========================================
-    # ❓ QUESTIONS
-    # ==========================================
-    path("questions/", views.questions_view, name="admin_questions"),
-    path("questions/delete/<int:question_id>/", views.delete_question, name="admin_delete_question"),
-
-    # ==========================================
-    # ⚙️ SYSTEM CONFIGURATION
-    # ==========================================
-    path("system/", views.system_config_view, name="admin_system"),
-
-    # ==========================================
-    # 🗓️ CALENDAR EVENTS
-    # ==========================================
-    path("events/", views.events_view, name="admin_events"),
-    path("events/delete/<int:event_id>/", views.delete_event, name="admin_delete_event"),
-
-    # ==========================================
-    # 🔐 PIN LOGIN (Optional)
-    # ==========================================
-    path("login/", views.admin_login_view, name="admin_login"),
-    path("logout/", views.admin_logout_view, name="admin_logout"),
+    # Users & Settings
+    path('user/edit/', views.edit_user, name='edit_user'),
+    path('user/ban/<int:user_id>/', views.toggle_ban_user, name='toggle_ban_user'),
+    path('user/delete/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('settings/update/', views.update_settings, name='update_settings'),
 ]

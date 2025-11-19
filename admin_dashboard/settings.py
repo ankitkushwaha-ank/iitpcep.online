@@ -1,4 +1,2 @@
-# Redirect Django login checks to your custom admin login
-LOGIN_URL = "/admincp/login/"
-LOGIN_REDIRECT_URL = "/admincp/"
-LOGOUT_REDIRECT_URL = "/admincp/login/"
+LOGIN_URL = 'admin_dashboard:admin_login'
+LOGIN_REDIRECT_URL = 'admin_dashboard:admin_dashboard'
