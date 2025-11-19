@@ -65,15 +65,32 @@ def _combine_date_time(date_str, time_str):
             return None
     return None
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.utils import timezone
+from django.db.models import Count
+from django.db.models.functions import TruncMonth
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+from datetime import datetime
+
+# Import your models
+from moodle.models import (
+    UserTable, SystemConfig, Course,
+    Assignment, Quiz, Exam,
+    Question, Option, CalendarEvent
+)
+
+# ... (Keep Auth helpers like is_superuser, admin_login, etc. same as before) ...
 
 # ---------------------------------------------------------
-# 1. MAIN DASHBOARD VIEW
+# 1. MAIN DASHBOARD VIEW (UPDATED WITH GRAPHS)
 # ---------------------------------------------------------
 
 @login_required(login_url='admin_dashboard:admin_login')
 @user_passes_test(is_superuser, login_url='admin_dashboard:admin_login')
 def admin_dashboard(request):
-    # --- Statistics ---
+    # --- 1. Standard Statistics ---
     total_users = UserTable.objects.count()
     online_users = UserTable.objects.filter(is_online=True).count()
     total_courses = Course.objects.count()
@@ -82,7 +99,33 @@ def admin_dashboard(request):
     total_exams = Exam.objects.count()
     total_questions = Question.objects.count()
 
-    # --- Fetch Lists ---
+    # --- 2. Graph Data: User Growth (Line Chart) ---
+    # Group users by creation month
+    monthly_users = UserTable.objects.annotate(
+        month=TruncMonth('created_at')
+    ).values('month').annotate(
+        count=Count('id')
+    ).order_by('month')
+
+    user_labels = []
+    user_data = []
+
+    for entry in monthly_users:
+        if entry['month']:
+            user_labels.append(entry['month'].strftime('%b %Y'))
+            user_data.append(entry['count'])
+
+    # Fallback if no data
+    if not user_data:
+        user_labels = ["Jan", "Feb", "Mar", "Apr", "May"]
+        user_data = [0, 0, 0, 0, 0]
+
+    # --- 3. Graph Data: Content Distribution (Doughnut/Pie Chart) ---
+    # Comparing count of Quizzes vs Assignments vs Exams
+    distribution_labels = ["Quizzes", "Assignments", "Exams"]
+    distribution_data = [total_quizzes, total_assignments, total_exams]
+
+    # --- 4. Fetch Lists for Tables ---
     users = UserTable.objects.all().order_by('-created_at')
     courses = Course.objects.all()
     quizzes = Quiz.objects.all().order_by('-open_date')
@@ -90,25 +133,35 @@ def admin_dashboard(request):
     exams = Exam.objects.all().order_by('-open_date')
     questions = Question.objects.all().order_by('-id')
 
-    # --- System Config ---
+    # --- 5. System Config ---
     system_config, created = SystemConfig.objects.get_or_create(id=1)
 
     context = {
         'stats': {
-            'total_users': total_users, 'online_users': online_users, 'total_courses': total_courses,
-            'total_quizzes': total_quizzes, 'total_assignments': total_assignments,
-            'total_exams': total_exams, 'total_questions': total_questions,
+            'total_users': total_users,
+            'online_users': online_users,
+            'total_courses': total_courses,
+            'total_quizzes': total_quizzes,
+            'total_assignments': total_assignments,
+            'total_exams': total_exams,
+            'total_questions': total_questions,
         },
-        'users': users, 'courses': courses, 'quizzes': quizzes,
-        'assignments': assignments, 'exams': exams, 'questions': questions,
+        # Pass JSON strings for Chart.js
+        'graphs': {
+            'user_labels': json.dumps(user_labels),
+            'user_data': json.dumps(user_data),
+            'dist_labels': json.dumps(distribution_labels),
+            'dist_data': json.dumps(distribution_data),
+        },
+        'users': users,
+        'courses': courses,
+        'quizzes': quizzes,
+        'assignments': assignments,
+        'exams': exams,
+        'questions': questions,
         'config': system_config,
     }
     return render(request, 'admin_dashboard/admin.html', context)
-
-
-# ---------------------------------------------------------
-# 2. COURSE MANAGEMENT
-# ---------------------------------------------------------
 
 @login_required(login_url='admin_dashboard:admin_login')
 @user_passes_test(is_superuser, login_url='admin_dashboard:admin_login')

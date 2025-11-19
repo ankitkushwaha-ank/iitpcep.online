@@ -3,44 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - IIT Patna</title>
+    <title>Admin Panel - IITP MOODLE</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link rel="shortcut icon" href="https://cet.iitp.ac.in/moodle/pluginfile.php/1/theme_moove/favicon/1706000481/IITP_Logo.ico" />
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        bgMain: '#f0f2f5', card: '#ffffff', primary: '#2563eb',
-                        secondary: '#64748b', success: '#10b981', danger: '#ef4444',
-                        warning: '#f59e0b', textMain: '#1e293b', textMuted: '#64748b',
-                        border: '#e2e8f0'
-                    },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
-                }
+<script>
+    tailwind.config = {
+        darkMode: 'class', // ✅ Required for Dark Mode toggle to work
+        theme: {
+            extend: {
+                colors: {
+                    bgMain: '#f0f2f5',
+                    card: '#ffffff',
+                    primary: '#2563eb',
+                    secondary: '#64748b',
+                    success: '#10b981',
+                    danger: '#ef4444',
+                    warning: '#f59e0b',
+                    textMain: '#1e293b',
+                    textMuted: '#64748b',
+                    border: '#e2e8f0'
+                },
+                fontFamily: { sans: ['Inter', 'sans-serif'] }
             }
         }
-    </script>
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; color: #1e293b; }
-        .nav-item.active { background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; font-weight: 600; }
+    }
+</script>
+<style>
+        /* Global Smooth Transition */
+        body, div, nav, header, table, tr, td, input, select, textarea, button {
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        body { font-family: 'Inter', sans-serif; }
+
+        /* Active Nav Item */
+        .nav-item.active {
+            background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; font-weight: 600;
+        }
+        .dark .nav-item.active {
+            background-color: #1e293b; color: #60a5fa; border-right: 3px solid #60a5fa;
+        }
+
+        /* Hover Nav Item */
         .nav-item:hover { background-color: #f8fafc; color: #2563eb; }
+        .dark .nav-item:hover { background-color: #1e293b; color: #60a5fa; }
+
+        /* Utility */
         .ql-container { height: 150px; }
         .modal { transition: opacity 0.2s ease; }
         body.modal-active { overflow-x: hidden; overflow-y: visible !important; }
         .sidebar-transition { transition: transform 0.3s ease-in-out; }
+
+        /* Toggle Switch */
         .toggle-checkbox:checked { right: 0; border-color: #10b981; }
         .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
+
+        /* Stat Cards Hover Effect */
         .stat-card { transition: transform 0.2s; cursor: pointer; }
         .stat-card:hover { transform: translateY(-3px); }
+
+        /* Dark Mode Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden text-sm">
+<body class="flex h-screen w-full overflow-hidden text-sm bg-[#f0f2f5] dark:bg-slate-900 text-slate-800 dark:text-slate-00">
 
     <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
 
@@ -48,7 +84,7 @@
         <div class="h-16 flex items-center justify-between px-6 border-b border-border">
             <div class="flex items-center gap-2">
                 <div class="h-8 w-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xs">IP</div>
-                <div><h1 class="text-lg font-bold text-primary leading-tight">IIT Patna</h1><p class="text-[10px] text-textMuted">Admin Console</p></div>
+                <div><h1 class="text-lg font-bold text-primary leading-tight">IITP MOODLE</h1><p class="text-[10px] text-textMuted">Admin Console</p></div>
             </div>
             <button onclick="toggleSidebar()" class="md:hidden text-textMuted hover:text-danger"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
@@ -94,6 +130,9 @@
                         </div>
                     </div>
                 </div>
+                <button onclick="toggleDarkMode()" class="text-textMuted hover:text-primary focus:outline-none relative">
+                    <i id="themeIcon" class="fa-solid fa-moon text-xl"></i>
+                </button>
 
                 <div class="flex items-center gap-3 group relative cursor-pointer">
                     <div class="text-right hidden md:block">
@@ -111,6 +150,28 @@
                 </div>
             </div>
         </header>
+        <div id="commandPalette" class="fixed inset-0 bg-black/60 z-[60] hidden backdrop-blur-sm flex items-start justify-center pt-20">
+    <div class="bg-white dark:bg-gray-800 w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden transform transition-all scale-100">
+        <div class="border-b border-gray-200 dark:border-gray-700 p-4 flex items-center">
+            <i class="fa-solid fa-search text-gray-400 mr-3"></i>
+            <input type="text" id="commandInput" placeholder="Type a command or search..." class="w-full bg-transparent outline-none text-lg text-gray-700 dark:text-white h-10">
+            <span class="text-xs text-gray-400 border border-gray-300 rounded px-2 py-1">ESC</span>
+        </div>
+        <div class="p-2 max-h-96 overflow-y-auto" id="commandList">
+            <div class="text-xs font-bold text-gray-400 px-3 py-2 uppercase">Navigation</div>
+            <button onclick="switchTab('dashboard'); togglePalette()" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded flex items-center gap-3 text-gray-700 dark:text-gray-200">
+                <i class="fa-solid fa-gauge w-5 text-center"></i> Go to Dashboard
+            </button>
+            <button onclick="switchTab('users'); togglePalette()" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded flex items-center gap-3 text-gray-700 dark:text-gray-200">
+                <i class="fa-solid fa-users w-5 text-center"></i> Manage Users
+            </button>
+             <div class="text-xs font-bold text-gray-400 px-3 py-2 uppercase mt-2">Actions</div>
+            <button onclick="openCourseModal('add'); togglePalette()" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded flex items-center gap-3 text-gray-700 dark:text-gray-200">
+                <i class="fa-solid fa-plus w-5 text-center"></i> Add New Course
+            </button>
+        </div>
+    </div>
+</div>
 
         <main class="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-8" id="main-container">
 
@@ -128,16 +189,32 @@
 
             <div id="dashboard" class="section-content">
                 <h2 class="text-2xl font-bold text-textMain mb-6">Dashboard Overview</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-card p-6 rounded-xl shadow-sm border border-border lg:col-span-2">
+                        <h3 class="text-lg font-bold text-textMain mb-4">User Growth</h3>
+                        <div class="relative h-64 w-full">
+                            <canvas id="userGrowthChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-card p-6 rounded-xl shadow-sm border border-border">
+                        <h3 class="text-lg font-bold text-textMain mb-4">Content Distribution</h3>
+                        <div class="relative h-64 w-full flex justify-center">
+                            <canvas id="contentDistChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div onclick="switchTab('settings')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center border-l-4 {% if config.system_status == 'ONLINE' %}border-success{% else %}border-danger{% endif %}">
                         <div><p class="text-textMuted text-xs font-bold uppercase">System Status</p><h3 class="text-xl font-bold {% if config.system_status == 'ONLINE' %}text-success{% else %}text-danger{% endif %}">{{ config.system_status }}</h3></div><div class="bg-gray-50 p-3 rounded-lg"><i class="fa-solid fa-server text-xl"></i></div>
                     </div>
-                    <div onclick="switchTab('users')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Total Users</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_users }}</h3></div><div class="bg-blue-50 text-primary p-3 rounded-lg"><i class="fa-solid fa-users text-xl"></i></div></div>
-                    <div onclick="switchTab('courses')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Courses</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_courses }}</h3></div><div class="bg-purple-50 text-purple-600 p-3 rounded-lg"><i class="fa-solid fa-book text-xl"></i></div></div>
-                    <div onclick="switchTab('quizzes')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Quizzes</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_quizzes }}</h3></div><div class="bg-indigo-50 text-indigo-600 p-3 rounded-lg"><i class="fa-solid fa-clock text-xl"></i></div></div>
-                    <div onclick="switchTab('assignments')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Assignments</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_assignments }}</h3></div><div class="bg-teal-50 text-teal-600 p-3 rounded-lg"><i class="fa-solid fa-file-signature text-xl"></i></div></div>
-                    <div onclick="switchTab('exams')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Exams</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_exams }}</h3></div><div class="bg-red-50 text-danger p-3 rounded-lg"><i class="fa-solid fa-graduation-cap text-xl"></i></div></div>
-                    <div onclick="switchTab('questions')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center"><div><p class="text-textMuted text-xs font-bold uppercase">Questions</p><h3 class="text-2xl font-bold text-textMain">{{ stats.total_questions }}</h3></div><div class="bg-orange-50 text-warning p-3 rounded-lg"><i class="fa-solid fa-database text-xl"></i></div></div>
+                    <div onclick="switchTab('users')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Total Users</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_users }}</h3></div><div class="bg-white p-3 rounded-full shadow-sm text-blue-600"><i class="fa-solid fa-users text-xl"></i></div></div>
+                    <div onclick="switchTab('courses')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Courses</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_courses }}</h3></div><div class="bg-purple text-purple-600 p-3 rounded-full shadow-sm"><i class="fa-solid fa-book text-xl"></i></div></div>
+                    <div onclick="switchTab('quizzes')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Quizzes</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_quizzes }}</h3></div><div class="bg-indigo text-indigo-600 p-3 rounded-full shadow-sm"><i class="fa-solid fa-clock text-xl"></i></div></div>
+                    <div onclick="switchTab('assignments')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Assignments</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_assignments }}</h3></div><div class="bg-teal text-teal-600 p-3 rounded-full shadow-sm"><i class="fa-solid fa-file-signature text-xl"></i></div></div>
+                    <div onclick="switchTab('exams')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Exams</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_exams }}</h3></div><div class="bg-red text-danger p-3 rounded-full shadow-sm"><i class="fa-solid fa-graduation-cap text-xl"></i></div></div>
+                    <div onclick="switchTab('questions')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Questions</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_questions }}</h3></div><div class="bg-orange text-warning p-3 rounded-full shadow-sm"><i class="fa-solid fa-database text-xl"></i></div></div>
                 </div>
             </div>
 
@@ -242,12 +319,37 @@
                         <tbody class="divide-y divide-border">
                             {% for q in questions %}
                             <tr class="hover:bg-gray-50 searchable-row" data-search="{{ q.text }}">
-                                <td class="p-4 text-textMain truncate max-w-md">{{ q.text|striptags }}</td>
+                                <td class="p-4 text-textMain truncate max-w-md">{% if q.text %}{{ q.text|striptags }} {% else %} <img src="{{ q.image.url }}">{% endif %} </td>
                                 <td class="p-4"><span class="bg-blue-100 text-primary px-2 py-1 rounded text-xs">{{ q.get_question_type_display }}</span></td>
                                 <td class="p-4 text-textMuted">{{ q.parent_type }} #{{ q.parent_id }}</td>
                                 <td class="p-4 text-right">
-                                    <button onclick="viewSingleQuestion('{{ q.text|escapejs }}', '{{ q.question_type }}')" class="text-secondary p-2 hover:text-primary"><i class="fa-solid fa-eye"></i></button>
-                                    <button onclick="openQuestionModal('edit', '{{ q.id }}', '{{ q.text|escapejs }}', '{{ q.question_type }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
+                                    <button
+                                        onclick="viewSingleQuestion(
+                                            '{{ q.text|escapejs }}',
+                                            '{{ q.question_type }}',
+                                            '{% if q.image %}{{ q.image.url }}{% endif %}'
+                                        )"
+                                        class="text-secondary p-2 hover:text-primary"
+                                        title="View Details">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                    <button
+        type="button"
+        class="text-primary p-2"
+        onclick="openEditQuestion(this)"
+        data-id="{{ q.id }}"
+        data-text="{{ q.text|escapejs }}"
+        data-type="{{ q.question_type }}"
+        data-correct="{{ q.correct_option }}"
+        data-ans-text="{{ q.correct_answer_text|escapejs }}"
+        /* Django Template Logic to get Options */
+        data-opt-a="{% for opt in q.option_set.all %}{% if opt.option_label == 'A' %}{{ opt.text|escapejs }}{% endif %}{% endfor %}"
+        data-opt-b="{% for opt in q.option_set.all %}{% if opt.option_label == 'B' %}{{ opt.text|escapejs }}{% endif %}{% endfor %}"
+        data-opt-c="{% for opt in q.option_set.all %}{% if opt.option_label == 'C' %}{{ opt.text|escapejs }}{% endif %}{% endfor %}"
+        data-opt-d="{% for opt in q.option_set.all %}{% if opt.option_label == 'D' %}{{ opt.text|escapejs }}{% endif %}{% endfor %}"
+        title="Edit">
+        <i class="fa-solid fa-pen"></i>
+    </button>
                                     <button onclick="confirmDelete('question/delete/{{ q.id }}')" class="text-danger p-2"><i class="fa-solid fa-trash"></i></button>
                                 </td>
                             </tr>
@@ -301,11 +403,21 @@
                             <div><p class="font-bold text-textMain">System Status</p><p class="text-xs text-textMuted">Take the site offline.</p></div>
                             <div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" name="system_status_toggle" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" {% if config.system_status == 'ONLINE' %}checked{% endif %}/><label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label></div>
                         </div>
+
+                        <div class="flex items-center justify-between mb-6 pb-6 border-b border-border">
+                            <div>
+                                <p class="font-bold text-textMain">Pin Required</p>
+                                <p class="text-xs text-textMuted">If disabled, PIN not required for login.</p>
+                            </div>
+                            <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                <input type="checkbox" name="pin_required" value="Yes" id="pin_toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" {% if config.pin_required %}checked{% endif %}/>
+                                <label for="pin_toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div><label class="block text-xs font-bold text-textMuted uppercase mb-2">System Root</label><input type="text" name="system_root" value="{{ config.system_root }}" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>
                             <div><label class="block text-xs font-bold text-textMuted uppercase mb-2">Loggin PIN</label><input type="text" name="system_pin" value="{{ config.system_pin }}" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>
                         </div>
-                        <div class="mb-6"><label class="block text-xs font-bold text-textMuted uppercase mb-2">Pin Required</label><div class="flex items-start mt-3 p-3 bg-bgMain rounded border border-border"><input type="checkbox" name="pin_required" value="Yes" {% if config.pin_required %}checked{% endif %} class="w-5 h-5 accent-primary mr-3 mt-0.5"><label class="text-sm text-textMuted">If disabled, PIN not required for login.</label></div></div>
                         <div class="mt-8 pt-4 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4"><div class="text-xs text-textMuted"><span class="font-bold">Last updated:</span> {{ config.last_updated }}</div><button class="bg-primary text-white px-8 py-2.5 rounded font-bold hover:bg-blue-700 shadow-md transition w-full md:w-auto">Save Changes</button></div>
                     </form>
                 </div>
@@ -443,6 +555,8 @@
             });
             localStorage.setItem('notifHistory', JSON.stringify(history.slice(0, 15)));
             renderNotifications();
+
+
         });
         function renderNotifications() {
             const history = JSON.parse(localStorage.getItem('notifHistory') || '[]');
@@ -536,22 +650,91 @@
                 <ul class="text-xs text-gray-600 list-disc pl-4 mt-2"><li>Option A</li><li class="text-green-600 font-bold">Option B (Correct)</li><li>Option C</li></ul></div>`;
              toggleModal('viewQuestionsModal');
         }
-        function viewSingleQuestion(text, type) {
-             document.getElementById('viewQuestionsTitle').innerText = type + " Question";
-             document.getElementById('viewQuestionsList').innerHTML = `<div class="bg-white p-4 rounded border border-border"><p class="font-bold text-lg">${text}</p><span class="bg-blue-100 text-primary text-xs px-2 py-1 rounded">${type}</span></div>`;
-             toggleModal('viewQuestionsModal');
-        }
+        function viewSingleQuestion(text, type, imageUrl) {
+    document.getElementById('viewQuestionsTitle').innerText = "Question Details";
+
+    let imageHtml = '';
+    if (imageUrl && imageUrl !== 'None' && imageUrl !== '') {
+        imageHtml = `<div class="mb-3"><img src="${imageUrl}" class="max-h-48 rounded border border-border mx-auto"></div>`;
+    }
+
+    document.getElementById('viewQuestionsList').innerHTML = `
+        <div class="bg-white p-5 rounded-lg border border-border">
+            <div class="flex justify-between items-start mb-2">
+                <span class="bg-blue-100 text-primary text-xs px-2 py-1 rounded font-bold uppercase">${type}</span>
+            </div>
+            ${imageHtml}
+            <p class="font-bold text-lg text-textMain mb-2">${text}</p>
+            <p class="text-xs text-gray-500 italic">Click 'Edit' to see full options and answer key.</p>
+        </div>`;
+
+    toggleModal('viewQuestionsModal');
+}
 
         function openQuestionModal(mode) { document.getElementById('questionModalTitle').innerText = "Add Questions"; document.getElementById('questionForm').reset(); toggleModal('questionModal'); }
 
-        function openEditQuestion(id, text, type) {
-             document.getElementById('questionModalTitle').innerText = "Edit Question";
-             toggleModal('questionModal');
-             // Simulating pre-fill
-             document.getElementById('q_type_0').value = type;
-             document.getElementById('q_text_0').value = text;
-             handleTypeChange(document.getElementById('q_type_0'));
+        // 2. EDIT QUESTION (Reads data from button attributes to pre-fill)
+function openEditQuestion(button) {
+    // 1. Get Data from Attributes
+    const id = button.getAttribute('data-id');
+    const text = button.getAttribute('data-text');
+    const type = button.getAttribute('data-type');
+    const correct = button.getAttribute('data-correct');
+    const ansText = button.getAttribute('data-ans-text');
+
+    const optA = button.getAttribute('data-opt-a');
+    const optB = button.getAttribute('data-opt-b');
+    const optC = button.getAttribute('data-opt-c');
+    const optD = button.getAttribute('data-opt-d');
+
+    // 2. Setup Modal Title
+    document.getElementById('questionModalTitle').innerText = "Edit Question";
+    toggleModal('questionModal');
+
+    // 3. Pre-fill Question Text & Type
+    // We target the first question block (q_type_0) assuming single edit mode
+    const typeSelect = document.getElementsByName('question_type[]')[0];
+    const textInput = document.getElementsByName('question_text[]')[0];
+
+    if(typeSelect) {
+        typeSelect.value = type;
+        // Trigger change event to show/hide relevant sections (MCQ vs Text)
+        handleTypeChange(typeSelect);
+    }
+    if(textInput) textInput.value = text;
+
+    // 4. Pre-fill Options (If MCQ)
+    if (type === 'MCQ') {
+        const inputsA = document.getElementsByName('opt_a_text[]')[0];
+        const inputsB = document.getElementsByName('opt_b_text[]')[0];
+        const inputsC = document.getElementsByName('opt_c_text[]')[0];
+        const inputsD = document.getElementsByName('opt_d_text[]')[0];
+
+        if(inputsA) inputsA.value = optA;
+        if(inputsB) inputsB.value = optB;
+        if(inputsC) inputsC.value = optC;
+        if(inputsD) inputsD.value = optD;
+
+        // Select Correct Radio Button
+        // The name for the first block's radios is 'correct_opt_0' (based on our addNextQuestion logic)
+        // If editing existing, we might need to ensure the name aligns.
+        // Assuming the edit modal is cleared and reset to index 0.
+        const radios = document.getElementsByName('correct_opt_0');
+        if(radios.length > 0) {
+            for(let r of radios) {
+                if(r.value === correct) r.checked = true;
+            }
         }
+    }
+    // 5. Pre-fill Text Answer (If Text/Code)
+    else {
+        const correctTextInput = document.getElementsByName('correct_answer_text[]')[0];
+        if(correctTextInput) correctTextInput.value = ansText;
+    }
+
+    // Note: We cannot pre-fill file inputs (Images) for security reasons.
+    // You might want to add a text label saying "Image currently uploaded" if needed.
+}
 
         function filterTests() {
             const type = document.getElementById('q_parent_type').value;
@@ -580,6 +763,144 @@
             <div class="text-section hidden mt-4"><label class="text-xs font-bold text-textMuted">Answer Key</label><textarea name="correct_answer_text[]" class="w-full border rounded p-2 h-20 text-sm"></textarea></div>`;
             wrapper.appendChild(div);
         }
+        // --- CHART CONFIGURATION ---
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. User Growth Chart (Line)
+    const userCtx = document.getElementById('userGrowthChart');
+    if (userCtx) {
+        const userLabels = JSON.parse('{{ graphs.user_labels|safe }}');
+        const userData = JSON.parse('{{ graphs.user_data|safe }}');
+
+        new Chart(userCtx, {
+            type: 'line',
+            data: {
+                labels: userLabels,
+                datasets: [{
+                    label: 'New Users',
+                    data: userData,
+                    borderColor: '#2563eb', // Primary Blue
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#2563eb',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#f0f2f5' }, ticks: { color: '#64748b', font: {size: 10} } },
+                    x: { grid: { display: false }, ticks: { color: '#64748b', font: {size: 10} } }
+                }
+            }
+        });
+    }
+
+    // 2. Content Distribution Chart (Doughnut)
+    const distCtx = document.getElementById('contentDistChart');
+    if (distCtx) {
+        const distLabels = JSON.parse('{{ graphs.dist_labels|safe }}');
+        const distData = JSON.parse('{{ graphs.dist_data|safe }}');
+
+        new Chart(distCtx, {
+            type: 'doughnut',
+            data: {
+                labels: distLabels,
+                datasets: [{
+                    data: distData,
+                    backgroundColor: ['#4f46e5', '#06b6d4', '#ef4444'], // Indigo, Cyan, Red
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, color: '#64748b' } }
+                },
+                cutout: '70%'
+            }
+        });
+    }
+});
+// --- DARK MODE LOGIC ---
+
+// 1. Toggle Function
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+
+    if (html.classList.contains('dark')) {
+        // Switch to Light
+        html.classList.remove('dark');
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'light');
+    } else {
+        // Switch to Dark
+        html.classList.add('dark');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'dark');
+    }
+}
+
+// 2. Initialization (Run Immediately)
+(function() {
+    const userTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const icon = document.getElementById('themeIcon');
+
+    // Check if Dark Mode should be active
+    if (userTheme === 'dark' || (!userTheme && systemTheme)) {
+        document.documentElement.classList.add('dark');
+        // Update icon if it exists (DOM might not be ready, so we check)
+        if (icon) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+    } else {
+        document.documentElement.classList.remove('dark');
+        if (icon) {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+    }
+})();
+
+// 3. Ensure Icon Correctness on Full DOM Load (Double Check)
+document.addEventListener('DOMContentLoaded', () => {
+    const icon = document.getElementById('themeIcon');
+    if (document.documentElement.classList.contains('dark')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+    }
+});
+
+        // Toggle Palette on Ctrl+K
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+        const palette = document.getElementById('commandPalette');
+        palette.classList.toggle('hidden');
+        if (!palette.classList.contains('hidden')) document.getElementById('commandInput').focus();
+    }
+    if (e.key === 'Escape') document.getElementById('commandPalette').classList.add('hidden');
+});
+
+// Close when clicking outside
+document.getElementById('commandPalette').addEventListener('click', function(e) {
+    if(e.target === this) this.classList.add('hidden');
+});
+
     </script>
 </body>
 </html>
