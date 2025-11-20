@@ -243,13 +243,14 @@
                 <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-textMain">Quizzes</h2><button onclick="openAssessmentModal('add', 'quiz')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition"><i class="fa-solid fa-plus mr-2"></i> Add Quiz</button></div>
                 <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
                     <table class="w-full text-left min-w-[700px] searchable-table">
-                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Title</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Course</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Status</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
+                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Title</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Course</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Open Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Close Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Status</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
                         <tbody class="divide-y divide-border">
                             {% for item in quizzes %}
                             <tr class="hover:bg-gray-50 searchable-row" data-search="{{ item.title }} {{ item.course.code }}">
                                 <td class="p-4 font-medium text-textMain">{{ item.title }}</td>
-                                <td class="p-4 text-textMuted">{{ item.course.code }}</td>
-                                <td class="p-4 text-xs text-textMuted">{{ item.open_date|date:"M d" }}</td>
+                                <td class="p-4 text-textMuted">{{ item.course.title }}</td>
+                                <td class="p-4 text-xs text-textMuted">{{ item.open_date }}</td>
+                                <td class="p-4 text-xs text-textMuted">{{ item.close_date }}</td>
                                 <td class="p-4">{% if item.is_live %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs font-bold">Live</span>{% else %}<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">Draft</span>{% endif %}</td>
                                 <td class="p-4 text-right">
                                     <button onclick="viewQuestions('{{ item.title|escapejs }}', '{{ item.id }}')" class="text-secondary p-2 hover:text-primary" title="View Questions"><i class="fa-solid fa-eye"></i></button>
@@ -267,13 +268,14 @@
                 <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-textMain">Assignments</h2><button onclick="openAssessmentModal('add', 'assignment')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition"><i class="fa-solid fa-plus mr-2"></i> Add Assignment</button></div>
                 <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
                     <table class="w-full text-left min-w-[700px] searchable-table">
-                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Title</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Course</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Status</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
+                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Title</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Course</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Open Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Close Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Status</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
                         <tbody class="divide-y divide-border">
                             {% for item in assignments %}
                             <tr class="hover:bg-gray-50 searchable-row" data-search="{{ item.title }} {{ item.course.code }}">
                                 <td class="p-4 font-medium text-textMain">{{ item.title }}</td>
-                                <td class="p-4 text-textMuted">{{ item.course.code }}</td>
-                                <td class="p-4 text-xs text-textMuted">{{ item.open_date|date:"M d" }}</td>
+                                <td class="p-4 text-textMuted">{{ item.course.title }}</td>
+                                <td class="p-4 text-xs text-textMuted">{{ item.open_date }}</td>
+                                <td class="p-4 text-xs text-textMuted">{{ item.close_date }}</td>
                                 <td class="p-4">{% if item.is_live %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs font-bold">Live</span>{% else %}<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">Draft</span>{% endif %}</td>
                                 <td class="p-4 text-right">
                                     <button onclick="viewQuestions('{{ item.title|escapejs }}', '{{ item.id }}')" class="text-secondary p-2 hover:text-primary" title="View Questions"><i class="fa-solid fa-eye"></i></button>
@@ -291,13 +293,14 @@
                 <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-textMain">Exams</h2><button onclick="openAssessmentModal('add', 'exam')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition"><i class="fa-solid fa-plus mr-2"></i> Add Exam</button></div>
                 <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
                     <table class="w-full text-left min-w-[700px] searchable-table">
-                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Title</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Course</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Status</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
+                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Title</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Course</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Open Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Close Dates</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Status</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
                         <tbody class="divide-y divide-border">
                             {% for item in exams %}
                             <tr class="hover:bg-gray-50 searchable-row" data-search="{{ item.title }} {{ item.course.code }}">
                                 <td class="p-4 font-medium text-textMain">{{ item.title }}</td>
-                                <td class="p-4 text-textMuted">{{ item.course.code }}</td>
-                                <td class="p-4 text-xs text-textMuted">{{ item.open_date|date:"M d" }}</td>
+                                <td class="p-4 text-textMuted">{{ item.course.title }}</td>
+                                <td class="p-4 text-xs text-textMuted">{{ item.open_date }}</td>
+                                <td class="p-4 text-xs text-textMuted">{{ item.close_date }}</td>
                                 <td class="p-4">{% if item.is_live %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs font-bold">Live</span>{% else %}<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">Draft</span>{% endif %}</td>
                                 <td class="p-4 text-right">
                                     <button onclick="viewQuestions('{{ item.title|escapejs }}', '{{ item.id }}')" class="text-secondary p-2 hover:text-primary" title="View Questions"><i class="fa-solid fa-eye"></i></button>
@@ -499,9 +502,9 @@
                 {% csrf_token %}
 
                 <div class="bg-white p-4 rounded shadow-sm mb-6 border border-border grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div><label class="text-xs font-bold text-textMuted uppercase">1. Test Type</label><select id="q_parent_type" name="parent_type" class="w-full bg-gray-50 border border-border rounded p-2 mt-1" onchange="filterTests()"><option value="QUIZ">Quiz</option><option value="ASSIGNMENT">Assignment</option><option value="EXAM">Exam</option></select></div>
-                    <div><label class="text-xs font-bold text-textMuted uppercase">2. Select Course</label><select id="q_course_select" class="w-full bg-gray-50 border border-border rounded p-2 mt-1" onchange="filterTests()">{% for c in courses %}<option value="{{ c.id }}">{{ c.code }}</option>{% endfor %}</select></div>
-                    <div><label class="text-xs font-bold text-textMuted uppercase">3. Select Test</label>
+                    <div><label class="text-xs font-bold text-textMuted uppercase">Test Type</label><select id="q_parent_type" name="parent_type" class="w-full bg-gray-50 border border-border rounded p-2 mt-1" onchange="filterTests()"><option value="QUIZ">Quiz</option><option value="ASSIGNMENT">Assignment</option><option value="EXAM">Exam</option></select></div>
+                    <div><label class="text-xs font-bold text-textMuted uppercase">Select Course</label><select id="q_course_select" class="w-full bg-gray-50 border border-border rounded p-2 mt-1" onchange="filterTests()">{% for c in courses %}<option value="{{ c.id }}">{{ c.title }}</option>{% endfor %}</select></div>
+                    <div><label class="text-xs font-bold text-textMuted uppercase">Select Test</label>
                         <select id="q_parent_id" name="parent_id" class="w-full bg-gray-50 border border-border rounded p-2 mt-1">
                             {% for q in quizzes %}<option class="test-option" data-type="QUIZ" data-course="{{ q.course.id }}" value="{{ q.id }}">{{ q.title }}</option>{% endfor %}
                             {% for a in assignments %}<option class="test-option" data-type="ASSIGNMENT" data-course="{{ a.course.id }}" value="{{ a.id }}">{{ a.title }}</option>{% endfor %}
