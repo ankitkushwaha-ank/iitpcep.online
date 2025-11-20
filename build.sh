@@ -12,7 +12,8 @@ python manage.py collectstatic --no-input
 python manage.py migrate
 
 # 4. Flush Old Data (⚠️ DELETES ALL EXISTING DATA ON RENDER)
-python clean_db.py
+# This solves the "Duplicate key" error by removing the existing "Ankit"
+python manage.py flush --no-input
 
 # 5. Load New Data
 python manage.py loaddata data.json

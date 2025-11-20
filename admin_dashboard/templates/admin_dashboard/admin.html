@@ -761,22 +761,84 @@ function openEditQuestion(button) {
             if (sel.value === 'MCQ') { block.querySelector('.mcq-section').classList.remove('hidden'); block.querySelector('.text-section').classList.add('hidden'); }
             else { block.querySelector('.mcq-section').classList.add('hidden'); block.querySelector('.text-section').classList.remove('hidden'); }
         }
-        let qCount=0;
-        function addNextQuestion() {
-            qCount++; const wrapper = document.getElementById('questionsWrapper'); const div = document.createElement('div');
-            div.className = "question-block bg-white p-6 rounded shadow-sm border border-blue-200 relative mt-6";
-            div.innerHTML = `<span class="absolute top-0 left-0 bg-blue-600 text-white text-xs px-2 py-1 rounded-br">Q${qCount+1}</span><button type="button" onclick="this.closest('.question-block').remove()" class="absolute top-2 right-2 text-danger"><i class="fa-solid fa-trash"></i></button>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"><div><label class="text-xs font-bold text-textMuted uppercase">Type</label><select name="question_type[]" class="w-full border border-border rounded p-2 mt-1" onchange="handleTypeChange(this)"><option value="MCQ">Multiple Choice</option><option value="TEXT">Text Answer</option><option value="CODE">Coding</option></select></div>
-            <div class="col-span-2"><label class="text-xs font-bold text-textMuted uppercase">Question</label><textarea name="question_text[]" class="w-full border border-border rounded p-2 mt-1 h-10"></textarea></div>
-            <div class="col-span-3"><label class="text-xs font-bold text-textMuted uppercase">Image</label><input type="file" name="question_image[]" class="text-xs"></div></div>
-            <div class="mcq-section"><div class="space-y-2">
-            <div class="flex items-center gap-2"><span class="font-bold w-6">A</span><input type="text" name="opt_a_text[]" class="flex-1 border rounded p-2 text-sm"><input type="file" name="opt_a_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_${qCount}" value="A" class="w-4 h-4 accent-primary"></div>
-            <div class="flex items-center gap-2"><span class="font-bold w-6">B</span><input type="text" name="opt_b_text[]" class="flex-1 border rounded p-2 text-sm"><input type="file" name="opt_b_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_${qCount}" value="B" class="w-4 h-4 accent-primary"></div>
-            <div class="flex items-center gap-2"><span class="font-bold w-6">C</span><input type="text" name="opt_c_text[]" class="flex-1 border rounded p-2 text-sm"><input type="file" name="opt_c_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_${qCount}" value="C" class="w-4 h-4 accent-primary"></div>
-            <div class="flex items-center gap-2"><span class="font-bold w-6">D</span><input type="text" name="opt_d_text[]" class="flex-1 border rounded p-2 text-sm"><input type="file" name="opt_d_img[]" class="text-xs w-20"><input type="radio" name="correct_opt_${qCount}" value="D" class="w-4 h-4 accent-primary"></div></div></div>
-            <div class="text-section hidden mt-4"><label class="text-xs font-bold text-textMuted">Answer Key</label><textarea name="correct_answer_text[]" class="w-full border rounded p-2 h-20 text-sm"></textarea></div>`;
-            wrapper.appendChild(div);
-        }
+        // Start count based on existing questions to avoid duplicates if page reloads
+let qCount = document.querySelectorAll('.question-block').length;
+
+function addNextQuestion() {
+    const wrapper = document.getElementById('questionsWrapper');
+    const div = document.createElement('div');
+
+    // We use the current count as the Index (0, 1, 2...) for the Backend
+    // We use (qCount + 1) for the Visual Label (Q1, Q2, Q3...)
+    let currentIndex = qCount;
+
+    div.className = "question-block bg-white p-6 rounded shadow-sm border border-blue-200 relative mt-6";
+    div.innerHTML = `
+    <span class="absolute top-0 left-0 bg-blue-600 text-white text-xs px-2 py-1 rounded-br">Q${currentIndex + 1}</span>
+    <button type="button" onclick="removeQuestion(this)" class="absolute top-2 right-2 text-danger"><i class="fa-solid fa-trash"></i></button>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div>
+            <label class="text-xs font-bold text-textMuted uppercase">Type</label>
+            <select name="question_type[]" class="w-full border border-border rounded p-2 mt-1" onchange="handleTypeChange(this)">
+                <option value="MCQ">Multiple Choice</option>
+                <option value="TEXT">Text Answer</option>
+                <option value="CODE">Coding</option>
+            </select>
+        </div>
+        <div class="col-span-2">
+            <label class="text-xs font-bold text-textMuted uppercase">Question</label>
+            <textarea name="question_text[]" class="w-full border border-border rounded p-2 mt-1 h-10"></textarea>
+        </div>
+        <div class="col-span-3">
+            <label class="text-xs font-bold text-textMuted uppercase">Image</label>
+            <input type="file" name="question_image[]" class="text-xs">
+        </div>
+    </div>
+
+    <div class="mcq-section">
+        <div class="space-y-2">
+            <div class="flex items-center gap-2">
+                <span class="font-bold w-6">A</span>
+                <input type="text" name="opt_a_text[]" class="flex-1 border rounded p-2 text-sm">
+                <input type="file" name="opt_a_img[]" class="text-xs w-20">
+                <input type="radio" name="correct_opt_${currentIndex}" value="A" class="w-4 h-4 accent-primary">
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="font-bold w-6">B</span>
+                <input type="text" name="opt_b_text[]" class="flex-1 border rounded p-2 text-sm">
+                <input type="file" name="opt_b_img[]" class="text-xs w-20">
+                <input type="radio" name="correct_opt_${currentIndex}" value="B" class="w-4 h-4 accent-primary">
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="font-bold w-6">C</span>
+                <input type="text" name="opt_c_text[]" class="flex-1 border rounded p-2 text-sm">
+                <input type="file" name="opt_c_img[]" class="text-xs w-20">
+                <input type="radio" name="correct_opt_${currentIndex}" value="C" class="w-4 h-4 accent-primary">
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="font-bold w-6">D</span>
+                <input type="text" name="opt_d_text[]" class="flex-1 border rounded p-2 text-sm">
+                <input type="file" name="opt_d_img[]" class="text-xs w-20">
+                <input type="radio" name="correct_opt_${currentIndex}" value="D" class="w-4 h-4 accent-primary">
+            </div>
+        </div>
+    </div>
+
+    <div class="text-section hidden mt-4">
+        <label class="text-xs font-bold text-textMuted">Answer Key</label>
+        <textarea name="correct_answer_text[]" class="w-full border rounded p-2 h-20 text-sm"></textarea>
+    </div>`;
+
+    wrapper.appendChild(div);
+    qCount++; // Increment AFTER using the index
+}
+
+function removeQuestion(btn) {
+    btn.closest('.question-block').remove();
+    // Note: If you delete questions, array indices might shift but Radio names won't.
+    // Ideally, you should submit the form without deleting middle questions, or reload to reset order.
+}
         // --- CHART CONFIGURATION ---
 document.addEventListener("DOMContentLoaded", () => {
     // 1. User Growth Chart (Line)
