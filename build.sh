@@ -14,3 +14,6 @@ python manage.py migrate
 # 4. Load Your Data (The new part)
 # ⚠️ WARNING: This overwrites data with matching IDs!
 python manage.py loaddata data.json
+
+#render's build command
+#pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
