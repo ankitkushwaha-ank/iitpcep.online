@@ -1,6 +1,7 @@
 import os
 import json
 import warnings
+import dj_database_url
 from pathlib import Path
 from config import DATABASE, SYSTEM  # ✅ import DB + system config safely
 
@@ -23,7 +24,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "iitpcep.online",
     "www.iitpcep.online",
-    "iitpcep-online.onrender.com",  # This is the correct Render domain
+    "iitpcep-online.onrender.com",
     "cet.iitpcep.online",
 ]
 
@@ -113,14 +114,53 @@ print(f"[SETTINGS] Environment: Development")
 print(f"[SETTINGS] Using Database Engine: SQLite")
 print(f"[SETTINGS] System Online: {SYSTEM.get('SYSTEM_ON', True)}")
 print("--------------------------------------------------")
+#
+# # Local SQLite
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
-# Local SQLite
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+
+# --------------------------------------------------
+# 📦 DATABASE SETTINGS
+# --------------------------------------------------
+print("--------------------------------------------------")
+if DEBUG:
+    print(f"[SETTINGS] Environment: Development (DEBUG=True)")
+
+    # Local SQLite
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    print("[SETTINGS] Environment: Production (DEBUG=False)")
+
+    # Render PostgreSQL
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+
+    # Fallback if DATABASE_URL is missing
+    if not DATABASES['default']:
+        print("⚠️ WARNING: DATABASE_URL not found. Using SQLite fallback.")
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": BASE_DIR / "db.sqlite3",
+            }
+        }
+    else:
+        print("[SETTINGS] Render PostgreSQL configured.")
+
 
 # Local Static Files
 STATIC_URL = "/static/"
