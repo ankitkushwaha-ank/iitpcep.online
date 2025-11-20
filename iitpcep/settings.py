@@ -16,7 +16,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-local-dev-key")
 # --------------------------------------------------
 # This is the MASTER switch for your environments
 # Set to True to use local SQLite and local media, as you requested.
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
