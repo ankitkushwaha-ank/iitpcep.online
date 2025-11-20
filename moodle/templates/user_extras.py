@@ -4,13 +4,6 @@ register = template.Library()
 
 @register.filter
 def user_initials(username):
-    """
-    Generate initials from username.
-    Example:
-        "Ankit" -> "A"
-        "Ankit Kumar" -> "AK"
-        None or empty -> "I"
-    """
     if not username:
         return "I"
 
