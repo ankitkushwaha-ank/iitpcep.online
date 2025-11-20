@@ -600,8 +600,8 @@ document.body.className += ' jsenabled';
             {% if q.user_answer %} answered {% else %} notyetanswered {% endif %}
             free btn
                     {% if q.correct_option %}
-        complete
-    {% endif %}
+                        complete
+                    {% endif %}
             {% if q.id == question.id %} thispage {% endif %}"
            id="quiznavbutton{{ q.id }}"
            title="Question {{ forloop.counter }} - {% if q.user_answer %}Answered{% else %}Not yet answered{% endif %}"

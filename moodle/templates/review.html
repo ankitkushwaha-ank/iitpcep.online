@@ -491,8 +491,10 @@ document.body.className += ' jsenabled';
   <div class="qn_buttons clearfix allquestionsononepage">
     {% for q in questions %}
       <a class="qnbutton
-
-          free btn complete"
+{% if q.correct_option %}
+                        complete
+                    {% endif %}
+          free btn"
          id="quiznavbutton{{ q.id }}"
          title="Question {{ forloop.counter }} - {% if q.user_answer %}Answered{% else %}Not yet answered{% endif %}"
          data-quiz-page="{{ forloop.counter0 }}"
