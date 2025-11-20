@@ -324,35 +324,41 @@
                             <tr class="hover:bg-gray-50 searchable-row" data-search="{{ q.text }}">
                                 <td class="p-4 text-textMain truncate max-w-md">{% if q.text %}{{ q.text|striptags }} {% else %} <img src="{{ q.image.url }}">{% endif %} </td>
                                 <td class="p-4"><span class="bg-blue-100 text-primary px-2 py-1 rounded text-xs">{{ q.get_question_type_display }}</span></td>
-                                <td class="p-4 text-textMuted">{{ q.parent_type }} #{{ q.parent_id }}</td>
+                                <td class="p-4 text-textMuted">{{ q.parent_type }} # {{ q.parent_id }}</td>
                                 <td class="p-4 text-right">
-                                    <button
-                                        onclick="viewSingleQuestion(
-                                            '{{ q.text|escapejs }}',
-                                            '{{ q.question_type }}',
-                                            '{% if q.image %}{{ q.image.url }}{% endif %}'
-                                        )"
-                                        class="text-secondary p-2 hover:text-primary"
-                                        title="View Details">
+                                    <button type="button"
+                                        onclick="viewSingleQuestion(this)"
+                                        data-type="{{ q.question_type }}"
+                                        data-text="{{ q.text }}"
+                                        {% if q.image %} data-image="{{ q.image.url|default:'' }}"{% endif %}
+                                        data-correct="{{ q.correct_option }}"
+                                        data-ans-text="{{ q.correct_answer_text }}"
+
+                                        data-opt-a="{{ q.options.all.0.text }}"
+                                        data-opt-b="{{ q.options.all.1.text }}"
+                                        data-opt-c="{{ q.options.all.2.text }}"
+                                        data-opt-d="{{ q.options.all.3.text }}"
+
+                                        class="text-blue-500 hover:text-blue-700">
                                         <i class="fa-solid fa-eye"></i>
                                     </button>
                                     <button
-        type="button"
-        class="text-primary p-2"
-        onclick="openEditQuestion(this)"
-        data-id="{{ q.id }}"
-        data-text="{{ q.text|escapejs }}"
-        data-type="{{ q.question_type }}"
-        data-correct="{{ q.correct_option }}"
-        data-ans-text="{{ q.correct_answer_text|escapejs }}"
-        /* Django Template Logic to get Options */
-        data-opt-a="{% for opt in q.option_set.all %}{% if opt.option_label == 'A' %}{{ opt.text|escapejs }}{% endif %}{% endfor %}"
-        data-opt-b="{% for opt in q.option_set.all %}{% if opt.option_label == 'B' %}{{ opt.text|escapejs }}{% endif %}{% endfor %}"
-        data-opt-c="{% for opt in q.option_set.all %}{% if opt.option_label == 'C' %}{{ opt.text|escapejs }}{% endif %}{% endfor %}"
-        data-opt-d="{% for opt in q.option_set.all %}{% if opt.option_label == 'D' %}{{ opt.text|escapejs }}{% endif %}{% endfor %}"
-        title="Edit">
-        <i class="fa-solid fa-pen"></i>
-    </button>
+                                        type="button"
+                                        class="text-primary p-2"
+                                        onclick="openEditQuestion(this)"
+                                        data-id="{{ q.id }}"
+                                        data-text="{{ q.text }}"
+                                        data-type="{{ q.question_type }}"
+                                        data-correct="{{ q.correct_option }}"
+                                        data-ans-text="{{ q.correct_answer_text }}"
+                                        /* Django Template Logic to get Options */
+                                        data-opt-a="{{ q.options.all.0.text }}"
+                                    data-opt-b="{{ q.options.all.1.text }}"
+                                    data-opt-c="{{ q.options.all.2.text }}"
+                                    data-opt-d="{{ q.options.all.3.text }}"
+                                        title="Edit">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
                                     <button onclick="confirmDelete('question/delete/{{ q.id }}')" class="text-danger p-2"><i class="fa-solid fa-trash"></i></button>
                                 </td>
                             </tr>
@@ -655,31 +661,61 @@
         }
 
         // 4. VIEW QUESTIONS & ADD QUESTIONS Logic (Identical to previous robust logic)
-        function viewQuestions(title, id) {
-             document.getElementById('viewQuestionsTitle').innerText = "Questions: " + title;
-             // Simulate render - In production fetch via ID
-             document.getElementById('viewQuestionsList').innerHTML = `
-                <div class="bg-white p-4 rounded border border-border mb-2"><p class="font-bold mb-2">Q. Sample Question?</p>
-                <div class="flex gap-2 mt-2"><img src="https://via.placeholder.com/50" class="h-10 rounded"><span class="text-xs">Question Image</span></div>
-                <ul class="text-xs text-gray-600 list-disc pl-4 mt-2"><li>Option A</li><li class="text-green-600 font-bold">Option B (Correct)</li><li>Option C</li></ul></div>`;
-             toggleModal('viewQuestionsModal');
-        }
-        function viewSingleQuestion(text, type, imageUrl) {
+// ---------------------------------------------------------
+// 4. VIEW SINGLE QUESTION
+// ---------------------------------------------------------
+function viewSingleQuestion(btn) {
+    const data = btn.dataset;
     document.getElementById('viewQuestionsTitle').innerText = "Question Details";
 
-    let imageHtml = '';
-    if (imageUrl && imageUrl !== 'None' && imageUrl !== '') {
-        imageHtml = `<div class="mb-3"><img src="${imageUrl}" class="max-h-48 rounded border border-border mx-auto"></div>`;
+    let mainImageHtml = '';
+    if (data.image && data.image !== 'None' && data.image !== '') {
+        mainImageHtml = `<div class="mb-4"><img src="${data.image}" class="max-h-48 rounded border border-border mx-auto object-contain"></div>`;
+    }
+
+    let optionsHtml = '';
+    if (data.type === 'MCQ') {
+        const opts = [
+            { label: 'A', text: data.optA, img: data.optAImg },
+            { label: 'B', text: data.optB, img: data.optBImg },
+            { label: 'C', text: data.optC, img: data.optCImg },
+            { label: 'D', text: data.optD, img: data.optDImg }
+        ];
+
+        optionsHtml = `<div class="grid grid-cols-1 gap-2 mt-4">`;
+        opts.forEach(opt => {
+            const isCorrect = (data.correct === opt.label);
+            const bgClass = isCorrect ? 'bg-green-50 border-green-500' : 'bg-gray-50 border-gray-200';
+            const textClass = isCorrect ? 'text-green-700 font-bold' : 'text-gray-700';
+
+            let optImg = '';
+            if(opt.img && opt.img !== 'None' && opt.img !== '') {
+                optImg = `<img src="${opt.img}" class="h-10 w-10 object-cover rounded ml-2 border">`;
+            }
+
+            optionsHtml += `
+                <div class="flex items-center p-3 border rounded ${bgClass}">
+                    <span class="font-bold w-6">${opt.label}.</span>
+                    <span class="${textClass} flex-1">${opt.text || ''}</span>
+                    ${optImg}
+                    ${isCorrect ? '<i class="fa-solid fa-check-circle text-green-600 ml-auto"></i>' : ''}
+                </div>`;
+        });
+        optionsHtml += `</div>`;
+    } else {
+        optionsHtml = `
+            <div class="mt-4 p-4 bg-gray-100 rounded border border-gray-300">
+                <p class="text-xs font-bold text-gray-500 uppercase">Correct Answer</p>
+                <p class="text-sm font-mono mt-1">${data.ansText}</p>
+            </div>`;
     }
 
     document.getElementById('viewQuestionsList').innerHTML = `
         <div class="bg-white p-5 rounded-lg border border-border">
-            <div class="flex justify-between items-start mb-2">
-                <span class="bg-blue-100 text-primary text-xs px-2 py-1 rounded font-bold uppercase">${type}</span>
-            </div>
-            ${imageHtml}
-            <p class="font-bold text-lg text-textMain mb-2">${text}</p>
-            <p class="text-xs text-gray-500 italic">Click 'Edit' to see full options and answer key.</p>
+            <span class="bg-blue-100 text-primary text-xs px-2 py-1 rounded font-bold uppercase">${data.type}</span>
+            <p class="font-bold text-lg text-textMain mb-4 mt-2">${data.text}</p>
+            ${mainImageHtml}
+            ${optionsHtml}
         </div>`;
 
     toggleModal('viewQuestionsModal');

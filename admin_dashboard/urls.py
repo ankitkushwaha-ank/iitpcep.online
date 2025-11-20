@@ -15,14 +15,13 @@ urlpatterns = [
 
     # Assessments (Quiz, Assignment, Exam)
     path('assessment/add/', views.add_assessment, name='add_assessment'),
-
-    # ✅ ADD THIS LINE BELOW TO FIX THE 404
     path('assessment/edit/<int:id>/', views.edit_assessment, name='edit_assessment'),
-
     path('assessment/delete/<int:id>/', views.delete_assessment, name='delete_assessment'),
 
     # Questions
     path('question/add/', views.add_question, name='add_question'),
+    # ✅ NEW: Added the edit_question path
+    path('question/edit/<int:question_id>/', views.edit_question, name='edit_question'),
     path('question/delete/<int:id>/', views.delete_question, name='delete_question'),
 
     # Users & Settings
