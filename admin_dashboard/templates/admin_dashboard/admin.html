@@ -380,8 +380,19 @@
                                     {% if user.is_superuser %}<span class="ml-2 bg-yellow-100 text-yellow-800 text-[10px] px-1 rounded">ADMIN</span>{% endif %}
                                 </td>
                                 <td class="p-4">
-                                    {% if user.is_banned %}<span class="bg-red-100 text-danger px-2 py-1 rounded text-xs font-bold">Banned</span>
-                                    {% else %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs">Active</span>{% endif %}
+                                    {% if user.is_banned %}
+                                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-bold">
+                                            Banned
+                                        </span>
+                                    {% elif user.is_online %}
+                                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">
+                                            Online
+                                        </span>
+                                    {% else %}
+                                        <span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">
+                                            Offline
+                                        </span>
+                                    {% endif %}
                                 </td>
                                 <td class="p-4 text-textMuted text-xs">{{ user.last_active|date:"M d, Y H:i" }}</td>
                                 <td class="p-4 text-textMuted text-xs">{{ user.created_at|date:"M d, Y" }}</td>
@@ -826,62 +837,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 cutout: '70%'
             }
         });
-    }
-});
-// --- DARK MODE LOGIC ---
-
-// 1. Toggle Function
-function toggleDarkMode() {
-    const html = document.documentElement;
-    const icon = document.getElementById('themeIcon');
-
-    if (html.classList.contains('dark')) {
-        // Switch to Light
-        html.classList.remove('dark');
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-        localStorage.setItem('theme', 'light');
-    } else {
-        // Switch to Dark
-        html.classList.add('dark');
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-        localStorage.setItem('theme', 'dark');
-    }
-}
-
-// 2. Initialization (Run Immediately)
-(function() {
-    const userTheme = localStorage.getItem('theme');
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const icon = document.getElementById('themeIcon');
-
-    // Check if Dark Mode should be active
-    if (userTheme === 'dark' || (!userTheme && systemTheme)) {
-        document.documentElement.classList.add('dark');
-        // Update icon if it exists (DOM might not be ready, so we check)
-        if (icon) {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        }
-    } else {
-        document.documentElement.classList.remove('dark');
-        if (icon) {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        }
-    }
-})();
-
-// 3. Ensure Icon Correctness on Full DOM Load (Double Check)
-document.addEventListener('DOMContentLoaded', () => {
-    const icon = document.getElementById('themeIcon');
-    if (document.documentElement.classList.contains('dark')) {
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-    } else {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
     }
 });
 
