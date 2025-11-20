@@ -1,8 +1,8 @@
 import os
 import json
 import warnings
-import dj_database_url
 from pathlib import Path
+import dj_database_url  # ✅ Added for Render PostgreSQL
 from config import DATABASE, SYSTEM  # ✅ import DB + system config safely
 
 # --------------------------------------------------
@@ -27,6 +27,11 @@ ALLOWED_HOSTS = [
     "iitpcep-online.onrender.com",
     "cet.iitpcep.online",
 ]
+
+# Add Render's internal host pattern to allowed hosts automatically
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 CSRF_TRUSTED_ORIGINS = [
     "https://iitpcep.online",
@@ -103,165 +108,44 @@ TEMPLATES = [
 # 📦 DATABASE, STATIC & MEDIA SETTINGS
 # --------------------------------------------------
 
-# This flag is no longer needed for local-only setup
-# USE_CLOUD_SQL = True
-
-# if DEBUG:
-# --- 🌞 DEVELOPMENT SETTINGS ---
-# This block is now ACTIVE because DEBUG = True
 print("--------------------------------------------------")
-print(f"[SETTINGS] Environment: Development")
-print(f"[SETTINGS] Using Database Engine: SQLite")
+print(f"[SETTINGS] Environment: {'Render/Production' if os.environ.get('DATABASE_URL') else 'Development'}")
 print(f"[SETTINGS] System Online: {SYSTEM.get('SYSTEM_ON', True)}")
 print("--------------------------------------------------")
-#
-# # Local SQLite
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
 
-
-# --------------------------------------------------
-# 📦 DATABASE SETTINGS
-# --------------------------------------------------
-print("--------------------------------------------------")
-if DEBUG:
-    print(f"[SETTINGS] Environment: Development (DEBUG=True)")
-
-    # Local SQLite
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+# 1. Database Configuration
+# Default to SQLite (Local)
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
+}
+
+# Render PostgreSQL Override
+# If DATABASE_URL environment variable exists (Render provides this), overwrite with Postgres
+database_url = os.environ.get("DATABASE_URL")
+if database_url:
+    DATABASES["default"] = dj_database_url.config(
+        default=database_url,
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+    print("[SETTINGS] Using Database: PostgreSQL (Render)")
 else:
-    print("[SETTINGS] Environment: Production (DEBUG=False)")
-
-    # Render PostgreSQL
-    DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600,
-            ssl_require=True
-        )
-    }
-
-    # Fallback if DATABASE_URL is missing
-    if not DATABASES['default']:
-        print("⚠️ WARNING: DATABASE_URL not found. Using SQLite fallback.")
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-                "NAME": BASE_DIR / "db.sqlite3",
-            }
-        }
-    else:
-        print("[SETTINGS] Render PostgreSQL configured.")
+    print("[SETTINGS] Using Database: SQLite (Local)")
 
 
-# Local Static Files
+# 2. Static Files (Kept exactly as you requested)
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_dev")
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
-# Local Media Files
+# 3. Media Files (Kept exactly as you requested - Local Storage Only)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-#
-# else:
-#     # --- 🚀 PRODUCTION SETTINGS ---
-#     # This block is now INACTIVE
-#     print("--------------------------------------------------")
-#     print("[SETTINGS] Environment: Production")
-#     print(f"[SETTINGS] System Online: {SYSTEM.get('SYSTEM_ON', True)}")
-#     print("--------------------------------------------------")
-#
-#     # --- 1. LOAD CREDENTIALS (FOR DB & STORAGE) ---
-#     credentials = None
-#     GS_CREDENTIALS = None  # <-- This is required for django-storages
-#
-#     # Reverted to using environment variables for safety
-#     GOOGLE_CREDENTIALS_JSON_STR = os.getenv("GOOGLE_CREDENTIALS_JSON")
-#
-#     if GOOGLE_CREDENTIALS_JSON_STR:
-#         try:
-#             # 👇 THIS IS THE FIX 👇
-#             from google.oauth2 import service_account
-#
-#             info = json.loads(GOOGLE_CREDENTIALS_JSON_STR)
-#             credentials = service_account.Credentials.from_service_account_info(info)
-#             GS_CREDENTIALS = credentials  # <-- Pass credentials to django-storages
-#         except Exception as e:
-#             warnings.warn(f"CRITICAL Error loading Google credentials: {e}")
-#     else:
-#         warnings.warn("CRITICAL WARNING: 'GOOGLE_CREDENTIALS_JSON' env var not set.")
-#
-#     # --- 2. CONFIGURE DATABASE ---
-#     USE_CLOUD_SQL = os.getenv("USE_CLOUD_SQL", "False") == "True"
-#     if USE_CLOUD_SQL:
-#         print("[SETTINGS] Attempting to use Google Cloud SQL...")
-#         try:
-#             import pymysql
-#             from cloud_sql_python_connector import connector
-#
-#             # Fix for PyMySQL
-#             pymysql.version_info = (1, 4, 6)
-#             pymysql.install_as_MySQLdb()
-#
-#             db_connector = connector.Connector(credentials=credentials)
-#
-#
-#             def get_db_conn():
-#                 return db_connector.connect(
-#                     os.getenv("DB_HOST", ""),  # Cloud SQL instance name
-#                     "pymysql",
-#                     user=os.getenv("DB_USER", ""),
-#                     password=os.getenv("DB_PASS", ""),
-#                     db=os.getenv("DB_NAME", ""),
-#                 )
-#
-#
-#             DATABASES = {
-#                 "default": {
-#                     "ENGINE": "django.db.backends.mysql",
-#                     "NAME": os.getenv("DB_NAME"),
-#                     "CONN_CALLABLE": get_db_conn,
-#                 }
-#             }
-#             print("[SETTINGS] Google Cloud SQL configured.")
-#
-#         except ModuleNotFoundError:
-#             warnings.warn("⚠️ cloud_sql_python_connector not installed. Falling back.")
-#             DATABASES = {"default": DATABASE if DATABASE else {"ENGINE": "django.db.backends.sqlite3",
-#                                                                "NAME": BASE_DIR / "db.sqlite3"}}
-#     else:
-#         print("[SETTINGS] USE_CLOUD_SQL is False. Using fallback database.")
-#         DATABASES = {"default": DATABASE if DATABASE else {"ENGINE": "django.db.backends.sqlite3",
-#                                                            "NAME": BASE_DIR / "db.sqlite3"}}
-#
-#     # --- 3. CONFIGURE STATIC FILES (Whitenoise) ---
-#     STATIC_URL = "/static/"
-#     STATICFILES_DIRS = [os.path.join(BASE_DIR, "moodle", "static")]
-#     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-#     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-#
-#     # --- 4. CONFIGURE MEDIA FILES (Google Cloud Storage) ---
-#     GS_BUCKET_NAME = os.getenv("GS_BUCKET_NAME")
-#     if GS_BUCKET_NAME and GS_CREDENTIALS:  # Check for both
-#         DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
-#         GS_FILE_OVERWRITE = False
-#         MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
-#         print("[SETTINGS] Google Cloud Storage (Media) configured.")
-#     else:
-#         warnings.warn("⚠️ GS_BUCKET_NAME or credentials not set. Media will use local storage.")
-#         MEDIA_URL = "/media/"
-#         MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # Fallback to local
-#         DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 # --------------------------------------------------
 # 🧾 DEFAULT PRIMARY KEY FIELD
@@ -275,4 +159,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 def system_context(request):
     """Inject SYSTEM settings globally into templates"""
     return {"SYSTEM": SYSTEM}
-#old settings.py on
