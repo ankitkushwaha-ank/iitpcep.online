@@ -262,51 +262,48 @@ def delete_assessment(request, id):
     return redirect('admin_dashboard:admin_dashboard')
 
 
-# ---------------------------------------------------------
-# 4. QUESTION BANK MANAGEMENT (FIXED: OPTIONS SAVING)
-# ---------------------------------------------------------
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db import transaction
+from django.contrib import messages
+
+
+# Import your models: Question, Option, etc.
+
 @login_required(login_url='admin_dashboard:admin_login')
-@user_passes_test(is_superuser, login_url='admin_dashboard:admin_login')
+@user_passes_test(lambda u: u.is_superuser, login_url='admin_dashboard:admin_login')
 def add_question(request):
     if request.method == "POST":
         parent_type = request.POST.get('parent_type')
         parent_id = request.POST.get('parent_id')
 
-        # Arrays from HTML
+        # Get text arrays (Text inputs allow empty strings, so arrays work fine here)
         q_types = request.POST.getlist('question_type[]')
         q_texts = request.POST.getlist('question_text[]')
-        # Note: File arrays in HTML are tricky. If you skip a file in Q1 but add one in Q2,
-        # Django might mix them up unless you used the unique names I suggested earlier.
-        q_images = request.FILES.getlist('question_image[]')
 
-        # Option Arrays
-        opt_a_texts = request.POST.getlist('opt_a_text[]')
-        opt_b_texts = request.POST.getlist('opt_b_text[]')
-        opt_c_texts = request.POST.getlist('opt_c_text[]')
-        opt_d_texts = request.POST.getlist('opt_d_text[]')
-
-        # Option Images
-        opt_a_imgs = request.FILES.getlist('opt_a_img[]')
-        opt_b_imgs = request.FILES.getlist('opt_b_img[]')
-        opt_c_imgs = request.FILES.getlist('opt_c_img[]')
-        opt_d_imgs = request.FILES.getlist('opt_d_img[]')
+        # Option Text Arrays
+        opt_texts = {
+            'A': request.POST.getlist('opt_a_text[]'),
+            'B': request.POST.getlist('opt_b_text[]'),
+            'C': request.POST.getlist('opt_c_text[]'),
+            'D': request.POST.getlist('opt_d_text[]'),
+        }
 
         correct_answers_text = request.POST.getlist('correct_answer_text[]')
 
         try:
             with transaction.atomic():
-                # FIX: Loop over q_types, because text might be empty!
                 for i, q_type in enumerate(q_types):
 
+                    # Get Text safely
                     text = q_texts[i] if i < len(q_texts) else ""
 
-                    # 1. Get Question Image safely
-                    # WARNING: This assumes you upload images for ALL questions or NONE.
-                    # HTML standard file arrays do not send "empty" placeholders.
-                    q_img = q_images[i] if i < len(q_images) else None
+                    # FIX: Get Image using specific Key (question_image_0, question_image_1)
+                    # This solves the issue of images shifting to the wrong question
+                    q_img = request.FILES.get(f'question_image_{i}')
 
-                    # FIX: Only skip if BOTH text is empty AND no image is uploaded
-                    if not text and not q_img:
+                    # Skip if completely empty (no text AND no image)
+                    if not text.strip() and not q_img:
                         continue
 
                     question = Question.objects.create(
@@ -318,33 +315,30 @@ def add_question(request):
                         marks=1
                     )
 
-                    # 2. Handle Options if MCQ
+                    # Handle MCQ Options
                     if q_type == 'MCQ':
-                        # Get Correct Option Value (correct_opt_0, correct_opt_1...)
+                        # Correct Option (e.g. correct_opt_0 = 'A')
                         correct_val = request.POST.get(f'correct_opt_{i}')
                         question.correct_option = correct_val
                         question.save()
 
-                        # Helper to get image safely
-                        def get_opt_img(img_list, idx):
-                            return img_list[idx] if idx < len(img_list) else None
+                        # Create Options A, B, C, D
+                        for label in ['A', 'B', 'C', 'D']:
+                            # Get text from array
+                            o_text_list = opt_texts[label]
+                            o_text = o_text_list[i] if i < len(o_text_list) else ""
 
-                        # Create 4 Options
-                        # We use "or ''" to ensure we don't crash if lists are uneven
-                        Option.objects.create(question=question, option_label='A',
-                                              text=opt_a_texts[i] if i < len(opt_a_texts) else '',
-                                              image=get_opt_img(opt_a_imgs, i))
-                        Option.objects.create(question=question, option_label='B',
-                                              text=opt_b_texts[i] if i < len(opt_b_texts) else '',
-                                              image=get_opt_img(opt_b_imgs, i))
-                        Option.objects.create(question=question, option_label='C',
-                                              text=opt_c_texts[i] if i < len(opt_c_texts) else '',
-                                              image=get_opt_img(opt_c_imgs, i))
-                        Option.objects.create(question=question, option_label='D',
-                                              text=opt_d_texts[i] if i < len(opt_d_texts) else '',
-                                              image=get_opt_img(opt_d_imgs, i))
+                            # Get Option Image from unique key (e.g. opt_a_img_0)
+                            o_img = request.FILES.get(f'opt_{label.lower()}_img_{i}')
 
-                    # 3. Handle Text/Code Answer
+                            Option.objects.create(
+                                question=question,
+                                option_label=label,
+                                text=o_text,
+                                image=o_img
+                            )
+
+                    # Handle Text/Code
                     elif q_type in ['TEXT', 'CODE']:
                         ans_text = correct_answers_text[i] if i < len(correct_answers_text) else ''
                         question.correct_answer_text = ans_text
@@ -363,63 +357,58 @@ def edit_question(request, question_id):
     question = get_object_or_404(Question, id=question_id)
 
     if request.method == "POST":
-        # ---------------------------------------------------------
-        # FIX: Handle Array Inputs (e.g. question_text[]) from the reused modal
-        # ---------------------------------------------------------
+        try:
+            # 1. Update Question Text
+            # We use [0] because the modal sends arrays even for single edits
+            q_texts = request.POST.getlist('question_text[]')
+            question.text = q_texts[0] if q_texts else question.text
 
-        # Helper to get first item of array or string
-        def get_val(key):
-            val = request.POST.getlist(key)
-            return val[0] if val else request.POST.get(key, '')
+            # 2. Update Question Image
+            # Edit Modal resets counter to 0, so we look for 'question_image_0'
+            if request.FILES.get('question_image_0'):
+                question.image = request.FILES.get('question_image_0')
 
-        question.text = get_val('question_text[]')  # Notice the []
-
-        # Handle Main Image
-        # For files, we look for the specific name.
-        # If your form uses question_image[], we need request.FILES.getlist...
-        if 'question_image[]' in request.FILES:
-            images = request.FILES.getlist('question_image[]')
-            if images: question.image = images[0]
-
-        question.save()
-
-        if question.question_type == 'MCQ':
-            # Radio buttons usually send a single value, e.g., "A"
-            # But our dynamic JS names them correct_opt_0
-            correct_val = request.POST.get('correct_opt_0')
-            if correct_val:
-                question.correct_option = correct_val
-                question.save()
-
-            # Update Options
-            options = question.options.all().order_by('option_label')
-
-            # Map form fields to options
-            opt_map = {
-                'A': {'text': 'opt_a_text[]', 'img': 'opt_a_img[]'},
-                'B': {'text': 'opt_b_text[]', 'img': 'opt_b_img[]'},
-                'C': {'text': 'opt_c_text[]', 'img': 'opt_c_img[]'},
-                'D': {'text': 'opt_d_text[]', 'img': 'opt_d_img[]'},
-            }
-
-            for opt in options:
-                keys = opt_map.get(opt.option_label)
-                if keys:
-                    opt.text = get_val(keys['text'])
-
-                    # Check for new Option Image
-                    if keys['img'] in request.FILES:
-                        f_list = request.FILES.getlist(keys['img'])
-                        if f_list: opt.image = f_list[0]
-
-                    opt.save()
-
-        elif question.question_type in ['TEXT', 'CODE']:
-            question.correct_answer_text = get_val('correct_answer_text[]')
             question.save()
 
-        messages.success(request, "Question updated successfully.")
-        return redirect('admin_dashboard:admin_dashboard')  # Or wherever you list questions
+            # 3. Update Options (MCQ)
+            if question.question_type == 'MCQ':
+
+                # Update Correct Option
+                correct_val = request.POST.get('correct_opt_0')
+                if correct_val:
+                    question.correct_option = correct_val
+                    question.save()
+
+                # Update A, B, C, D
+                for label in ['A', 'B', 'C', 'D']:
+                    # Get Inputs
+                    txt_list = request.POST.getlist(f'opt_{label.lower()}_text[]')
+                    new_text = txt_list[0] if txt_list else ""
+
+                    new_img = request.FILES.get(f'opt_{label.lower()}_img_0')
+
+                    # Use update_or_create to handle cases where options might be missing
+                    obj, created = Option.objects.update_or_create(
+                        question=question,
+                        option_label=label,
+                        defaults={'text': new_text}
+                    )
+
+                    # Only update image if a new one is uploaded
+                    if new_img:
+                        obj.image = new_img
+                        obj.save()
+
+            # 4. Update Text/Code Answer
+            elif question.question_type in ['TEXT', 'CODE']:
+                ans_list = request.POST.getlist('correct_answer_text[]')
+                question.correct_answer_text = ans_list[0] if ans_list else ""
+                question.save()
+
+            messages.success(request, "Question updated successfully.")
+
+        except Exception as e:
+            messages.error(request, f"Error updating question: {str(e)}")
 
     return redirect('admin_dashboard:admin_dashboard')
 

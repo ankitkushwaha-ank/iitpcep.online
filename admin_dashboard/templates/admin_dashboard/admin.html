@@ -188,35 +188,79 @@
             {% endif %}
 
             <div id="dashboard" class="section-content">
-                <h2 class="text-2xl font-bold text-textMain mb-6">Dashboard Overview</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-card p-6 rounded-xl shadow-sm border border-border lg:col-span-2">
-                        <h3 class="text-lg font-bold text-textMain mb-4">User Growth</h3>
-                        <div class="relative h-64 w-full">
-                            <canvas id="userGrowthChart"></canvas>
-                        </div>
-                    </div>
+    <h2 class="text-2xl font-bold text-textMain mb-6">Dashboard Overview</h2>
 
-                    <div class="bg-card p-6 rounded-xl shadow-sm border border-border">
-                        <h3 class="text-lg font-bold text-textMain mb-4">Content Distribution</h3>
-                        <div class="relative h-64 w-full flex justify-center">
-                            <canvas id="contentDistChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div onclick="switchTab('settings')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center border-l-4 {% if config.system_status == 'ONLINE' %}border-success{% else %}border-danger{% endif %}">
-                        <div><p class="text-textMuted text-xs font-bold uppercase">System Status</p><h3 class="text-xl font-bold {% if config.system_status == 'ONLINE' %}text-success{% else %}text-danger{% endif %}">{{ config.system_status }}</h3></div><div class="bg-gray-50 p-3 rounded-lg"><i class="fa-solid fa-server text-xl"></i></div>
-                    </div>
-                    <div onclick="switchTab('users')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Total Users</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_users }}</h3></div><div class="bg-white p-3 rounded-full shadow-sm text-blue-600"><i class="fa-solid fa-users text-xl"></i></div></div>
-                    <div onclick="switchTab('courses')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Courses</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_courses }}</h3></div><div class="bg-purple text-purple-600 p-3 rounded-full shadow-sm"><i class="fa-solid fa-book text-xl"></i></div></div>
-                    <div onclick="switchTab('quizzes')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Quizzes</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_quizzes }}</h3></div><div class="bg-indigo text-indigo-600 p-3 rounded-full shadow-sm"><i class="fa-solid fa-clock text-xl"></i></div></div>
-                    <div onclick="switchTab('assignments')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Assignments</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_assignments }}</h3></div><div class="bg-teal text-teal-600 p-3 rounded-full shadow-sm"><i class="fa-solid fa-file-signature text-xl"></i></div></div>
-                    <div onclick="switchTab('exams')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Exams</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_exams }}</h3></div><div class="bg-red text-danger p-3 rounded-full shadow-sm"><i class="fa-solid fa-graduation-cap text-xl"></i></div></div>
-                    <div onclick="switchTab('questions')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300"><div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Questions</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_questions }}</h3></div><div class="bg-orange text-warning p-3 rounded-full shadow-sm"><i class="fa-solid fa-database text-xl"></i></div></div>
-                </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div class="bg-card p-6 rounded-xl shadow-sm border border-border lg:col-span-2">
+            <h3 class="text-lg font-bold text-textMain mb-4">User Growth</h3>
+            <div class="relative h-64 w-full">
+                <canvas id="userGrowthChart"></canvas>
             </div>
+        </div>
+
+        <div class="bg-card p-6 rounded-xl shadow-sm border border-border">
+            <h3 class="text-lg font-bold text-textMain mb-4">Content Distribution</h3>
+            <div class="relative h-64 w-full flex justify-center">
+                <canvas id="contentDistChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+        <div onclick="switchTab('settings')" class="bg-card stat-card p-6 rounded-xl shadow-sm border border-border flex justify-between items-center border-l-4 {% if config.system_status == 'ONLINE' %}border-success{% else %}border-danger{% endif %} cursor-pointer">
+            <div>
+                <p class="text-textMuted text-xs font-bold uppercase">System Status</p>
+                <h3 class="text-xl font-bold {% if config.system_status == 'ONLINE' %}text-success{% else %}text-danger{% endif %}">{{ config.system_status }}</h3>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-lg"><i class="fa-solid fa-server text-xl"></i></div>
+        </div>
+
+        <div class="bg-gradient-to-br from-white to-green-50 p-6 rounded-xl shadow-sm border border-green-100 flex justify-between items-center transition-all duration-300">
+            <div>
+                <p class="text-green-600 text-xs font-bold uppercase tracking-wider">Online Users</p>
+                <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.online_users|default:"0" }}</h3>
+            </div>
+            <div class="bg-white p-3 rounded-full shadow-sm text-green-600 relative">
+                <i class="fa-solid fa-wifi text-xl"></i>
+                <span class="absolute top-0 right-0 flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+            </div>
+        </div>
+
+        <div onclick="switchTab('users')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Total Users</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_users }}</h3></div>
+            <div class="bg-white p-3 rounded-full shadow-sm text-blue-600"><i class="fa-solid fa-users text-xl"></i></div>
+        </div>
+
+        <div onclick="switchTab('courses')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Courses</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_courses }}</h3></div>
+            <div class="bg-purple text-purple-600 p-3 rounded-full shadow-sm"><i class="fa-solid fa-book text-xl"></i></div>
+        </div>
+
+        <div onclick="switchTab('quizzes')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Quizzes</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_quizzes }}</h3></div>
+            <div class="bg-indigo text-indigo-600 p-3 rounded-full shadow-sm"><i class="fa-solid fa-clock text-xl"></i></div>
+        </div>
+
+        <div onclick="switchTab('assignments')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Assignments</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_assignments }}</h3></div>
+            <div class="bg-teal text-teal-600 p-3 rounded-full shadow-sm"><i class="fa-solid fa-file-signature text-xl"></i></div>
+        </div>
+
+        <div onclick="switchTab('exams')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Exams</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_exams }}</h3></div>
+            <div class="bg-red text-danger p-3 rounded-full shadow-sm"><i class="fa-solid fa-graduation-cap text-xl"></i></div>
+        </div>
+
+        <div onclick="switchTab('questions')" class="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 flex justify-between items-center cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div><p class="text-blue-600 text-xs font-bold uppercase tracking-wider">Questions</p><h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_questions }}</h3></div>
+            <div class="bg-orange text-warning p-3 rounded-full shadow-sm"><i class="fa-solid fa-database text-xl"></i></div>
+        </div>
+    </div>
+</div>
 
             <div id="courses" class="section-content hidden">
                 <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-textMain">My Courses</h2><button onclick="toggleModal('courseModal')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition flex items-center"><i class="fa-solid fa-plus mr-2"></i> Add Course</button></div>
@@ -315,59 +359,114 @@
             </div>
 
             <div id="questions" class="section-content hidden">
-                <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-textMain">Question Bank</h2><button onclick="openQuestionModal('add')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition flex items-center"><i class="fa-solid fa-plus mr-2"></i> Add Question</button></div>
-                <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
-                     <table class="w-full text-left min-w-[600px] searchable-table">
-                        <thead class="bg-gray-50 border-b border-border"><tr><th class="p-4 text-xs font-bold text-textMuted uppercase">Question</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Type</th><th class="p-4 text-xs font-bold text-textMuted uppercase">Parent</th><th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th></tr></thead>
-                        <tbody class="divide-y divide-border">
-                            {% for q in questions %}
-                            <tr class="hover:bg-gray-50 searchable-row" data-search="{{ q.text }}">
-                                <td class="p-4 text-textMain truncate max-w-md">{% if q.text %}{{ q.text|striptags }} {% else %} <img src="{{ q.image.url }}">{% endif %} </td>
-                                <td class="p-4"><span class="bg-blue-100 text-primary px-2 py-1 rounded text-xs">{{ q.get_question_type_display }}</span></td>
-                                <td class="p-4 text-textMuted">{{ q.parent_type }} # {{ q.parent_id }}</td>
-                                <td class="p-4 text-right">
-                                    <button type="button"
-                                        onclick="viewSingleQuestion(this)"
-                                        data-type="{{ q.question_type }}"
-                                        data-text="{{ q.text }}"
-                                        {% if q.image %} data-image="{{ q.image.url|default:'' }}"{% endif %}
-                                        data-correct="{{ q.correct_option }}"
-                                        data-ans-text="{{ q.correct_answer_text }}"
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-textMain">Question Bank</h2>
+        <button onclick="openAddQuestion()" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition flex items-center">
+            <i class="fa-solid fa-plus mr-2"></i> Add Question
+        </button>
+    </div>
 
-                                        data-opt-a="{{ q.options.all.0.text }}"
-                                        data-opt-b="{{ q.options.all.1.text }}"
-                                        data-opt-c="{{ q.options.all.2.text }}"
-                                        data-opt-d="{{ q.options.all.3.text }}"
+    <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
+         <table class="w-full text-left min-w-[600px] searchable-table">
+            <thead class="bg-gray-50 border-b border-border">
+                <tr>
+                    <th class="p-4 text-xs font-bold text-textMuted uppercase">Question</th>
+                    <th class="p-4 text-xs font-bold text-textMuted uppercase">Type</th>
+                    <th class="p-4 text-xs font-bold text-textMuted uppercase">Parent ID</th>
+                    <th class="p-4 text-right text-xs font-bold text-textMuted uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+                {% for q in questions %}
+                <tr class="hover:bg-gray-50 searchable-row" data-search="{{ q.text }}">
 
-                                        class="text-blue-500 hover:text-blue-700">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        class="text-primary p-2"
-                                        onclick="openEditQuestion(this)"
-                                        data-id="{{ q.id }}"
-                                        data-text="{{ q.text }}"
-                                        data-type="{{ q.question_type }}"
-                                        data-correct="{{ q.correct_option }}"
-                                        data-ans-text="{{ q.correct_answer_text }}"
-                                        /* Django Template Logic to get Options */
-                                        data-opt-a="{{ q.options.all.0.text }}"
-                                    data-opt-b="{{ q.options.all.1.text }}"
-                                    data-opt-c="{{ q.options.all.2.text }}"
-                                    data-opt-d="{{ q.options.all.3.text }}"
-                                        title="Edit">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </button>
-                                    <button onclick="confirmDelete('question/delete/{{ q.id }}')" class="text-danger p-2"><i class="fa-solid fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                    <td class="p-4 text-textMain align-middle">
+                        <div class="flex items-center gap-3">
+                            {% if q.image %}
+                                <img src="{{ q.image.url }}" class="h-10 w-10 object-cover rounded border border-gray-200" alt="Q-Img">
+                            {% endif %}
+                            <span class="truncate max-w-xs block" title="{{ q.text }}">
+                                {{ q.text|default:"(Image Question)"|truncatechars:50 }}
+                            </span>
+                        </div>
+                    </td>
 
+                    <td class="p-4 align-middle">
+                        <span class="bg-blue-100 text-primary px-2 py-1 rounded text-xs font-bold">
+                            {{ q.get_question_type_display }}
+                        </span>
+                    </td>
+
+                    <td class="p-4 text-textMuted text-xs align-middle">
+                        <span class="uppercase font-bold">{{ q.parent_type }}</span> #{{ q.parent_id }}
+                    </td>
+
+                    <td class="p-4 text-right align-middle whitespace-nowrap">
+
+                        <button type="button"
+                            onclick="viewSingleQuestion(this)"
+                            data-type="{{ q.question_type }}"
+                            data-text="{{ q.text }}"
+                            {% if q.image %} data-image="{{ q.image.url|default:'' }}" {% endif %}
+                            data-correct="{{ q.correct_option }}"
+                            data-ans-text="{{ q.correct_answer_text }}"
+
+                            /* Option Text */
+                            data-opt-a="{{ q.options.all.0.text|default:'' }}"
+                            data-opt-b="{{ q.options.all.1.text|default:'' }}"
+                            data-opt-c="{{ q.options.all.2.text|default:'' }}"
+                            data-opt-d="{{ q.options.all.3.text|default:'' }}"
+
+                            /* Option Images */
+
+                            class="text-blue-500 hover:text-blue-700 p-2" title="View Details">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                        <button type="button"
+                            onclick="openEditQuestion(this)"
+                            data-id="{{ q.id }}"
+
+                            /* Parent Data for Auto-fill */
+                            data-parent-type="{{ q.parent_type }}"
+                            data-course-id="{{ q.parent_id }}"
+                            data-test-id="{{ q.parent_id }}"
+
+                            /* Question Data */
+                            data-text="{{ q.text }}"
+                            data-type="{{ q.question_type }}"
+                           {% if q.image %}  data-image="{{ q.image.url|default:'' }}" {% endif %}
+                            data-correct="{{ q.correct_option }}"
+                            data-ans-text="{{ q.correct_answer_text }}"
+
+                            /* Option Text */
+                            data-opt-a="{{ q.options.all.0.text|default:'' }}"
+                            data-opt-b="{{ q.options.all.1.text|default:'' }}"
+                            data-opt-c="{{ q.options.all.2.text|default:'' }}"
+                            data-opt-d="{{ q.options.all.3.text|default:'' }}"
+
+                            class="text-green-500 hover:text-green-700 p-2" title="Edit">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+
+                        <button onclick="confirmDelete('question/delete/{{ q.id }}')" class="text-danger hover:text-red-700 p-2" title="Delete">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                {% if not questions %}
+                <tr>
+                    <td colspan="4" class="p-8 text-center text-textMuted">
+                        No questions found. Click "Add Question" to start.
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
             <div id="users" class="section-content hidden">
                 <h2 class="text-2xl font-bold text-textMain mb-6">User Management</h2>
                 <div class="bg-card rounded-xl shadow-sm border border-border overflow-x-auto">
@@ -562,250 +661,167 @@
         </div>
     </div>
 
-    <script>
-        // 1. NOTIFICATIONS (Persistent)
-        document.addEventListener("DOMContentLoaded", () => {
-            const activeTab = localStorage.getItem('activeTab') || 'dashboard';
-            switchTab(activeTab);
-            // Load history
-            const flashMsgs = document.querySelectorAll('.flash-msg');
-            let history = JSON.parse(localStorage.getItem('notifHistory') || '[]');
-            flashMsgs.forEach(msg => {
-                history.unshift({ text: msg.dataset.text, type: msg.dataset.type, time: msg.dataset.time });
-            });
-            localStorage.setItem('notifHistory', JSON.stringify(history.slice(0, 15)));
-            renderNotifications();
+<script>
+    // ---------------------------------------------------------
+    // 1. NOTIFICATIONS & INITIALIZATION
+    // ---------------------------------------------------------
+    document.addEventListener("DOMContentLoaded", () => {
+        // Restore Tab
+        const activeTab = localStorage.getItem('activeTab') || 'dashboard';
+        switchTab(activeTab);
 
-
+        // Load Notification History
+        const flashMsgs = document.querySelectorAll('.flash-msg');
+        let history = JSON.parse(localStorage.getItem('notifHistory') || '[]');
+        flashMsgs.forEach(msg => {
+            history.unshift({ text: msg.dataset.text, type: msg.dataset.type, time: msg.dataset.time });
         });
-        function renderNotifications() {
-            const history = JSON.parse(localStorage.getItem('notifHistory') || '[]');
-            const list = document.getElementById('notificationList');
-            const dot = document.getElementById('notifDot');
-            if(history.length > 0) {
-                list.innerHTML = "";
-                dot.classList.remove('hidden');
-                history.forEach(n => {
-                    const d = document.createElement('div');
-                    d.className = `p-3 border-b border-border text-xs ${n.type === 'error' ? 'text-red-600' : 'text-green-600'}`;
-                    d.innerHTML = `<b>${n.time}</b>: ${n.text}`;
-                    list.appendChild(d);
-                });
-            }
-        }
-        function toggleNotifications() { document.getElementById('notificationPanel').classList.toggle('hidden'); }
-        function clearNotifications() { localStorage.removeItem('notifHistory'); renderNotifications(); document.getElementById('notificationList').innerHTML='<p class="text-xs text-center py-4">No notifications</p>'; document.getElementById('notifDot').classList.add('hidden'); }
+        localStorage.setItem('notifHistory', JSON.stringify(history.slice(0, 15)));
+        renderNotifications();
 
-        // 2. NAVIGATION & MODALS
-        function switchTab(tabId) {
-            localStorage.setItem('activeTab', tabId);
-            document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(tabId).classList.remove('hidden');
-            const nav = document.getElementById('nav-' + tabId); if(nav) nav.classList.add('active');
-        }
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebarOverlay').classList.toggle('hidden'); }
-        function toggleModal(id) { document.getElementById(id).classList.toggle('opacity-0'); document.getElementById(id).classList.toggle('pointer-events-none'); }
-        function filterContent() {
-            const term = document.getElementById('globalSearch').value.toLowerCase();
-            document.querySelectorAll('.searchable-row, .searchable-item').forEach(el => el.style.display = el.dataset.search.toLowerCase().includes(term) ? "" : "none");
-        }
-        function confirmDelete(url) { window.pendingDeleteUrl = "{% url 'admin_dashboard:admin_dashboard' %}" + url; toggleModal('deleteConfirmModal'); }
-        function executeDelete() { window.location.href = window.pendingDeleteUrl; }
+        // Setup Filter Listeners for Question Modal
+        const parentType = document.getElementById('q_parent_type');
+        const courseSelect = document.getElementById('q_course_select');
+        if(parentType) parentType.addEventListener('change', filterTests);
+        if(courseSelect) courseSelect.addEventListener('change', filterTests);
 
-        // 3. EDIT LOGIC
-        var assessQuill = new Quill('#assessmentEditor', { theme: 'snow' });
-        assessQuill.on('text-change', () => document.getElementById('assessmentDescInput').value = assessQuill.root.innerHTML);
-
-        function openEditCourse(id, title, code, desc) {
-            document.getElementById('courseModalTitle').innerText = "Edit Course";
-            document.getElementById('c_title').value = title;
-            document.getElementById('c_code').value = code;
-            document.getElementById('c_desc').value = desc;
-            document.getElementById('courseForm').action = "{% url 'admin_dashboard:admin_dashboard' %}course/edit/" + id + "/";
-            toggleModal('courseModal');
-        }
-
-        function openEditAssessment(id, title, type, desc, odate, otime, cdate, ctime, dur, max, live) {
-             document.getElementById('assessmentModalTitle').innerText = "Edit " + type.toUpperCase();
-             document.getElementById('assessmentTypeInput').value = type;
-             document.getElementById('a_title').value = title;
-             assessQuill.root.innerHTML = desc;
-             // Pre-fill (Mock logic assumes strings are passed correctly)
-             document.getElementById('a_odate').value = odate || "";
-             document.getElementById('a_otime').value = otime || "";
-             document.getElementById('a_cdate').value = cdate || "";
-             document.getElementById('a_ctime').value = ctime || "";
-             document.getElementById('a_duration').value = dur;
-             document.getElementById('a_attempts').value = max;
-             document.getElementById('a_islive').checked = (live === 'True');
-             document.getElementById('assessmentForm').action = `{% url 'admin_dashboard:admin_dashboard' %}assessment/edit/${id}/`; // Make sure backend supports this
-             toggleModal('quizModal');
-        }
-
-        function openAssessmentModal(mode, type) {
-            document.getElementById('assessmentModalTitle').innerText = "Add " + type.toUpperCase();
-            document.getElementById('assessmentTypeInput').value = type;
-            document.getElementById('assessmentForm').reset();
-            assessQuill.root.innerHTML = "";
-            document.getElementById('assessmentForm').action = "{% url 'admin_dashboard:add_assessment' %}";
-            toggleModal('quizModal');
-        }
-
-        function openEditUser(id, username, isAdmin, isBanned) {
-            document.getElementById('u_id').value = id;
-            document.getElementById('u_name').value = username;
-            document.getElementById('u_admin').checked = (isAdmin === 'true');
-            document.getElementById('u_ban').checked = (isBanned === 'true');
-            toggleModal('editUserModal');
-        }
-
-        // 4. VIEW QUESTIONS & ADD QUESTIONS Logic (Identical to previous robust logic)
-// ---------------------------------------------------------
-// 4. VIEW SINGLE QUESTION
-// ---------------------------------------------------------
-function viewSingleQuestion(btn) {
-    const data = btn.dataset;
-    document.getElementById('viewQuestionsTitle').innerText = "Question Details";
-
-    let mainImageHtml = '';
-    if (data.image && data.image !== 'None' && data.image !== '') {
-        mainImageHtml = `<div class="mb-4"><img src="${data.image}" class="max-h-48 rounded border border-border mx-auto object-contain"></div>`;
-    }
-
-    let optionsHtml = '';
-    if (data.type === 'MCQ') {
-        const opts = [
-            { label: 'A', text: data.optA, img: data.optAImg },
-            { label: 'B', text: data.optB, img: data.optBImg },
-            { label: 'C', text: data.optC, img: data.optCImg },
-            { label: 'D', text: data.optD, img: data.optDImg }
-        ];
-
-        optionsHtml = `<div class="grid grid-cols-1 gap-2 mt-4">`;
-        opts.forEach(opt => {
-            const isCorrect = (data.correct === opt.label);
-            const bgClass = isCorrect ? 'bg-green-50 border-green-500' : 'bg-gray-50 border-gray-200';
-            const textClass = isCorrect ? 'text-green-700 font-bold' : 'text-gray-700';
-
-            let optImg = '';
-            if(opt.img && opt.img !== 'None' && opt.img !== '') {
-                optImg = `<img src="${opt.img}" class="h-10 w-10 object-cover rounded ml-2 border">`;
-            }
-
-            optionsHtml += `
-                <div class="flex items-center p-3 border rounded ${bgClass}">
-                    <span class="font-bold w-6">${opt.label}.</span>
-                    <span class="${textClass} flex-1">${opt.text || ''}</span>
-                    ${optImg}
-                    ${isCorrect ? '<i class="fa-solid fa-check-circle text-green-600 ml-auto"></i>' : ''}
-                </div>`;
-        });
-        optionsHtml += `</div>`;
-    } else {
-        optionsHtml = `
-            <div class="mt-4 p-4 bg-gray-100 rounded border border-gray-300">
-                <p class="text-xs font-bold text-gray-500 uppercase">Correct Answer</p>
-                <p class="text-sm font-mono mt-1">${data.ansText}</p>
-            </div>`;
-    }
-
-    document.getElementById('viewQuestionsList').innerHTML = `
-        <div class="bg-white p-5 rounded-lg border border-border">
-            <span class="bg-blue-100 text-primary text-xs px-2 py-1 rounded font-bold uppercase">${data.type}</span>
-            <p class="font-bold text-lg text-textMain mb-4 mt-2">${data.text}</p>
-            ${mainImageHtml}
-            ${optionsHtml}
-        </div>`;
-
-    toggleModal('viewQuestionsModal');
-}
-
-        function openQuestionModal(mode) { document.getElementById('questionModalTitle').innerText = "Add Questions"; document.getElementById('questionForm').reset(); toggleModal('questionModal'); }
-
-        // 2. EDIT QUESTION (Reads data from button attributes to pre-fill)
-function openEditQuestion(button) {
-    // 1. Get Data from Attributes
-    const id = button.getAttribute('data-id');
-    const text = button.getAttribute('data-text');
-    const type = button.getAttribute('data-type');
-    const correct = button.getAttribute('data-correct');
-    const ansText = button.getAttribute('data-ans-text');
-
-    const optA = button.getAttribute('data-opt-a');
-    const optB = button.getAttribute('data-opt-b');
-    const optC = button.getAttribute('data-opt-c');
-    const optD = button.getAttribute('data-opt-d');
-
-    // 2. Setup Modal Title
-    document.getElementById('questionModalTitle').innerText = "Edit Question";
-    toggleModal('questionModal');
-
-    // 3. Pre-fill Question Text & Type
-    // We target the first question block (q_type_0) assuming single edit mode
-    const typeSelect = document.getElementsByName('question_type[]')[0];
-    const textInput = document.getElementsByName('question_text[]')[0];
-
-    if(typeSelect) {
-        typeSelect.value = type;
-        // Trigger change event to show/hide relevant sections (MCQ vs Text)
-        handleTypeChange(typeSelect);
-    }
-    if(textInput) textInput.value = text;
-
-    // 4. Pre-fill Options (If MCQ)
-    if (type === 'MCQ') {
-        const inputsA = document.getElementsByName('opt_a_text[]')[0];
-        const inputsB = document.getElementsByName('opt_b_text[]')[0];
-        const inputsC = document.getElementsByName('opt_c_text[]')[0];
-        const inputsD = document.getElementsByName('opt_d_text[]')[0];
-
-        if(inputsA) inputsA.value = optA;
-        if(inputsB) inputsB.value = optB;
-        if(inputsC) inputsC.value = optC;
-        if(inputsD) inputsD.value = optD;
-
-        // Select Correct Radio Button
-        // The name for the first block's radios is 'correct_opt_0' (based on our addNextQuestion logic)
-        // If editing existing, we might need to ensure the name aligns.
-        // Assuming the edit modal is cleared and reset to index 0.
-        const radios = document.getElementsByName('correct_opt_0');
-        if(radios.length > 0) {
-            for(let r of radios) {
-                if(r.value === correct) r.checked = true;
-            }
-        }
-    }
-    // 5. Pre-fill Text Answer (If Text/Code)
-    else {
-        const correctTextInput = document.getElementsByName('correct_answer_text[]')[0];
-        if(correctTextInput) correctTextInput.value = ansText;
-    }
-
-    // Note: We cannot pre-fill file inputs (Images) for security reasons.
-    // You might want to add a text label saying "Image currently uploaded" if needed.
-}
-
-        function filterTests() {
-            const type = document.getElementById('q_parent_type').value;
-            const courseId = document.getElementById('q_course_select').value;
-            document.querySelectorAll('.test-option').forEach(opt => { opt.style.display = (opt.dataset.type === type && opt.dataset.course === courseId) ? 'block' : 'none'; });
-        }
+        // Run filter once on load just in case
         filterTests();
-        function handleTypeChange(sel) {
-            const block = sel.closest('.question-block');
-            if (sel.value === 'MCQ') { block.querySelector('.mcq-section').classList.remove('hidden'); block.querySelector('.text-section').classList.add('hidden'); }
-            else { block.querySelector('.mcq-section').classList.add('hidden'); block.querySelector('.text-section').classList.remove('hidden'); }
-        }
-        // Start count based on existing questions to avoid duplicates if page reloads
-let qCount = document.querySelectorAll('.question-block').length;
+    });
 
+    function renderNotifications() {
+        const history = JSON.parse(localStorage.getItem('notifHistory') || '[]');
+        const list = document.getElementById('notificationList');
+        const dot = document.getElementById('notifDot');
+        if (history.length > 0) {
+            list.innerHTML = "";
+            dot.classList.remove('hidden');
+            history.forEach(n => {
+                const d = document.createElement('div');
+                d.className = `p-3 border-b border-border text-xs ${n.type === 'error' ? 'text-red-600' : 'text-green-600'}`;
+                d.innerHTML = `<b>${n.time}</b>: ${n.text}`;
+                list.appendChild(d);
+            });
+        }
+    }
+
+    function toggleNotifications() { document.getElementById('notificationPanel').classList.toggle('hidden'); }
+    function clearNotifications() {
+        localStorage.removeItem('notifHistory');
+        renderNotifications();
+        document.getElementById('notificationList').innerHTML = '<p class="text-xs text-center py-4">No notifications</p>';
+        document.getElementById('notifDot').classList.add('hidden');
+    }
+
+    // ---------------------------------------------------------
+    // 2. NAVIGATION & MODALS
+    // ---------------------------------------------------------
+    function switchTab(tabId) {
+        localStorage.setItem('activeTab', tabId);
+        document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(tabId).classList.remove('hidden');
+        const nav = document.getElementById('nav-' + tabId);
+        if (nav) nav.classList.add('active');
+    }
+
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        document.getElementById('sidebarOverlay').classList.toggle('hidden');
+    }
+
+    function toggleModal(id) {
+        document.getElementById(id).classList.toggle('opacity-0');
+        document.getElementById(id).classList.toggle('pointer-events-none');
+    }
+
+    function filterContent() {
+        const term = document.getElementById('globalSearch').value.toLowerCase();
+        document.querySelectorAll('.searchable-row, .searchable-item').forEach(el =>
+            el.style.display = el.dataset.search.toLowerCase().includes(term) ? "" : "none"
+        );
+    }
+
+    function confirmDelete(url) {
+        window.pendingDeleteUrl = "{% url 'admin_dashboard:admin_dashboard' %}" + url;
+        toggleModal('deleteConfirmModal');
+    }
+
+    function executeDelete() { window.location.href = window.pendingDeleteUrl; }
+
+    // ---------------------------------------------------------
+    // 3. COURSE & ASSESSMENT EDIT LOGIC
+    // ---------------------------------------------------------
+    var assessQuill = new Quill('#assessmentEditor', { theme: 'snow' });
+    assessQuill.on('text-change', () => document.getElementById('assessmentDescInput').value = assessQuill.root.innerHTML);
+
+    function openEditCourse(id, title, code, desc) {
+        document.getElementById('courseModalTitle').innerText = "Edit Course";
+        document.getElementById('c_title').value = title;
+        document.getElementById('c_code').value = code;
+        document.getElementById('c_desc').value = desc;
+        document.getElementById('courseForm').action = "{% url 'admin_dashboard:admin_dashboard' %}course/edit/" + id + "/";
+        toggleModal('courseModal');
+    }
+
+    function openEditAssessment(id, title, type, desc, odate, otime, cdate, ctime, dur, max, live) {
+        document.getElementById('assessmentModalTitle').innerText = "Edit " + type.toUpperCase();
+        document.getElementById('assessmentTypeInput').value = type;
+        document.getElementById('a_title').value = title;
+        assessQuill.root.innerHTML = desc;
+        document.getElementById('a_odate').value = odate || "";
+        document.getElementById('a_otime').value = otime || "";
+        document.getElementById('a_cdate').value = cdate || "";
+        document.getElementById('a_ctime').value = ctime || "";
+        document.getElementById('a_duration').value = dur;
+        document.getElementById('a_attempts').value = max;
+        document.getElementById('a_islive').checked = (live === 'True');
+        document.getElementById('assessmentForm').action = `{% url 'admin_dashboard:admin_dashboard' %}assessment/edit/${id}/`;
+        toggleModal('quizModal');
+    }
+
+    function openAssessmentModal(mode, type) {
+        document.getElementById('assessmentModalTitle').innerText = "Add " + type.toUpperCase();
+        document.getElementById('assessmentTypeInput').value = type;
+        document.getElementById('assessmentForm').reset();
+        assessQuill.root.innerHTML = "";
+        document.getElementById('assessmentForm').action = "{% url 'admin_dashboard:add_assessment' %}";
+        toggleModal('quizModal');
+    }
+
+    function openEditUser(id, username, isAdmin, isBanned) {
+        document.getElementById('u_id').value = id;
+        document.getElementById('u_name').value = username;
+        document.getElementById('u_admin').checked = (isAdmin === 'true');
+        document.getElementById('u_ban').checked = (isBanned === 'true');
+        toggleModal('editUserModal');
+    }
+
+// ---------------------------------------------------------
+// GLOBAL VARIABLES & INITIALIZATION
+// ---------------------------------------------------------
+let qCount = 0;
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Initialize Filter Listeners on Load
+    const parentType = document.getElementById('q_parent_type');
+    const courseSelect = document.getElementById('q_course_select');
+
+    if(parentType) parentType.addEventListener('change', filterTests);
+    if(courseSelect) courseSelect.addEventListener('change', filterTests);
+
+    // Run once on load to ensure correct state
+    filterTests();
+});
+
+// ---------------------------------------------------------
+// 1. ADD NEXT QUESTION (Fixed: Unique File Input Names)
+// ---------------------------------------------------------
 function addNextQuestion() {
     const wrapper = document.getElementById('questionsWrapper');
     const div = document.createElement('div');
 
-    // We use the current count as the Index (0, 1, 2...) for the Backend
-    // We use (qCount + 1) for the Visual Label (Q1, Q2, Q3...)
+    // Use current count as index to ensure unique IDs for this session
     let currentIndex = qCount;
 
     div.className = "question-block bg-white p-6 rounded shadow-sm border border-blue-200 relative mt-6";
@@ -828,7 +844,8 @@ function addNextQuestion() {
         </div>
         <div class="col-span-3">
             <label class="text-xs font-bold text-textMuted uppercase">Image</label>
-            <input type="file" name="question_image[]" class="text-xs">
+            <input type="file" name="question_image_${currentIndex}" class="text-xs">
+            <p class="text-xs text-gray-400 hidden existing-img-note">Current image saved. Upload new to replace.</p>
         </div>
     </div>
 
@@ -837,25 +854,25 @@ function addNextQuestion() {
             <div class="flex items-center gap-2">
                 <span class="font-bold w-6">A</span>
                 <input type="text" name="opt_a_text[]" class="flex-1 border rounded p-2 text-sm">
-                <input type="file" name="opt_a_img[]" class="text-xs w-20">
+                <input type="file" name="opt_a_img_${currentIndex}" class="text-xs w-20">
                 <input type="radio" name="correct_opt_${currentIndex}" value="A" class="w-4 h-4 accent-primary">
             </div>
             <div class="flex items-center gap-2">
                 <span class="font-bold w-6">B</span>
                 <input type="text" name="opt_b_text[]" class="flex-1 border rounded p-2 text-sm">
-                <input type="file" name="opt_b_img[]" class="text-xs w-20">
+                <input type="file" name="opt_b_img_${currentIndex}" class="text-xs w-20">
                 <input type="radio" name="correct_opt_${currentIndex}" value="B" class="w-4 h-4 accent-primary">
             </div>
             <div class="flex items-center gap-2">
                 <span class="font-bold w-6">C</span>
                 <input type="text" name="opt_c_text[]" class="flex-1 border rounded p-2 text-sm">
-                <input type="file" name="opt_c_img[]" class="text-xs w-20">
+                <input type="file" name="opt_c_img_${currentIndex}" class="text-xs w-20">
                 <input type="radio" name="correct_opt_${currentIndex}" value="C" class="w-4 h-4 accent-primary">
             </div>
             <div class="flex items-center gap-2">
                 <span class="font-bold w-6">D</span>
                 <input type="text" name="opt_d_text[]" class="flex-1 border rounded p-2 text-sm">
-                <input type="file" name="opt_d_img[]" class="text-xs w-20">
+                <input type="file" name="opt_d_img_${currentIndex}" class="text-xs w-20">
                 <input type="radio" name="correct_opt_${currentIndex}" value="D" class="w-4 h-4 accent-primary">
             </div>
         </div>
@@ -867,96 +884,239 @@ function addNextQuestion() {
     </div>`;
 
     wrapper.appendChild(div);
-    qCount++; // Increment AFTER using the index
+    qCount++;
 }
 
 function removeQuestion(btn) {
     btn.closest('.question-block').remove();
-    // Note: If you delete questions, array indices might shift but Radio names won't.
-    // Ideally, you should submit the form without deleting middle questions, or reload to reset order.
 }
-        // --- CHART CONFIGURATION ---
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. User Growth Chart (Line)
-    const userCtx = document.getElementById('userGrowthChart');
-    if (userCtx) {
-        const userLabels = JSON.parse('{{ graphs.user_labels|safe }}');
-        const userData = JSON.parse('{{ graphs.user_data|safe }}');
 
-        new Chart(userCtx, {
-            type: 'line',
-            data: {
-                labels: userLabels,
-                datasets: [{
-                    label: 'New Users',
-                    data: userData,
-                    borderColor: '#2563eb', // Primary Blue
-                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: true,
-                    pointBackgroundColor: '#ffffff',
-                    pointBorderColor: '#2563eb',
-                    pointRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: '#f0f2f5' }, ticks: { color: '#64748b', font: {size: 10} } },
-                    x: { grid: { display: false }, ticks: { color: '#64748b', font: {size: 10} } }
-                }
-            }
-        });
+function handleTypeChange(sel) {
+    const block = sel.closest('.question-block');
+    if (sel.value === 'MCQ') {
+        block.querySelector('.mcq-section').classList.remove('hidden');
+        block.querySelector('.text-section').classList.add('hidden');
+    } else {
+        block.querySelector('.mcq-section').classList.add('hidden');
+        block.querySelector('.text-section').classList.remove('hidden');
+    }
+}
+
+// ---------------------------------------------------------
+// 2. FILTER TESTS (Fixed Logic)
+// ---------------------------------------------------------
+
+        function filterTests() {
+            const type = document.getElementById('q_parent_type').value;
+            const courseId = document.getElementById('q_course_select').value;
+            document.querySelectorAll('.test-option').forEach(opt => { opt.style.display = (opt.dataset.type === type && opt.dataset.course === courseId) ? 'block' : 'none'; });
+        }
+        filterTests();
+        function handleTypeChange(sel) {
+            const block = sel.closest('.question-block');
+            if (sel.value === 'MCQ') { block.querySelector('.mcq-section').classList.remove('hidden'); block.querySelector('.text-section').classList.add('hidden'); }
+            else { block.querySelector('.mcq-section').classList.add('hidden'); block.querySelector('.text-section').classList.remove('hidden'); }
+        }
+
+// ---------------------------------------------------------
+// 3. OPEN ADD MODAL
+// ---------------------------------------------------------
+function openAddQuestion() {
+    document.getElementById('questionModalTitle').innerText = "Add Questions";
+    const form = document.getElementById('questionForm');
+
+    // Set correct URL
+    form.action = "/admincp/question/add/";
+
+    document.getElementById('questionsWrapper').innerHTML = '';
+    qCount = 0;
+    form.reset();
+
+    // Important: Filter tests (likely hides all initially)
+    filterTests();
+
+    // Add first blank question
+    addNextQuestion();
+
+    // Show Add More button
+    const addBtn = document.getElementById('addMoreBtn');
+    if (addBtn) addBtn.style.display = 'inline-block';
+
+    toggleModal('questionModal');
+}
+
+// ---------------------------------------------------------
+// 4. OPEN EDIT MODAL (Fixed Auto-Fill)
+// ---------------------------------------------------------
+function openEditQuestion(btn) {
+    const data = btn.dataset;
+    document.getElementById('questionModalTitle').innerText = "Edit Question";
+    const form = document.getElementById('questionForm');
+
+    // 1. Set Edit URL
+    form.action = `/admincp/question/edit/${data.id}/`;
+
+    // 2. Reset Wrapper & Create Inputs
+    document.getElementById('questionsWrapper').innerHTML = '';
+    qCount = 0;
+    addNextQuestion();
+
+    // 3. Hide "Add More" button
+    const addBtn = document.getElementById('addMoreBtn');
+    if (addBtn) addBtn.style.display = 'none';
+
+    toggleModal('questionModal');
+
+    // ------------------------------------------------
+    // 4. AUTO-FILL PARENT DATA & FILTER
+    // ------------------------------------------------
+    const parentTypeInput = document.getElementById('q_parent_type');
+    const courseSelect = document.getElementById('q_course_select');
+
+    // Set values
+    if (parentTypeInput) parentTypeInput.value = data.parentType;
+    if (courseSelect) courseSelect.value = data.courseId;
+
+    // CRITICAL FIX: Trigger filterTests NOW so the Test dropdown updates options
+    // based on the values we just set above.
+    filterTests();
+
+    // NOW we can safely set the Test ID because the option is visible
+    const testSelect = document.getElementById('q_test_select');
+    if (testSelect) testSelect.value = data.testId;
+
+    // ------------------------------------------------
+    // 5. FILL QUESTION CONTENT
+    // ------------------------------------------------
+    const typeSelect = document.getElementsByName('question_type[]')[0];
+    const textInput = document.getElementsByName('question_text[]')[0];
+
+    if (typeSelect) {
+        typeSelect.value = data.type;
+        handleTypeChange(typeSelect);
+    }
+    if (textInput) textInput.value = data.text;
+
+    // Show image note
+    if (data.image && data.image !== '') {
+        const note = document.querySelector('.existing-img-note');
+        if (note) note.classList.remove('hidden');
     }
 
-    // 2. Content Distribution Chart (Doughnut)
-    const distCtx = document.getElementById('contentDistChart');
-    if (distCtx) {
-        const distLabels = JSON.parse('{{ graphs.dist_labels|safe }}');
-        const distData = JSON.parse('{{ graphs.dist_data|safe }}');
+    // Fill Options
+    if (data.type === 'MCQ') {
+        document.getElementsByName('opt_a_text[]')[0].value = data.optA;
+        document.getElementsByName('opt_b_text[]')[0].value = data.optB;
+        document.getElementsByName('opt_c_text[]')[0].value = data.optC;
+        document.getElementsByName('opt_d_text[]')[0].value = data.optD;
 
-        new Chart(distCtx, {
-            type: 'doughnut',
-            data: {
-                labels: distLabels,
-                datasets: [{
-                    data: distData,
-                    backgroundColor: ['#4f46e5', '#06b6d4', '#ef4444'], // Indigo, Cyan, Red
-                    borderWidth: 0,
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, color: '#64748b' } }
+        // Correct Option
+        const radios = document.getElementsByName('correct_opt_0');
+        for (const r of radios) {
+            if (r.value === data.correct) r.checked = true;
+        }
+    } else {
+        const ansInput = document.getElementsByName('correct_answer_text[]')[0];
+        if (ansInput) ansInput.value = data.ansText;
+    }
+}
+
+// ---------------------------------------------------------
+// 5. VIEW QUESTION DETAILS
+// ---------------------------------------------------------
+function viewSingleQuestion(btn) {
+    const data = btn.dataset;
+    document.getElementById('viewQuestionsTitle').innerText = "Question Details";
+
+    let mainImageHtml = '';
+    if (data.image && data.image !== 'None' && data.image !== '') {
+        mainImageHtml = `<div class="mb-4"><img src="${data.image}" class="max-h-48 rounded border border-border mx-auto object-contain"></div>`;
+    }
+
+    let optionsHtml = '';
+    if (data.type === 'MCQ') {
+        const opts = [
+            { label: 'A', text: data.optA, img: data.optAImg },
+            { label: 'B', text: data.optB, img: data.optBImg },
+            { label: 'C', text: data.optC, img: data.optCImg },
+            { label: 'D', text: data.optD, img: data.optDImg }
+        ];
+        optionsHtml = `<div class="grid grid-cols-1 gap-2 mt-4">`;
+        opts.forEach(opt => {
+            const isCorrect = (data.correct === opt.label);
+            const bgClass = isCorrect ? 'bg-green-50 border-green-500' : 'bg-gray-50 border-gray-200';
+            const textClass = isCorrect ? 'text-green-700 font-bold' : 'text-gray-700';
+
+            let optImg = '';
+            if (opt.img && opt.img !== 'None' && opt.img !== '') {
+                optImg = `<img src="${opt.img}" class="h-10 w-10 object-cover rounded ml-2 border">`;
+            }
+            optionsHtml += `
+                <div class="flex items-center p-3 border rounded ${bgClass}">
+                    <span class="font-bold w-6">${opt.label}.</span>
+                    <span class="${textClass} flex-1">${opt.text || ''}</span>
+                    ${optImg}
+                    ${isCorrect ? '<i class="fa-solid fa-check-circle text-green-600 ml-auto"></i>' : ''}
+                </div>`;
+        });
+        optionsHtml += `</div>`;
+    } else {
+        optionsHtml = `<div class="mt-4 p-4 bg-gray-100 rounded border border-gray-300"><p class="text-xs font-bold text-gray-500 uppercase">Correct Answer</p><p class="text-sm font-mono mt-1">${data.ansText}</p></div>`;
+    }
+
+    document.getElementById('viewQuestionsList').innerHTML = `
+        <div class="bg-white p-5 rounded-lg border border-border">
+            <span class="bg-blue-100 text-primary text-xs px-2 py-1 rounded font-bold uppercase">${data.type}</span>
+            <p class="font-bold text-lg text-textMain mb-4 mt-2">${data.text}</p>
+            ${mainImageHtml}
+            ${optionsHtml}
+        </div>`;
+    toggleModal('viewQuestionsModal');
+}
+
+    // ---------------------------------------------------------
+    // 5. CHARTS & KEYBOARD SHORTCUTS
+    // ---------------------------------------------------------
+    document.addEventListener("DOMContentLoaded", () => {
+        const userCtx = document.getElementById('userGrowthChart');
+        if (userCtx) {
+            const userLabels = JSON.parse('{{ graphs.user_labels|safe }}');
+            const userData = JSON.parse('{{ graphs.user_data|safe }}');
+            new Chart(userCtx, {
+                type: 'line',
+                data: {
+                    labels: userLabels,
+                    datasets: [{ label: 'New Users', data: userData, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.1)', borderWidth: 2, tension: 0.4, fill: true, pointBackgroundColor: '#ffffff', pointBorderColor: '#2563eb', pointRadius: 4 }]
                 },
-                cutout: '70%'
-            }
-        });
-    }
-});
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f0f2f5' }, ticks: { color: '#64748b', font: { size: 10 } } }, x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } } } }
+            });
+        }
 
-        // Toggle Palette on Ctrl+K
-document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.key === 'k') {
-        e.preventDefault();
-        const palette = document.getElementById('commandPalette');
-        palette.classList.toggle('hidden');
-        if (!palette.classList.contains('hidden')) document.getElementById('commandInput').focus();
-    }
-    if (e.key === 'Escape') document.getElementById('commandPalette').classList.add('hidden');
-});
+        const distCtx = document.getElementById('contentDistChart');
+        if (distCtx) {
+            const distLabels = JSON.parse('{{ graphs.dist_labels|safe }}');
+            const distData = JSON.parse('{{ graphs.dist_data|safe }}');
+            new Chart(distCtx, {
+                type: 'doughnut',
+                data: { labels: distLabels, datasets: [{ data: distData, backgroundColor: ['#4f46e5', '#06b6d4', '#ef4444'], borderWidth: 0, hoverOffset: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, color: '#64748b' } } }, cutout: '70%' }
+            });
+        }
+    });
 
-// Close when clicking outside
-document.getElementById('commandPalette').addEventListener('click', function(e) {
-    if(e.target === this) this.classList.add('hidden');
-});
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'k') {
+            e.preventDefault();
+            const palette = document.getElementById('commandPalette');
+            palette.classList.toggle('hidden');
+            if (!palette.classList.contains('hidden')) document.getElementById('commandInput').focus();
+        }
+        if (e.key === 'Escape') document.getElementById('commandPalette').classList.add('hidden');
+    });
 
-    </script>
+    document.getElementById('commandPalette').addEventListener('click', function(e) {
+        if (e.target === this) this.classList.add('hidden');
+    });
+</script>
 </body>
 </html>
