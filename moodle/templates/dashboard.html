@@ -275,10 +275,10 @@
                                                                 </a>
                                                             </div>
                                                         </div>
+                                                        <div class="pb-3 px-2 border-bottom"></div>
                                                     {% endfor %}
                                                 </li>
                                             {% endfor %}
-                                                    <hr>
                                             </ul>
                                         </li>
                                     {% endfor %}
@@ -385,121 +385,266 @@
 
                 <div class="calendarwrapper" data-courseid="1" data-context-id="2" data-month="{{ current_month_num }}" data-year="{{ current_year }}" data-view="monthblock">
 
-                    <div id="month-navigation-dynamic-1" class="controls">
-                        <div class="calendar-controls">
+            <style>
+                /* Force Modal to be on top of everything */
+                #calendarEventModal {
+                    z-index: 105050 !important;
+                }
+                .modal-backdrop {
+                    z-index: 105040 !important;
+                }
 
-                            <a class="arrow_link previous" title="Previous month"
-                               data-year="{{ prev_month.year }}" data-month="{{ prev_month.month_num }}" data-drop-zone="nav-link"
-                               href="?year={{ prev_month.year }}&month={{ prev_month.month_num }}">
-                                <span class="arrow">&#x25C4;</span>
-                                &nbsp;
-                                <span class="arrow_text">{{ prev_month.month_name }}</span>
-                            </a>
+                /* Custom Position (8vh from top) */
+                .modal-dialog-custom-pos {
+                    margin-top: 3vh;
+                    max-width: 500px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
 
-                            <span class="hide"> | </span>
-                            <h4 class="current">{{ current_month_name }} {{ current_year }}</h4>
-                            <span class="hide"> | </span>
+                /* Blue Outline */
+                .custom-modal-content {
+                    border: 3.5px solid #0f47ad;
+                    border-radius: 12px;
+                    overflow: hidden;
+                }
 
-                            <a class="arrow_link next" title="Next month"
-                               data-year="{{ next_month.year }}" data-month="{{ next_month.month_num }}" data-drop-zone="nav-link"
-                               href="?year={{ next_month.year }}&month={{ next_month.month_num }}">
-                                <span class="arrow_text">{{ next_month.month_name }}</span>
-                                &nbsp;
-                                <span class="arrow">&#x25BA;</span>
-                            </a>
-                        </div>
+                .calendar-event-link:hover {
+                    text-decoration: underline !important;
+                    cursor: pointer;
+                }
+            </style>
+
+            <div class="calendarwrapper" data-courseid="1" data-context-id="2" data-month="{{ current_month_num }}" data-year="{{ current_year }}" data-view="monthblock">
+
+                <div id="month-navigation-dynamic-1" class="controls">
+                    <div class="calendar-controls">
+                        <a class="arrow_link previous" href="?year={{ prev_month.year }}&month={{ prev_month.month_num }}">
+                            <span class="arrow">&#x25C4;</span>&nbsp;<span class="arrow_text">{{ prev_month.month_name }}</span>
+                        </a>
+                        <span class="hide"> | </span>
+                        <h4 class="current">{{ current_month_name }} {{ current_year }}</h4>
+                        <span class="hide"> | </span>
+                        <a class="arrow_link next" href="?year={{ next_month.year }}&month={{ next_month.month_num }}">
+                            <span class="arrow_text">{{ next_month.month_name }}</span>&nbsp;<span class="arrow">&#x25BA;</span>
+                        </a>
                     </div>
-
-                    <span class="overlay-icon-container hidden" data-region="overlay-icon-container">
-                        <span class="loading-icon icon-no-margin"><i class="icon fa fa-circle-o-notch fa-spin fa-fw " title="Loading" role="img" aria-label="Loading"></i></span>
-                    </span>
-
-                    <table id="month-detailed-dynamic-1" class="calendarmonth calendartable mb-0">
-                        <thead>
-                            <tr>
-                                <th class="header text-xs-center"><span class="sr-only">Monday</span><span aria-hidden="true">Mon</span></th>
-                                <th class="header text-xs-center"><span class="sr-only">Tuesday</span><span aria-hidden="true">Tue</span></th>
-                                <th class="header text-xs-center"><span class="sr-only">Wednesday</span><span aria-hidden="true">Wed</span></th>
-                                <th class="header text-xs-center"><span class="sr-only">Thursday</span><span aria-hidden="true">Thu</span></th>
-                                <th class="header text-xs-center"><span class="sr-only">Friday</span><span aria-hidden="true">Fri</span></th>
-                                <th class="header text-xs-center"><span class="sr-only">Saturday</span><span aria-hidden="true">Sat</span></th>
-                                <th class="header text-xs-center"><span class="sr-only">Sunday</span><span aria-hidden="true">Sun</span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% comment %} Loop through each week from the view {% endcomment %}
-                            {% for week in calendar_weeks %}
-                            <tr data-region="month-view-week">
-
-                                {% comment %} Loop through each day object in the week {% endcomment %}
-                                {% for day_data in week %}
-
-                                    {% comment %}
-                                      This is now much simpler.
-                                      The view already gave us the day_num, events, and classes.
-                                    {% endcomment %}
-                                    <td class="{{ day_data.classes }}"
-                                        data-day="{{ day_data.day_num }}"
-                                        data-drop-zone="month-view-day"
-                                        data-region="day"
-                                        >
-
-                                        {% if day_data.day_num != 0 %}
-                                            {% with day=day_data.day_num day_events=day_data.events %}
-
-                                            <div class="d-none d-md-block hidden-phone text-xs-center">
-                                                {% if day_events %}
-                                                    <span class="sr-only">{{ day_events|length }} events, {{ today|date:"l" }}, {{ day }} {{ current_month_name }}</span>
-                                                    <a data-action="view-day-link"  class="aalink day"
-                                                       data-year="{{ current_year }}" data-month="{{ current_month_num }}" data-day="{{ day }}">
-                                                       <span class="day-number-circle"><span class="day-number">{{ day }}</span></span>
-                                                    </a>
-                                                    <div data-region="day-content">
-                                                        <ul>
-                                                            {% for event in day_events %}
-                                                            <li data-region="event-item" data-event-component="mod_{{ event.model }}">
-                                                                <a data-action="view-event" data-event-id="0" title="{{ event.title }} {{ event.type }}">
-                                                                    <span class="calendar-circle calendar_event_course">
-                                                                        &nbsp;
-                                                                    </span>
-                                                                    <span class="eventname" style="color: #0f47ad;">{{ event.title }} {{ event.type }}</span>
-                                                                </a>
-                                                            </li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                    </div>
-                                                {% else %}
-                                                    <span class="sr-only">No events, {{ today|date:"l" }}, {{ day }} {{ current_month_name }}</span>
-                                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">{{ day }}</span></span></span>
-                                                {% endif %}
-                                            </div>
-
-                                            <div class="d-md-none hidden-desktop hidden-tablet">
-                                                 {% if day_events %}
-                                                    <span class="sr-only">{{ day_events|length }} events, {{ today|date:"l" }}, {{ day }} {{ current_month_name }}</span>
-                                                    <a data-action="view-day-link"  class="day aalink"
-                                                        data-year="{{ current_year }}" data-month="{{ current_month_num }}" data-day="{{ day }}">
-                                                        <span class="day-number-circle"><span class="day-number">{{ day }}</span></span>
-                                                    </a>
-                                                 {% else %}
-                                                    <span class="sr-only">No events, {{ today|date:"l" }}, {{ day }} {{ current_month_name }}</span>
-                                                    <span aria-hidden="true"><span class="day-number-circle"><span class="day-number">{{ day }}</span></span></span>
-                                                 {% endif %}
-                                            </div>
-                                            {% endwith %}
-                                        {% else %}
-                                            &nbsp;
-                                        {% endif %}
-                                    </td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
                 </div>
 
+                <table id="month-detailed-dynamic-1" class="calendarmonth calendartable mb-0">
+                    <thead>
+                        <tr>
+                            <th class="header text-xs-center">Mon</th>
+                            <th class="header text-xs-center">Tue</th>
+                            <th class="header text-xs-center">Wed</th>
+                            <th class="header text-xs-center">Thu</th>
+                            <th class="header text-xs-center">Fri</th>
+                            <th class="header text-xs-center">Sat</th>
+                            <th class="header text-xs-center">Sun</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for week in calendar_weeks %}
+                        <tr data-region="month-view-week">
+                            {% for day_data in week %}
+                                <td class="{{ day_data.classes }} day-cell" data-day="{{ day_data.day_num }}">
+                                    {% if day_data.day_num != 0 %}
+                                        {% with day=day_data.day_num day_events=day_data.events %}
 
-</div></div>
+                                        <div class="d-none d-md-block hidden-phone text-xs-center">
+
+                                            {# --- 1. DAY NUMBER LINK (View All Events) --- #}
+                                            {# Using onclick="openDayView(this)" to FORCE execution #}
+                                            <a href="javascript:void(0);"
+                                               class="aalink day"
+                                               onclick="openDayView(this)"
+                                               data-date-full="{{ day }} {{ current_month_name }} {{ current_year }}">
+                                               <span class="day-number-circle"><span class="day-number">{{ day }}</span></span>
+                                            </a>
+
+                                            <div data-region="day-content">
+                                                <ul>
+                                                    {% if day_events %}
+                                                        {% for event in day_events %}
+                                                        <li data-region="event-item">
+                                                            {% url 'test_detail' test_type=event.model_name_lower test_id=event.id as activity_url %}
+
+                                                            {# --- 2. SINGLE EVENT LINK --- #}
+                                                            {# Using onclick="openSingleEvent(this)" to FORCE execution #}
+                                                            <a href="javascript:void(0);"
+                                                               class="calendar-event-link"
+                                                               onclick="openSingleEvent(this)"
+                                                               data-title="{{ event.title }}"
+                                                               data-date="{{ event.start_date|date:'l, j F, h:i A' }}"
+                                                               data-course="BO CDA {{ event.course.code }}: {{ event.course.title }}"
+                                                               data-type="{{ event.type|default:'Course event' }}"
+                                                               data-url="{{ activity_url }}"
+                                                               title="{{ event.title }}">
+
+                                                                <span class="calendar-circle calendar_event_course">&nbsp;</span>
+                                                                <span class="eventname" style="color: #0f47ad;">{{ event.title }} {{ event.type }}</span>
+                                                            </a>
+
+                                                            {# HIDDEN STORAGE FOR DAY VIEW #}
+                                                            <div class="event-data-storage" style="display:none;"
+                                                                 data-title="{{ event.title }} {{ event.type }}"
+                                                                 data-url="{{ activity_url }}"
+                                                                 data-course="{{ event.course.code }}: {{ event.course.title }}"></div>
+                                                        </li>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-md-none hidden-desktop hidden-tablet">
+                                             <a href="javascript:void(0);"
+                                                class="day aalink"
+                                                onclick="openDayView(this)"
+                                                data-date-full="{{ day }} {{ current_month_name }}">
+                                                <span class="day-number-circle"><span class="day-number">{{ day }}</span></span>
+                                             </a>
+                                        </div>
+
+                                        {% endwith %}
+                                    {% else %}
+                                        &nbsp;
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal fade" id="calendarEventModal" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-custom-pos shadow-lg" role="document">
+                <div class="modal-content custom-modal-content">
+
+                  <div class="modal-header" style="background-color: #ffd3bd; border-bottom: none;">
+                    <h5 class="modal-title font-weight-bold text-dark" id="modalEventTitle">Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div class="modal-body pl-4 pr-4 pt-3">
+
+                      <div id="single-event-view" style="display: none;">
+                          <div class="media mb-1 align-items-center">
+                              <i class="fa fa-clock-o mr-3" style="width: 20px; text-align: center; font-size: 1.1em;"></i>
+                              <div class="media-body text-dark" id="modalEventDate"></div>
+                          </div>
+                          <div class="media mb-1 align-items-center">
+                              <i class="fa fa-calendar mr-3" style="width: 20px; text-align: center; font-size: 1.1em;"></i>
+                              <div class="media-body text-dark" id="modalEventType"></div>
+                          </div>
+                          <div class="media mb-1 align-items-center">
+                              <i class="fa fa-graduation-cap mr-3" style="width: 20px; text-align: center; font-size: 1.1em;"></i>
+                              <div class="media-body" style="color: #0f47ad;" id="modalEventCourse"></div>
+                          </div>
+                      </div>
+
+                      <div id="day-list-view" style="display: none;">
+                          <div id="day-list-container"></div>
+                          <div id="no-events-message" class= text-center py-3">No events today.</div>
+                      </div>
+                  </div>
+
+                  <div class="modal-footer border-top-1 pt-0 pb-2">
+                    <a href="#" id="modalGoToActivity" class="btn btn-link float-right" style="text-decoration: none; color: #0f47ad;">Go to activity</a>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <script>
+            // --- FUNCTION 1: OPEN SINGLE EVENT ---
+            function openSingleEvent(element) {
+                console.log("Single Event Clicked"); // Check your console (F12)
+
+                var link = $(element);
+                var modal = $('#calendarEventModal');
+
+                // 1. Reset Views
+                $('#day-list-view').hide();
+                $('#single-event-view').show();
+
+                // 2. Get Data
+                var title = link.attr('data-title');
+                var date = link.attr('data-date');
+                var course = link.attr('data-course');
+                var type = link.attr('data-type');
+                var url = link.attr('data-url');
+
+                // 3. Set Data
+                modal.find('#modalEventTitle').text(title + ' ' + type);
+                modal.find('#modalEventDate').text(date);
+                modal.find('#modalEventType').text('Course event');
+                modal.find('#modalEventCourse').text(course);
+
+                // 4. Handle Button
+                if (url && url !== "") {
+                    modal.find('#modalGoToActivity').attr('href', url).show();
+                } else {
+                    modal.find('#modalGoToActivity').hide();
+                }
+
+                // 5. Force Open
+                modal.modal('show');
+            }
+
+            // --- FUNCTION 2: OPEN DAY VIEW (CLICK NUMBER) ---
+            function openDayView(element) {
+                console.log("Day View Clicked"); // Check your console (F12)
+
+                var link = $(element);
+                var modal = $('#calendarEventModal');
+
+                // 1. Reset Views
+                $('#single-event-view').hide();
+                $('#day-list-view').show();
+                $('#modalGoToActivity').hide();
+
+                // 2. Set Header Date
+                var dateFull = link.attr('data-date-full');
+                modal.find('#modalEventTitle').text(dateFull);
+
+                // 3. Build List from hidden storage
+                var listContainer = $('#day-list-container');
+                listContainer.empty();
+
+                var parentCell = link.closest('td');
+                var events = parentCell.find('.event-data-storage');
+
+                if (events.length > 0) {
+                    $('#no-events-message').hide();
+                    var ul = $('<ul class="list-group list-group-flush"></ul>');
+
+                    events.each(function() {
+                        var t = $(this).attr('data-title');
+                        var u = $(this).attr('data-url');
+                        var c = $(this).attr('data-course');
+
+                        var li = $('<li class="list-group-item px-0 border-0"></li>');
+                        var a = $('<a></a>').attr('href', u).addClass('font-weight-bold').css('color', '#0f47ad').text(t);
+                        var span = $('<div class="text-muted small"></div>').text(c);
+                        li.append(a).append(span);
+                        ul.append(li);
+                    });
+                    listContainer.append(ul);
+                } else {
+                    $('#no-events-message').show();
+                }
+
+                // 4. Force Open
+                modal.modal('show');
+            }
+            </script>
+
+        </div></div>
             <div class="footer"><div class="bottom">
         <span class="footer-link">
             <a href="">Full calendar</a>
@@ -647,8 +792,3 @@
                 {% include '_script.html' %}
         
 
-</div>
-</div>
-
-</body>
-</html>

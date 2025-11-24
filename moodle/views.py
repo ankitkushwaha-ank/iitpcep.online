@@ -147,7 +147,7 @@ def dashboard(request):
         })
 
     # --------------------------------------------------
-    # 🗓️ 7. CALENDAR LOGIC
+    # 🗓️ 7. CALENDAR LOGIC (Updated for Modal Data)
     # --------------------------------------------------
     try:
         year = int(request.GET.get('year', now.year))
@@ -164,17 +164,24 @@ def dashboard(request):
     first_day_of_month = current_date.replace(day=1)
     last_day_prev_month = first_day_of_month - timezone.timedelta(days=1)
     first_day_next_month = (first_day_of_month + timezone.timedelta(days=32)).replace(day=1)
-    prev_month_data = {"year": last_day_prev_month.year, "month_num": last_day_prev_month.month,
-                       "month_name": last_day_prev_month.strftime('%B')}
-    next_month_data = {"year": first_day_next_month.year, "month_num": first_day_next_month.month,
-                       "month_name": first_day_next_month.strftime('%B')}
+
+    prev_month_data = {
+        "year": last_day_prev_month.year,
+        "month_num": last_day_prev_month.month,
+        "month_name": last_day_prev_month.strftime('%B')
+    }
+    next_month_data = {
+        "year": first_day_next_month.year,
+        "month_num": first_day_next_month.month,
+        "month_name": first_day_next_month.strftime('%B')
+    }
 
     month_filter = Q(open_date__year=year, open_date__month=month) | \
                    Q(close_date__year=year, close_date__month=month)
 
-    cal_assignments = Assignment.objects.filter(month_filter)
-    cal_quizzes = Quiz.objects.filter(month_filter)
-    cal_exams = Exam.objects.filter(month_filter)
+    cal_assignments = Assignment.objects.filter(month_filter).select_related('course')
+    cal_quizzes = Quiz.objects.filter(month_filter).select_related('course')
+    cal_exams = Exam.objects.filter(month_filter).select_related('course')
     other_events = CalendarEvent.objects.filter(date__year=year, date__month=month)
 
     events_by_day = {}
@@ -184,17 +191,50 @@ def dashboard(request):
             events_by_day[day] = []
         events_by_day[day].append(event_data)
 
+    # --- UPDATED LOOP: PASSING FULL DATA FOR MODAL ---
     for item in list(cal_assignments) + list(cal_quizzes) + list(cal_exams):
-        if item.open_date.month == month:
-            add_to_dict(item.open_date.day,
-                        {"id": item.id, "title": item.title, "type": "opens", "model": item.__class__.__name__.lower()})
-        if item.close_date and item.close_date.month == month:
-            add_to_dict(item.close_date.day, {"id": item.id, "title": item.title, "type": "closes",
-                                              "model": item.__class__.__name__.lower()})
-    for event in other_events:
-        add_to_dict(event.date.day, {"id": event.id, "title": event.title, "type": event.get_event_type_display(),
-                                     "model": "calendarevent"})
+        model_name = item.__class__.__name__  # e.g. "Quiz"
 
+        # 1. Handle "Opens" Date
+        if item.open_date.month == month:
+            add_to_dict(item.open_date.day, {
+                "id": item.id,
+                "title": item.title,
+                "type": "opens",
+                "model": model_name,
+                "model_name_lower": model_name.lower(),  # Required for {% url %}
+                "start_date": item.open_date,  # Required for date format
+                "course": item.course,  # Required for Course Code/Title
+                "is_active": True  # Logic to show/hide button
+            })
+
+        # 2. Handle "Closes" Date
+        if item.close_date and item.close_date.month == month:
+            add_to_dict(item.close_date.day, {
+                "id": item.id,
+                "title": item.title,
+                "type": "closes",
+                "model": model_name,
+                "model_name_lower": model_name.lower(),
+                "start_date": item.close_date,
+                "course": item.course,
+                "is_active": True
+            })
+
+    # --- UPDATED OTHER EVENTS ---
+    for event in other_events:
+        add_to_dict(event.date.day, {
+            "id": event.id,
+            "title": event.title,
+            "type": event.get_event_type_display(),  # e.g. "Course Event"
+            "model": "calendarevent",
+            "model_name_lower": "calendarevent",
+            "start_date": event.date,
+            "course": None,  # CalendarEvents might not have courses
+            "is_active": False
+        })
+
+    # --- PROCESS WEEKS (Mostly the same) ---
     calendar_weeks_with_events = []
     for week in calendar_matrix:
         processed_week = []
@@ -204,17 +244,31 @@ def dashboard(request):
                 processed_week.append({"day_num": 0, "events": [], "classes": "dayblank"})
             else:
                 day_events = events_by_day.get(day_num, [])
+
+                # Sort events by time if possible
+                day_events.sort(key=lambda x: x['start_date'])
+
                 day_classes = ["day", "text-sm-center", "text-md-left", "clickable"]
+
+                # Check Today
                 if day_num == today.day and month == today.month and year == today.year:
                     day_classes.append("today")
+
+                # Check Events
                 if day_events:
                     day_classes.append("hasevent")
+
+                # Check Weekend (Sat=5, Sun=6)
                 if day_index >= 5:
                     day_classes.append("weekend")
-                processed_week.append({"day_num": day_num, "events": day_events, "classes": " ".join(day_classes)})
+
+                processed_week.append({
+                    "day_num": day_num,
+                    "events": day_events,
+                    "classes": " ".join(day_classes)
+                })
             day_index += 1
         calendar_weeks_with_events.append(processed_week)
-
     # --------------------------------------------------
     # 8. COMBINE ALL CONTEXT & RENDER
     # --------------------------------------------------
