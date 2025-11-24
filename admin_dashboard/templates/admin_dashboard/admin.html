@@ -216,7 +216,7 @@
             <div class="bg-gray-50 p-3 rounded-lg"><i class="fa-solid fa-server text-xl"></i></div>
         </div>
 
-        <div class="bg-gradient-to-br from-white to-green-50 p-6 rounded-xl shadow-sm border border-green-100 flex justify-between items-center transition-all duration-300">
+        <div onclick="switchTab('users')" class="bg-gradient-to-br cursor-pointer from-white to-green-50 p-6 rounded-xl shadow-sm border border-green-100 flex justify-between items-center transition-all duration-300">
             <div>
                 <p class="text-green-600 text-xs font-bold uppercase tracking-wider">Online Users</p>
                 <h3 class="text-3xl font-bold text-gray-800 mt-1">{{ stats.online_users|default:"0" }}</h3>
@@ -298,7 +298,7 @@
                                 <td class="p-4">{% if item.is_live %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs font-bold">Live</span>{% else %}<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">Draft</span>{% endif %}</td>
                                 <td class="p-4 text-right">
                                     <button onclick="viewQuestions('{{ item.title|escapejs }}', '{{ item.id }}')" class="text-secondary p-2 hover:text-primary" title="View Questions"><i class="fa-solid fa-eye"></i></button>
-                                    <button onclick="openEditAssessment('{{ item.id }}', '{{ item.title|escapejs }}', 'quiz', '{{ item.description|escapejs }}', '{{ item.open_date|date:'Y-m-d' }}', '{{ item.open_date|time:'H:i' }}', '{{ item.close_date|date:'Y-m-d' }}', '{{ item.close_date|time:'H:i' }}', '{{ item.duration_minutes }}', '{{ item.max_attempts }}', '{{ item.is_live }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="openEditAssessment('{{ item.id }}','{{ item.course.id }}', '{{ item.title|escapejs }}', 'quiz', '{{ item.description|escapejs }}', '{{ item.open_date|date:'Y-m-d' }}', '{{ item.open_date|time:'H:i' }}', '{{ item.close_date|date:'Y-m-d' }}', '{{ item.close_date|time:'H:i' }}', '{{ item.duration_minutes }}', '{{ item.max_attempts }}', '{{ item.is_live }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
                                     <button onclick="confirmDelete('assessment/delete/{{ item.id }}')" class="text-danger p-2"><i class="fa-solid fa-trash"></i></button>
                                 </td>
                             </tr>
@@ -323,7 +323,7 @@
                                 <td class="p-4">{% if item.is_live %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs font-bold">Live</span>{% else %}<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">Draft</span>{% endif %}</td>
                                 <td class="p-4 text-right">
                                     <button onclick="viewQuestions('{{ item.title|escapejs }}', '{{ item.id }}')" class="text-secondary p-2 hover:text-primary" title="View Questions"><i class="fa-solid fa-eye"></i></button>
-                                    <button onclick="openEditAssessment('{{ item.id }}', '{{ item.title|escapejs }}', 'assignment', '{{ item.description|escapejs }}', '{{ item.open_date|date:'Y-m-d' }}', '{{ item.open_date|time:'H:i' }}', '{{ item.close_date|date:'Y-m-d' }}', '{{ item.close_date|time:'H:i' }}', '{{ item.duration_minutes }}', '{{ item.max_attempts }}', '{{ item.is_live }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="openEditAssessment('{{ item.id }}', '{{ item.course.id }}', '{{ item.title|escapejs }}', 'assignment', '{{ item.description|escapejs }}', '{{ item.open_date|date:'Y-m-d' }}', '{{ item.open_date|time:'H:i' }}', '{{ item.close_date|date:'Y-m-d' }}', '{{ item.close_date|time:'H:i' }}', '{{ item.duration_minutes }}', '{{ item.max_attempts }}', '{{ item.is_live }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
                                     <button onclick="confirmDelete('assessment/delete/{{ item.id }}')" class="text-danger p-2"><i class="fa-solid fa-trash"></i></button>
                                 </td>
                             </tr>
@@ -348,7 +348,7 @@
                                 <td class="p-4">{% if item.is_live %}<span class="bg-green-100 text-success px-2 py-1 rounded text-xs font-bold">Live</span>{% else %}<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs">Draft</span>{% endif %}</td>
                                 <td class="p-4 text-right">
                                     <button onclick="viewQuestions('{{ item.title|escapejs }}', '{{ item.id }}')" class="text-secondary p-2 hover:text-primary" title="View Questions"><i class="fa-solid fa-eye"></i></button>
-                                    <button onclick="openEditAssessment('{{ item.id }}', '{{ item.title|escapejs }}', 'exam', '{{ item.description|escapejs }}', '{{ item.open_date|date:'Y-m-d' }}', '{{ item.open_date|time:'H:i' }}', '{{ item.close_date|date:'Y-m-d' }}', '{{ item.close_date|time:'H:i' }}', '{{ item.duration_minutes }}', '{{ item.max_attempts }}', '{{ item.is_live }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="openEditAssessment('{{ item.id }}','{{ item.course.id }}', '{{ item.title|escapejs }}', 'exam', '{{ item.description|escapejs }}', '{{ item.open_date|date:'Y-m-d' }}', '{{ item.open_date|time:'H:i' }}', '{{ item.close_date|date:'Y-m-d' }}', '{{ item.close_date|time:'H:i' }}', '{{ item.duration_minutes }}', '{{ item.max_attempts }}', '{{ item.is_live }}')" class="text-primary p-2"><i class="fa-solid fa-pen"></i></button>
                                     <button onclick="confirmDelete('assessment/delete/{{ item.id }}')" class="text-danger p-2"><i class="fa-solid fa-trash"></i></button>
                                 </td>
                             </tr>
@@ -764,9 +764,10 @@
         toggleModal('courseModal');
     }
 
-    function openEditAssessment(id, title, type, desc, odate, otime, cdate, ctime, dur, max, live) {
+    function openEditAssessment(id, course, title, type, desc, odate, otime, cdate, ctime, dur, max, live) {
         document.getElementById('assessmentModalTitle').innerText = "Edit " + type.toUpperCase();
         document.getElementById('assessmentTypeInput').value = type;
+        document.getElementById('a_course').value = course;
         document.getElementById('a_title').value = title;
         assessQuill.root.innerHTML = desc;
         document.getElementById('a_odate').value = odate || "";

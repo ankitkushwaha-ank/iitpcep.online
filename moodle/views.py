@@ -142,7 +142,7 @@ def dashboard(request):
             "course": activity.course,
             "close_date": activity.close_date,
             "model_name": activity.__class__.__name__,
-            "model_name_lower": activity.__class__.__name__.lower(),  # <-- ⭐ THIS WAS THE MISSING KEY
+            "model_name_lower": activity.__class__.__name__.lower(),
             "close_date_group": date_group
         })
 
