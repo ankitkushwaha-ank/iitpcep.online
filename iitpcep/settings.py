@@ -33,7 +33,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://www.iitpcep.online",
     "https://iitpcep-online.onrender.com",
     "https://cet.iitpcep.online",
-    "https://test.iitpcep.online/"
+    "https://test.iitpcep.online/",
 ]
 
 LOGIN_URL = 'admin_dashboard:admin_login'
