@@ -35,11 +35,12 @@ class SystemConfigAdmin(admin.ModelAdmin):
         "status_badge",
         "system_status",
         "system_pin",
+        "show_answer",
         "system_root",
         "last_updated",
     )
     list_display_links = ("status_badge",)
-    list_editable = ("system_status", "system_pin", "system_root")
+    list_editable = ("system_status", "system_pin","show_answer", "system_root")
     readonly_fields = ("last_updated",)
     actions = ["activate_system", "shutdown_system", "reset_pin"]
 

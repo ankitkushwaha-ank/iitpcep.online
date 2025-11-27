@@ -597,14 +597,16 @@ document.body.className += ' jsenabled';
     <div class="qn_buttons clearfix multipages">
     {% for q in questions_list %}
         <a class="qnbutton
-            {% if q.user_answer %} answered {% else %} notyetanswered {% endif %}
+            {% if q.correct_option %} answered {% else %} notyetanswered {% endif %}
             free btn
-                    {% if q.correct_option %}
+            {% if show_answer %}
+                    {% if q.correct_option or q.correct_answer_text %}
                         complete
                     {% endif %}
+            {% endif %}
             {% if q.id == question.id %} thispage {% endif %}"
            id="quiznavbutton{{ q.id }}"
-           title="Question {{ forloop.counter }} - {% if q.user_answer %}Answered{% else %}Not yet answered{% endif %}"
+           title="Question {{ forloop.counter }} - {% if show_answer %}{% if q.correct_option %}{% endif %}Answered{% else %}Not yet answered{% endif %}"
            data-quiz-page="{{ forloop.counter0 }}"
            href="{% url 'test_attempt' test_type|lower test.id %}?q={{ forloop.counter }}">
 
@@ -679,11 +681,9 @@ document.body.className += ' jsenabled';
 <li class="breadcrumb-item">
     <span>{{ test.title }}</span>
 </li>
-
-
-        </ol>
+    </ol>
 </nav>
-            </div>
+    </div>
     </div>
 </header>
 
@@ -736,11 +736,11 @@ document.body.className += ' jsenabled';
 <form action="" method="post" enctype="multipart/form-data" accept-charset="utf-8" id="responseform">
     {% csrf_token %}
     <div>
-        <div id="question-{{ question.id }}" class="que multichoice deferredfeedback {% if question.user_answer %}answered{% else %}notyetanswered{% endif %}">
+        <div id="question-{{ question.id }}" class="que multichoice deferredfeedback {% if show_answer %} {% if question.correct_option or question.correct_option_text %} {% endif %}answered{% else %}notyetanswered{% endif %}">
             <div class="info">
                 <h3 class="no">Question <span class="qno">{{ q_index }}</span></h3>
                 <div class="state">
-                    {% if question.user_answer %}Answered{% else %}Not yet answered{% endif %}
+                    {% if show_answer %}{% if question.correct_option or question.correct_option_text %}{% endif %}Answered{% else %}Not yet answered{% endif %}
                 </div>
                 <div class="grade">Marked out of {{ question.marks|default:"1.00" }}</div>
                 <div class="questionflag editable">
@@ -767,70 +767,72 @@ document.body.className += ' jsenabled';
                         {% endif %}
                     </div>
 
-{% if options %}
-<fieldset class="ablock no-overflow visual-scroll-x">
-    <legend class="prompt h6 font-weight-normal sr-only">
-        <span class="sr-only">Question {{ q_index }}</span> Answer
-    </legend>
+                    {% if options %}
+                    <fieldset class="ablock no-overflow visual-scroll-x">
+                        <legend class="prompt h6 font-weight-normal sr-only">
+                            <span class="sr-only">Question {{ q_index }}</span> Answer
+                        </legend>
 
-    <div class="answer">
-        {% for opt in options %}
-        {% with letter=forloop.counter0|add:65 %}
-        <div class="r{{ forloop.counter0|divisibleby:2|yesno:'0,1' }} d-flex align-items-center mb-2">
+                        <div class="answer">
+                            {% for opt in options %}
+                            {% with letter=forloop.counter0|add:65 %}
+                            <div class="r{{ forloop.counter0|divisibleby:2|yesno:'0,1' }} d-flex align-items-center mb-2">
 
-            <!-- Radio button -->
-            <input type="radio"
-                   name="{{ question.id }}"
-                   value="{{ opt.id }}"
-                   id="q{{ question.id }}_answer{{ forloop.counter0 }}"
-                   {% if opt.id|stringformat:"s" == correct_option|stringformat:"s" %}
-                       checked
-                   {% endif %}
-                   style="margin-right:10px; transform:scale(1.1);" />
+                                <!-- Radio button -->
+                                <input type="radio"
+                                       name="{{ question.id }}"
+                                       value="{{ opt.id }}"
+                                       id="q{{ question.id }}_answer{{ forloop.counter0 }}"
+                                       {% if show_answer %}
+                                           {% if opt.id|stringformat:"s" == correct_option|stringformat:"s" %}
+                                               checked
+                                           {% endif %}
+                                       {% endif %}
+                                       style="margin-right:10px; transform:scale(1.1);" />
 
-            <!-- Option label with A., B., etc. -->
-            <label for="q{{ question.id }}_answer{{ forloop.counter0 }}" class="d-flex align-items-center" style="cursor:pointer;">
+                                <!-- Option label with A., B., etc. -->
+                                <label for="q{{ question.id }}_answer{{ forloop.counter0 }}" class="d-flex align-items-center" style="cursor:pointer;">
 
-                <span class="answernumber mr-2" style="font-weight:400;">
-                    {{ letter|to_chr|lower }}.
-                </span>
+                                    <span class="answernumber mr-2" style="font-weight:400;">
+                                        {{ letter|to_chr|lower }}.
+                                    </span>
 
-                {% if opt.image %}
-                    <!-- Option with image -->
-                    <img src="{{ opt.image.url }}" alt="Option Image"
-                         style=" max-height:80px; margin-right:10px; border-radius:0;" />
-                {% endif %}
+                                    {% if opt.image %}
+                                        <!-- Option with image -->
+                                        <img src="{{ opt.image.url }}" alt="Option Image"
+                                             style=" max-height:80px; margin-right:10px; border-radius:0;" />
+                                    {% endif %}
 
-                <span class="option-text">
-                    {{ opt.text|safe }}
-                    {% if opt.id|stringformat:"s" == correct_option|stringformat:"s" %}
-                    {% endif %}
-                </span>
+                                    <span class="option-text">
+                                        {{ opt.text|safe }}
+                                        {% if opt.id|stringformat:"s" == correct_option|stringformat:"s" %}
+                                        {% endif %}
+                                    </span>
 
-            </label>
-        </div>
-        {% endwith %}
-        {% endfor %}
-    </div>
+                                </label>
+                            </div>
+                            {% endwith %}
+                            {% endfor %}
+                        </div>
 
-    <!-- ✅ Clear choice (not needed for correct answers, but keeping for consistency) -->
-    <div id="q{{ question.id }}_clearchoice"
-         class="qtype_multichoice_clearchoice sr-only"
-         aria-hidden="true">
-        <input type="radio"
-               name="{{ question.id }}"
-               id="q{{ question.id }}_answer-1"
-               value="-1"
-               class="sr-only"
-               aria-hidden="true" />
-        <label for="q{{ question.id }}_answer-1">
-            <a tabindex="-1" role="button" class="btn btn-link ml-3 mt-n1" href="#">Clear my choice</a>
-        </label>
-    </div>
-</fieldset>
+                        <!-- ✅ Clear choice (not needed for correct answers, but keeping for consistency) -->
+                        <div id="q{{ question.id }}_clearchoice"
+                             class="qtype_multichoice_clearchoice sr-only"
+                             aria-hidden="true">
+                            <input type="radio"
+                                   name="{{ question.id }}"
+                                   id="q{{ question.id }}_answer-1"
+                                   value="-1"
+                                   class="sr-only"
+                                   aria-hidden="true" />
+                            <label for="q{{ question.id }}_answer-1">
+                                <a tabindex="-1" role="button" class="btn btn-link ml-3 mt-n1" href="#">Clear my choice</a>
+                            </label>
+                        </div>
+                    </fieldset>
 
 
-                    {% else %}
+                    {% elif question.text %}
                     <!-- ✅ If no options, show text input -->
                         <div class="ablock form-inline d-flex align-items-center">
                             <label for="q{{ question.id }}_textanswer" class="form-label mr-2 mb-0">Answer:</label>
@@ -838,10 +840,15 @@ document.body.className += ' jsenabled';
                                    name="{{ question.id }}"
                                    id="q{{ question.id }}_textanswer"
                                    class="form-control d-inline w-auto"
-                                   value="{{ correct_text|default:'' }}"
+                                   value="{% if show_answer %} {{ correct_text|default:'' }} {% endif %}"
                                    placeholder="" />
                         </div>
-
+                    {% else %}
+                    <div class="alert alert-warning mt-2">
+                        <span class="answernumber mr-2" style="font-weight:400;">
+                            <i class="fa fa-exclamation-circle"></i> No Question or Options Available.
+                        </span>
+                    </div>
                     {% endif %}
                 </div>
             </div>

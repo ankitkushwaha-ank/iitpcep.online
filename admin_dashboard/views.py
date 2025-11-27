@@ -463,6 +463,7 @@ def update_settings(request):
         config.system_status = "ONLINE" if request.POST.get('system_status_toggle') == 'on' else "OFFLINE"
         config.system_pin = request.POST.get('system_pin')
         config.pin_required = request.POST.get('pin_required') == 'Yes'
+        config.show_answer = request.POST.get('show_answer') == 'Yes'
         config.save()
         messages.success(request, "Settings updated.")
     return redirect('admin_dashboard:admin_dashboard')

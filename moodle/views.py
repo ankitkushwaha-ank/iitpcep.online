@@ -548,6 +548,8 @@ def test_attempt_view(request, test_type, test_id):
         opt.is_selected = (str(opt.id) == str(question.user_answer))
 
     courses = Course.objects.all()
+    config = SystemConfig.objects.first()
+    show_answer_value = config.show_answer
 
     # ✅ Context for template
     context = {
@@ -563,6 +565,7 @@ def test_attempt_view(request, test_type, test_id):
         "correct_option": correct_option_id,
         "correct_text": correct_answer_text,
         "courses":courses,
+        "show_answer":show_answer_value,
     }
 
     return render(request, "attempt.html", context)
@@ -629,12 +632,17 @@ def test_finish_view(request, test_type, test_id):
             "flagged": is_flagged,
         })
 
+
+    config = SystemConfig.objects.first()
+    show_answer_value = config.show_answer
+
     context = {
         "test": test_obj,
         "test_type": test_type,
         "course_name": course_name,
         "questions_list": questions_summary,  # ✅ same variable name your template expects
         "total": len(questions),
+        "show_answer":show_answer_value,
     }
 
     return render(request, "finish.html", context)
@@ -712,8 +720,8 @@ def test_review_view(request, test_type, test_id):
             "correct_answer_text": correct_answer_text,
         })
 
-    # Debugging: Check if the question data is correct
-    print(f"Question Data: {question_data}")
+    config = SystemConfig.objects.first()
+    show_answer_value = config.show_answer
 
     context = {
         "test": test_obj,
@@ -721,6 +729,7 @@ def test_review_view(request, test_type, test_id):
         "questions": question_data,
         "user_answers": user_answers,
         "total_questions": len(questions),
+        "show_answer":show_answer_value,
     }
 
     # Render the review page

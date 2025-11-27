@@ -59,6 +59,7 @@ class SystemConfig(models.Model):
     system_pin = models.CharField(max_length=10, default="4321")  # global PIN
     system_root = models.CharField(max_length=100, default="admin")
     pin_required = models.BooleanField(default=True, help_text="If disabled, PIN not required for login.")
+    show_answer = models.BooleanField(default=True, help_text="If disabled, Answers not shows in Tests")
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):

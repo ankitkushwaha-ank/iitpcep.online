@@ -533,6 +533,16 @@
                                 <label for="pin_toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
                             </div>
                         </div>
+                        <div class="flex items-center justify-between mb-6 pb-6 border-b border-border">
+                            <div>
+                                <p class="font-bold text-textMain">Show Answer</p>
+                                <p class="text-xs text-textMuted">If disabled, Don't show Answers</p>
+                            </div>
+                            <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                <input type="checkbox" name="show_answer" value="Yes" id="answer_toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" {% if config.show_answer %}checked{% endif %}/>
+                                <label for="answer_toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div><label class="block text-xs font-bold text-textMuted uppercase mb-2">System Root</label><input type="text" name="system_root" value="{{ config.system_root }}" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>
                             <div><label class="block text-xs font-bold text-textMuted uppercase mb-2">Loggin PIN</label><input type="text" name="system_pin" value="{{ config.system_pin }}" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>

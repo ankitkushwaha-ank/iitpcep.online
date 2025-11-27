@@ -459,10 +459,10 @@ document.body.className += ' jsenabled';
     <div class="qn_buttons clearfix multipages">
         {% for q in questions_list %}
             <a class="qnbutton answered
-                free btn complete
+                free btn {% if show_answer %} complete {% endif %}
                 {% if q.id == question.id %} thispage {% endif %}"
                id="quiznavbutton{{ q.id }}"
-               title="Question {{ forloop.counter }} - Answered"
+               title="Question {{ forloop.counter }} - {% if show_answer %} Answered {% endif %}Not yet answered"
                data-quiz-page="{{ forloop.counter0 }}"
                href="{% url 'test_attempt' test_type|lower test.id %}?q={{ forloop.counter }}">
 
@@ -595,7 +595,7 @@ document.body.className += ' jsenabled';
     {% for q in questions_list %}
         <tr class="quizsummary{{ q.id }} {% if q.user_answer %} answersaved {% else %} notyetanswered {% endif %}">
             <td class="cell c0" style="text-align:left;">
-                <a href="{% url 'test_attempt' test_type|lower test.id %}?q={{ forloop.counter }}" title="Question {{ forloop.counter }} - Answered">
+                <a href="{% url 'test_attempt' test_type|lower test.id %}?q={{ forloop.counter }}" title="Question {{ forloop.counter }} - {% if show_answer %} Answered {% endif %}Not yet answered">
                     {{ forloop.counter }}
                 </a>
             </td>
