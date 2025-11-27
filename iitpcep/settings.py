@@ -25,6 +25,7 @@ ALLOWED_HOSTS = [
     "www.iitpcep.online",
     "iitpcep-online.onrender.com",
     "cet.iitpcep.online",
+    "test.iitpcep.online",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -32,6 +33,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://www.iitpcep.online",
     "https://iitpcep-online.onrender.com",
     "https://cet.iitpcep.online",
+    "https://test.iitpcep.online/"
 ]
 
 LOGIN_URL = 'admin_dashboard:admin_login'
