@@ -96,91 +96,91 @@
                                 </div>
                                 </div>
                     <div role="main"><div class="container-fluid tertiary-navigation"><div class="row"><div class="singlebutton quizstartbuttondiv">
-<form method="post" action="">
-    {% csrf_token %}
-    <input type="hidden" name="cmid" value="3407">
-    <input type="hidden" name="sesskey" value="tFTEBU6tGl">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <input type="hidden" name="cmid" value="3407">
+                    <input type="hidden" name="sesskey" value="tFTEBU6tGl">
 
-    {% if test.is_live %}
-    <button type="button"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#startAttemptModal">
-        <i class=""></i> Attempt {{ test_type }}
-    </button>
-    {% else %}
-    <button type="button" class="btn btn-secondary" disabled>
-        <i class="fa fa-clock"></i> Coming Soon
-    </button>
-    {% endif %}
-</form>
+                    {% if test.is_live %}
+                    <button type="button"
+                            class="btn btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#startAttemptModal">
+                        <i class=""></i> Attempt quiz
+                    </button>
+                    {% else %}
+                    <button type="button" class="btn btn-secondary" disabled>
+                        <i class="fa fa-clock"></i> Coming Soon
+                    </button>
+                    {% endif %}
+                </form>
 
+                                    </div>
+                </div>
+                                        {% if test.is_live %}
+                <!-- ✅ Trigger Button -->
+
+
+                <!-- ✅ Modal Popup -->
+                <div class="modal fade" id="startAttemptModal" tabindex="-1" aria-labelledby="startAttemptLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="startAttemptLabel">Start Attempt</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+
+                      <div class="modal-body">
+                        <form autocomplete="off"
+                              action="{% url 'test_attempt' test_type=test_type|lower test_id=test.id %}"
+                              method="post"
+                              accept-charset="utf-8"
+                              id="mod_quiz_preflight_form"
+                              class="mform full-width-labels">
+                          {% csrf_token %}
+                          <input type="hidden" name="cmid" value="3407">
+                          <input type="hidden" name="sesskey" value="tFTEBU6tGl">
+                          <input type="hidden" name="_qf__mod_quiz_form_preflight_check_form" value="1">
+
+                          <fieldset class="clearfix mb-3">
+                            <legend class="sr-only">Time limit</legend>
+                            <h4 class="mb-2">Time Limit</h4>
+                            <p>Your attempt will have a time limit of
+                              <strong>{{ test.duration_minutes }} minutes</strong>.
+                              When you start, the timer will begin and cannot be paused.
+                              Are you sure you wish to start now?</p>
+                          </fieldset>
+
+                          <div class="d-flex justify-content-end mt-4">
+                            <button type="submit" class="btn btn-primary me-2">
+                              <i class=""></i> Start Attempt
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                              Cancel
+                            </button>
+                          </div>
+                        </form>
+                      </div>
                     </div>
-</div>
-                        {% if test.is_live %}
-<!-- ✅ Trigger Button -->
+                  </div>
+                </div>
+                {% else %}
+                <!-- ⚠️ If not live -->
+                <div class="alert alert-warning text-center mt-4 p-4" role="alert"
+                     style="border-radius: 10px; font-size: 16px;">
+                    <i class="fa fa-clock"></i>
+                    <strong>{{ test_type }} Coming Soon!</strong><br>
+                    This {{ test_type|lower }} will open on
+                    <strong>{{ test.open_date|date:"l, j F Y, h:i A" }}</strong>.
+                </div>
+                {% endif %}
+                                    </div>
 
 
-<!-- ✅ Modal Popup -->
-<div class="modal fade" id="startAttemptModal" tabindex="-1" aria-labelledby="startAttemptLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="startAttemptLabel">Start Attempt</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+                <!-- ✅ Add Bootstrap JS (must come after jQuery if you use it) -->
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-      <div class="modal-body">
-        <form autocomplete="off"
-              action="{% url 'test_attempt' test_type=test_type|lower test_id=test.id %}"
-              method="post"
-              accept-charset="utf-8"
-              id="mod_quiz_preflight_form"
-              class="mform full-width-labels">
-          {% csrf_token %}
-          <input type="hidden" name="cmid" value="3407">
-          <input type="hidden" name="sesskey" value="tFTEBU6tGl">
-          <input type="hidden" name="_qf__mod_quiz_form_preflight_check_form" value="1">
-
-          <fieldset class="clearfix mb-3">
-            <legend class="sr-only">Time limit</legend>
-            <h4 class="mb-2">Time Limit</h4>
-            <p>Your attempt will have a time limit of
-              <strong>{{ test.duration_minutes }} minutes</strong>.
-              When you start, the timer will begin and cannot be paused.
-              Are you sure you wish to start now?</p>
-          </fieldset>
-
-          <div class="d-flex justify-content-end mt-4">
-            <button type="submit" class="btn btn-primary me-2">
-              <i class=""></i> Start Attempt
-            </button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-{% else %}
-<!-- ⚠️ If not live -->
-<div class="alert alert-warning text-center mt-4 p-4" role="alert"
-     style="border-radius: 10px; font-size: 16px;">
-    <i class="fa fa-clock"></i>
-    <strong>{{ test_type }} Coming Soon!</strong><br>
-    This {{ test_type|lower }} will open on
-    <strong>{{ test.open_date|date:"l, j F Y, h:i A" }}</strong>.
-</div>
-{% endif %}
-                    </div>
-
-
-<!-- ✅ Add Bootstrap JS (must come after jQuery if you use it) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</div>
+                </div>
                 </section>
             </div>
 
