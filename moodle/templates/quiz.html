@@ -117,12 +117,15 @@
                     <input type="hidden" name="sesskey" value="tFTEBU6tGl">
 
                     {% if test.is_live %}
+
+            {% if not quiz_end %}
                     <button type="button"
                             class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#startAttemptModal">
                         <i class=""></i> Attempt quiz
                     </button>
+                    {% endif %}
                     {% else %}
                     <button type="button" class="btn btn-secondary" disabled>
                         <i class="fa fa-clock"></i> Coming Soon
@@ -189,7 +192,9 @@
                     <strong>{{ test.open_date|date:"l, j F Y, h:i A" }}</strong>.
                 </div>
                 {% endif %}
-                                    </div>
+                </div>
+
+
 
 
                 <!-- ✅ Add Bootstrap JS (must come after jQuery if you use it) -->
@@ -203,8 +208,36 @@
                         <p class="text-left">Attempts allowed: {{ test.max_attempts }}</p>
                         <p class="text-left">Time limit: {{ test.duration_minutes }} minute{{ test.duration_minutes|pluralize }}</p>
                     </div>
+            {% if test.is_live %}
+            {% if quiz_end %}
+            <h3>Summary of your previous attempts</h3>
 
-                    <div class="box py-3 quizattempt"></div>
+            <div class="table-responsive"><table class="generaltable quizattemptsummary">
+            <thead>
+            <tr>
+            <th class="header c0" style="text-align:left;" scope="col">State</th>
+            <th class="header c1" style="text-align:center;" scope="col">Grade / 10.00</th>
+            <th class="header c2 lastcol" style="text-align:center;" scope="col">Review</th>
+            </tr>
+            </thead>
+            <tbody><tr class="lastrow">
+            <td class="cell c0" style="text-align:left;">Finished<span class="statedetails">Submitted {{ test.close_date|date:"l, d F Y, h:i A" }}</span></td>
+            <td class="cell c1" style="text-align:center;">10.00</td>
+            <td class="cell c2 lastcol" style="text-align:center;"><a title="Review your responses to this attempt" href="{% url 'test_review' test_type|lower test.id %}?review=true">Review</a></td>
+            </tr>
+            </tbody>
+            </table>
+            </div>
+            <div id="feedback" class="box py-3 generalbox"><h3>Your final grade for this quiz is 10.00/10.00.</h3></div>
+            <div class="box py-3 quizattempt"><p class="text-left">No more attempts are allowed</p><div class="continuebutton">
+
+            <form method="get" action="{% url 'course_detail' test.course.code %}">
+                    <input type="hidden" name="id" value="209">
+                <button type="submit" class="btn btn-secondary" id="single_button692a1777ef0286">Back to the course</button>
+            </form>
+        </div></div>
+            {% endif %}
+                {% endif %}
 
         </div></div>
 

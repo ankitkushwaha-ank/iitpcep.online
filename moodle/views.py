@@ -410,12 +410,16 @@ def test_detail_view(request, test_type, test_id):
         parent_id=test_id
     ).prefetch_related("options")  # change to "option_set" if no related_name exists
     courses = Course.objects.all()
+    quiz_end = False
+    if test_obj.close_date and timezone.now() > test_obj.close_date:
+        quiz_end = True
     context = {
         "test": test_obj,
         "questions": questions,
         "test_type": test_type.capitalize(),
         "page_title": f"{test_type.capitalize()}: {test_obj.title}",
-        "courses":courses
+        "courses":courses,
+        "quiz_end": quiz_end,
     }
 
     return render(request, "quiz.html", context)
