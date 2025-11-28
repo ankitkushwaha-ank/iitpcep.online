@@ -197,19 +197,20 @@
                         <a href="{% url 'course_detail' course.code %}" style="text-decoration:none; color:inherit; display:block;">
                             <h6 class="card-title mb-3"
                                 style="font-size:16px; font-weight:400; color:#1E56A0;">
-                                BO CDA {{ course.code }}: {{ course.title }}
+                                BO CDA {{ course.code }}: {{ course.title|truncatechars:26 }}
                             </h6>
-
+                            {% if course.description != "Semester - III" %}
                             <div class="progress mb-3" style="height:8px; border-radius:10px;">
                                 <div class="progress-bar" role="progressbar"
-                                    style="width: 90%; background-color:#093DAB;"
-                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                    style="width: 100%; background-color:#093DAB;"
+                                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
+                            {% endif %}
                         </a>
 
                         <!-- ✅ Progress text + 3-dot menu perfectly aligned -->
                         <div class="d-flex justify-content-between align-items-center mt-1">
-                            <p style="color:#333; font-weight:500; margin:0; line-height:32px;">90% complete</p>
+                            <p style="color:#333; font-weight:500; margin:0; line-height:32px;">{% if course.description != "Semester - III" %}100% complete{% endif %}</p>
 
                             <div class="dropdown">
                                 <button class="btn p-1 m-0 rounded-circle d-flex align-items-center justify-content-center"
