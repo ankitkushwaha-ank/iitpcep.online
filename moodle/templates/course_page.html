@@ -348,13 +348,14 @@ document.body.className += ' jsenabled';
                                 </div>
                             </div>
                             <div id="coursecontentcollapse0"
-                                class="content 
+                                class="content
                                     course-content-item-content collapse show
                                 ">
                                 <div class=" my-3" data-for="sectioninfo">
                                         <div class="section_availability course-description-item">
                                         </div>
                             </div>
+                                {% if course.description == "Semester - III" %}
                                     <ul class="section m-0 p-0 img-text  d-block " data-for="cmlist">
                                                 <li
                                                     class="activity activity-wrapper forum modtype_forum  hasinfo "
@@ -386,26 +387,26 @@ document.body.className += ' jsenabled';
                                                                                             <div class="media-body align-self-center">
                                                                                                 <div class="activityname">
                                                                                                                 <a href="" class=" aalink stretched-link" onclick="">        <span class="instancename">Announcements <span class="accesshide " > Forum</span></span>    </a>
-                                                                                                            
+
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                
+
                                                                             <div class="activity-info mt-1 mt-md-0">
                                                                                     <div data-region="activity-information" data-activityname="Announcements" class="activity-information">
                                                                                     </div>
                                                                             </div>
                                                                     </div>
-                                                                
+
                                                                 </div>
-                                                                
+
                                                                 <div class="description">
                                                                 </div>
                                                         </div>
                                                 </li>
                                         </ul>
-                            
+                                {% endif %}
                     </div>
                 </li>
                 <li id="section-1"
@@ -471,6 +472,7 @@ document.body.className += ' jsenabled';
                                         <div class="section_availability course-description-item">
                                         </div>
                             </div>
+                                {% if course.description == "Semester - III" %}
                                     <ul class="section m-0 p-0 img-text  d-block " data-for="cmlist">
                                                 <li
                                                     class="activity activity-wrapper resource modtype_resource  hasinfo "
@@ -521,6 +523,7 @@ document.body.className += ' jsenabled';
                                                         </div>
                                                 </li>
                                         </ul>
+                                {% endif %}
                             
                     </div>
                 </li>
@@ -815,6 +818,7 @@ document.body.className += ' jsenabled';
                                         <div class="section_availability course-description-item">
                                         </div>
                             </div>
+                                {% if course.description == "Semester - III" %}
                                     <ul class="section m-0 p-0 img-text  d-block " data-for="cmlist">
                                                 <li
                                                     class="activity activity-wrapper page modtype_page  hasinfo "
@@ -936,6 +940,7 @@ document.body.className += ' jsenabled';
                                                         </div>
                                                 </li>
                                         </ul>
+                                {% endif %}
                             
                     </div>
                 </li>
@@ -1002,6 +1007,7 @@ document.body.className += ' jsenabled';
                                         <div class="section_availability course-description-item">
                                         </div>
                             </div>
+                                {% if course.description == "Semester - III" %}
                                     <ul class="section m-0 p-0 img-text  d-block " data-for="cmlist">
                                                 <li
                                                     class="activity activity-wrapper folder modtype_folder  hasinfo "
@@ -1052,6 +1058,7 @@ document.body.className += ' jsenabled';
                                                         </div>
                                                 </li>
                                         </ul>
+                                {% endif %}
                             
                     </div>
                 </li>
@@ -1118,6 +1125,7 @@ document.body.className += ' jsenabled';
                                         <div class="section_availability course-description-item">
                                         </div>
                             </div>
+                                {% if course.description == "Semester - III" %}
                                     <ul class="section m-0 p-0 img-text  d-block " data-for="cmlist">
                                                 <li
                                                     class="activity activity-wrapper resource modtype_resource  hasinfo "
@@ -1264,6 +1272,7 @@ document.body.className += ' jsenabled';
                                                         </div>
                                                 </li>
                                         </ul>
+                                {% endif %}
                             
                     </div>
                 </li>
