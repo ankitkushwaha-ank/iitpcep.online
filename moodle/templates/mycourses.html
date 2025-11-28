@@ -1,7 +1,15 @@
 {% include '_head.html' %}
 {% include '_header.html' %}
 {% load static %}
-
+<style>
+.drawers .block_myoverview>.card-body {
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding: 10px;
+    margin: 15px;
+}
+</style>
 
 <title>My courses</title>
 <div  class="drawer drawer-left drawer-primary d-print-none not-initialized" data-region="fixed-drawer" id="theme_moove-drawers-primary" data-preference="" data-state="show-drawer-primary" data-forceopen="0" data-close-on-resize="1">
@@ -238,6 +246,53 @@
     </div>
 </div>
 
+                <div data-region="paging-control-container" class="d-flex">
+                        <div id="paging-control-limit-container-1" data-region="paging-control-limit-container" class="d-inline-flex align-items-center">
+                            <span class="mr-1">Show</span>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-action="limit-toggle" aria-label="Show All items per page">
+
+                                            All
+                                </button>
+                                <div role="menu" class="dropdown-menu" data-show-active-item="" data-skip-active-class="true" data-active-item-button-aria-label-components="pagedcontentpagingbaritemsperpage, core">
+                                        <a class="dropdown-item " href="#" data-limit="12" role="menuitem">
+                                            12
+
+                                        </a>
+                                        <a class="dropdown-item active" href="#" data-limit="0" role="menuitem" aria-current="true">
+
+                                            All
+                                        </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    <nav id="paging-bar-1" class="ml-auto hidden" data-region="paging-bar" data-ignore-control-while-loading="true" data-hide-control-on-single-page="true" data-active-page-number="1" data-items-per-page="0" aria-label="Pagination navigation" data-aria-label-components-pagination-item="pagedcontentnavigationitem, core" data-aria-label-components-pagination-active-item="pagedcontentnavigationactiveitem, core" data-last-page-number="1">
+
+                        <ul class="pagination mb-0">
+
+
+<li class="page-item disabled" data-region="page-item" data-control="previous" aria-disabled="true" aria-label="Current page, page 1">
+
+    <a href="#" class="page-link" data-region="page-link" aria-label="Current page, page 1">
+
+                                        <span class="icon-no-margin dir-rtl-hide" aria-hidden="true"><i class="icon fa fa-chevron-left fa-fw " aria-hidden="true"></i></span>
+                                        <span class="icon-no-margin dir-ltr-hide" aria-hidden="true"><i class="icon fa fa-chevron-right fa-fw " aria-hidden="true"></i></span>
+                                        </a>
+</li>
+
+
+<li class="page-item disabled" data-region="page-item" data-control="next" aria-label="Current page, page 1" aria-disabled="true">
+
+    <a href="#" class="page-link" data-region="page-link" aria-label="Current page, page 1">
+
+                                        <span class="icon-no-margin dir-rtl-hide" aria-hidden="true"><i class="icon fa fa-chevron-right fa-fw " aria-hidden="true"></i></span>
+                                        <span class="icon-no-margin dir-ltr-hide" aria-hidden="true"><i class="icon fa fa-chevron-left fa-fw " aria-hidden="true"></i></span>
+                                        </a>
+</li>
+                        </ul>
+                    </nav>
+                </div>
 
 
 
