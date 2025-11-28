@@ -598,7 +598,16 @@
                     <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Close Date</label><input type="date" name="close_date" id="a_cdate" class="w-full bg-bgMain border border-border rounded p-2"><input type="time" name="close_time" id="a_ctime" class="w-full bg-bgMain border border-border rounded p-2 mt-1"></div>
                     <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Duration (Mins)</label><input type="number" name="duration_minutes" id="a_duration" class="w-full bg-bgMain border border-border rounded p-3"></div>
                     <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Max Attempts</label><input type="number" name="max_attempts" id="a_attempts" class="w-full bg-bgMain border border-border rounded p-3"></div>
-                    <div class="col-span-2 flex items-center mt-4"><input type="checkbox" name="is_live" id="a_islive" class="w-5 h-5 accent-primary mr-2"><label for="a_islive" class="text-textMain font-medium">Is Live?</label></div>
+                    <div class="col-span-2 flex items-center justify-between mt-4 p-2 rounded border border-transparent hover:bg-gray-50 transition">
+                        <div>
+                            <p class="font-bold text-textMain">Is Live?</p>
+                            <p class="text-xs text-textMuted">If disabled, students cannot see or attempt this.</p>
+                        </div>
+                        <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                            <input type="checkbox" name="is_live" id="a_islive" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                            <label for="a_islive" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
                 </div>
                 <div class="pt-4 border-t border-border text-right"><button type="submit" class="bg-primary text-white px-6 py-2.5 rounded font-bold hover:bg-blue-700 transition shadow-md">Save Assessment</button></div>
             </form>
