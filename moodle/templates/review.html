@@ -613,10 +613,10 @@ document.body.className += ' jsenabled';
         <!-- Test summary information -->
         <table class="generaltable generalbox quizreviewsummary">
           <tbody>
-            <tr><th class="cell" scope="row">Started on</th><td class="cell">{{ test.start_date|date:"l, j F Y, h:i A" }}</td></tr>
+            <tr><th class="cell" scope="row">Started on</th><td class="cell">{{ test.open_date|date:"l, d F Y, h:i A" }}</td></tr>
             <tr><th class="cell" scope="row">State</th><td class="cell">Finished</td></tr>
-            <tr><th class="cell" scope="row">Completed on</th><td class="cell">{{ test.end_date|date:"l, j F Y, h:i A" }}</td></tr>
-            <tr><th class="cell" scope="row">Time taken</th><td class="cell">{{ test.duration }}</td></tr>
+            <tr><th class="cell" scope="row">Completed on</th><td class="cell">{{ test.calculated_end_time|date:"l, d F Y, h:i A" }}</td></tr>
+            <tr><th class="cell" scope="row">Time taken</th><td class="cell">{{ test.duration_minutes }} minute{{ test.duration_minutes|pluralize }}</td></tr>
           </tbody>
         </table>
 

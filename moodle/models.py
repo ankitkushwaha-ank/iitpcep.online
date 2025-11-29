@@ -104,6 +104,13 @@ class BaseAssessment(models.Model):
     class Meta:
         abstract = True
 
+    # ✅ Add this property
+    @property
+    def calculated_end_time(self):
+        if self.open_date and self.duration_minutes:
+            return self.open_date + timedelta(minutes=self.duration_minutes)
+        return None
+
     def is_available(self):
         """
         Returns True if within open/close time AND is_live = True
