@@ -492,7 +492,7 @@
                                         <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-bold">
                                             Banned
                                         </span>
-                                    {% elif user.is_online %}
+                                    {% elif user.is_recently_active %}
                                         <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">
                                             Online
                                         </span>
@@ -504,7 +504,27 @@
                                 </td>
                                 <td class="p-4 text-textMuted text-xs">{{ user.last_active|date:"M d, Y H:i" }}</td>
                                 <td class="p-4 text-textMuted text-xs">{{ user.created_at|date:"M d, Y" }}</td>
-                                                                <td class="p-4 text-right"><button onclick="openEditUser('{{ user.username }}')" class="text-primary mx-2"><i class="fa-solid fa-pen"></i></button><a href="{% url 'admin_dashboard:toggle_ban_user' user.id %}" class="text-warning mx-2"><i class="fa-solid fa-ban"></i></a><button onclick="confirmDelete('user/delete/{{ user.id }}')" class="text-danger mx-2"><i class="fa-solid fa-trash"></i></button></td>
+                                <td class="p-4 text-right">
+                                    <button
+                                        onclick="openEditUser('{{ user.id }}', '{{ user.username|escapejs }}', '{% if user.is_superuser %}true{% endif %}', '{% if user.is_banned %}true{% endif %}')"
+                                        class="text-primary mx-2"
+                                        title="Edit User">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+
+                                    <a href="{% url 'admin_dashboard:toggle_ban_user' user.id %}"
+                                       class="text-warning mx-2"
+                                       title="{% if user.is_banned %}Unban{% else %}Ban{% endif %} User">
+                                        <i class="fa-solid {% if user.is_banned %}fa-unlock{% else %}fa-ban{% endif %}"></i>
+                                    </a>
+
+                                    <button
+                                        onclick="confirmDelete('user/delete/{{ user.id }}')"
+                                        class="text-danger mx-2"
+                                        title="Delete User">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -666,19 +686,47 @@
     </div>
 
     <div id="editUserModal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleModal('editUserModal')"></div>
-        <div class="bg-card w-full max-w-md mx-4 rounded-xl shadow-2xl z-50 p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-textMain">Edit User</h3>
-                <button onclick="toggleModal('editUserModal')" class="text-textMuted hover:text-danger"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="space-y-4">
-                <div><label class="block text-xs font-bold text-textMuted uppercase mb-1">Username</label><input type="text" id="edit_username" class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none"></div>
-                <div class="flex items-center bg-gray-50 p-3 rounded border border-border"><input type="checkbox" class="w-5 h-5 mr-3 accent-primary"><span class="text-textMain font-medium">Grant Admin Privileges?</span></div>
-                <div class="flex justify-end gap-3 mt-6"><button onclick="toggleModal('editUserModal')" class="px-4 py-2 text-textMuted hover:bg-gray-100 rounded transition">Cancel</button><button class="bg-primary text-white px-6 py-2 rounded font-bold hover:bg-blue-700 transition shadow">Update User</button></div>
-            </div>
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleModal('editUserModal')"></div>
+    <div class="bg-card w-full max-w-md mx-4 rounded-xl shadow-2xl z-50 p-6">
+
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-textMain">Edit User</h3>
+            <button type="button" onclick="toggleModal('editUserModal')" class="text-textMuted hover:text-danger">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
         </div>
+
+        <form id="userEditForm" method="POST" action="{% url 'admin_dashboard:edit_user' %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="users">
+            <input type="hidden" name="user_id" id="u_id">
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-textMuted uppercase mb-1">Username</label>
+                    <input type="text" name="username" id="u_name"
+                           class="w-full bg-bgMain border border-border rounded p-3 text-textMain outline-none focus:ring-2 focus:ring-primary"
+                           placeholder="Enter new username" required>
+                </div>
+
+                <div class="flex items-center bg-gray-50 p-3 rounded border border-border hover:bg-gray-100 transition">
+                    <input type="checkbox" name="is_superuser" id="u_admin" class="w-5 h-5 mr-3 accent-primary cursor-pointer">
+                    <label for="u_admin" class="text-textMain font-medium cursor-pointer flex-1">Grant Admin Privileges?</label>
+                </div>
+
+                <div class="flex items-center bg-red-50 p-3 rounded border border-red-100 hover:bg-red-100 transition">
+                    <input type="checkbox" name="is_banned" id="u_ban" class="w-5 h-5 mr-3 accent-danger cursor-pointer">
+                    <label for="u_ban" class="text-danger font-bold cursor-pointer flex-1">Ban User?</label>
+                </div>
+
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="toggleModal('editUserModal')" class="px-4 py-2 text-textMuted hover:bg-gray-100 rounded transition">Cancel</button>
+                    <button type="submit" class="bg-primary text-white px-6 py-2 rounded font-bold hover:bg-blue-700 transition shadow-md">Update User</button>
+                </div>
+            </div>
+        </form>
     </div>
+</div>
 
 <script>
     // ---------------------------------------------------------
@@ -810,12 +858,12 @@
     }
 
     function openEditUser(id, username, isAdmin, isBanned) {
-        document.getElementById('u_id').value = id;
-        document.getElementById('u_name').value = username;
-        document.getElementById('u_admin').checked = (isAdmin === 'true');
-        document.getElementById('u_ban').checked = (isBanned === 'true');
-        toggleModal('editUserModal');
-    }
+    document.getElementById('u_id').value = id;
+    document.getElementById('u_name').value = username; // Pre-fills the input with current username
+    document.getElementById('u_admin').checked = (isAdmin === 'true' || isAdmin === true);
+    document.getElementById('u_ban').checked = (isBanned === 'true' || isBanned === true);
+    toggleModal('editUserModal');
+}
 
 // ---------------------------------------------------------
 // GLOBAL VARIABLES & INITIALIZATION

@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.db import transaction, IntegrityError
 from django.contrib.auth.models import User  # Standard Django User model
 from datetime import datetime
-
+from datetime import timedelta
 # Auth Imports
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -92,7 +92,8 @@ from moodle.models import (
 def admin_dashboard(request):
     # --- 1. Standard Statistics ---
     total_users = UserTable.objects.count()
-    online_users = UserTable.objects.filter(is_online=True).count()
+    time_threshold = timezone.now() - timedelta(minutes=5)
+    online_users = UserTable.objects.filter(last_active__gte=time_threshold).count()
     total_courses = Course.objects.count()
     total_quizzes = Quiz.objects.count()
     total_assignments = Assignment.objects.count()
@@ -513,5 +514,42 @@ def edit_assessment(request, id):
 
             obj.save()
             messages.success(request, f"{assess_type.capitalize()} updated successfully!")
+
+    return redirect('admin_dashboard:admin_dashboard')
+
+
+@login_required(login_url='admin_dashboard:admin_login')
+@user_passes_test(is_superuser, login_url='admin_dashboard:admin_login')
+def edit_user(request):
+    if request.method == "POST":
+        user_id = request.POST.get('user_id')
+        user = get_object_or_404(UserTable, id=user_id)
+
+        # 1. Update Username
+        new_username = request.POST.get('username')
+
+        # Only update if it's different and not empty
+        if new_username and new_username != user.username:
+            # Check if username is already taken by someone else
+            if UserTable.objects.filter(username=new_username).exists():
+                messages.error(request, f"Username '{new_username}' is already taken.")
+                return redirect('admin_dashboard:admin_dashboard')
+
+            user.username = new_username
+
+        # 2. Update Admin Status (Checkbox)
+        # Checkboxes send 'on' if checked, or nothing if unchecked.
+        # We check 'is not None' to see if it was sent.
+        user.is_admin = request.POST.get('is_superuser') is not None
+
+        # 3. Update Ban Status (Checkbox)
+        user.is_banned = request.POST.get('is_banned') is not None
+
+        # If user is banned, force them offline immediately
+        if user.is_banned:
+            user.is_online = False
+
+        user.save()
+        messages.success(request, f"User '{user.username}' updated successfully.")
 
     return redirect('admin_dashboard:admin_dashboard')

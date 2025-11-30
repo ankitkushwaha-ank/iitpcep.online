@@ -6,6 +6,9 @@ from datetime import timedelta
 # --------------------------------------------------
 # 🧑 USER MODEL (PIN-BASED LOGIN SYSTEM)
 # --------------------------------------------------
+from django.db import models
+from django.utils import timezone
+from datetime import timedelta
 
 
 class UserTable(models.Model):
@@ -14,37 +17,28 @@ class UserTable(models.Model):
     is_banned = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # ✅ New Fields for Online Tracking
-    last_active = models.DateTimeField(default=timezone.now, help_text="Last time the user was active.")
-    is_online = models.BooleanField(default=False, help_text="Whether the user is currently online or not.")
+    # Tracking Fields
+    last_active = models.DateTimeField(default=timezone.now)
+    is_online = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
 
-    # ✅ Automatically determine online/offline state
     def update_activity(self):
-        """Call this whenever user does something (like visiting a page)."""
         self.last_active = timezone.now()
         self.is_online = True
         self.save(update_fields=["last_active", "is_online"])
 
-    def mark_offline(self):
-        """Mark user offline manually or after timeout."""
-        self.is_online = False
-        self.save(update_fields=["is_online"])
-
+    # ✅ ADD THIS DECORATOR
+    @property
     def is_recently_active(self):
-        """Return True if user was active in last 5 minutes."""
-        return timezone.now() - self.last_active <= timedelta(minutes=5)
-
-    def status_label(self):
-        """Used in admin panel or frontend."""
-        if self.is_online or self.is_recently_active():
-            return "🟢 Online"
-        return "🔴 Offline"
-
-    status_label.short_description = "Status"
-
+        """
+        Returns True if the user clicked a link in the last 5 minutes.
+        """
+        if not self.last_active:
+            return False
+        # Check if last_active is within the last 5 minutes
+        return timezone.now() - self.last_active <= timedelta(minutes=30)
 
 
 # --------------------------------------------------

@@ -71,3 +71,32 @@ class CustomAdminAccessMiddleware:
         # Let the request continue as normal for all other pages
         response = self.get_response(request)
         return response
+
+
+from django.utils import timezone
+from .models import UserTable
+from django.core.cache import cache
+
+
+class ActiveUserMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+
+        if request.user.is_authenticated:
+            # Cache key to prevent database spam (update once per minute)
+            cache_key = f'last_seen_{request.user.id}'
+            if not cache.get(cache_key):
+                try:
+                    # Update the UserTable entry
+                    user_profile = UserTable.objects.get(username=request.user.username)
+                    user_profile.update_activity()  # Updates timestamp
+
+                    # Set cache for 60 seconds
+                    cache.set(cache_key, timezone.now(), 60)
+                except UserTable.DoesNotExist:
+                    pass
+
+        return response
