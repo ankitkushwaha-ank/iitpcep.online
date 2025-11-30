@@ -3,7 +3,12 @@ import json
 import warnings
 from pathlib import Path
 from config import DATABASE, SYSTEM  # ✅ import DB + system config safely
+# 1. Set the Time Zone to India
+TIME_ZONE = 'Asia/Kolkata'
 
+# 2. Turn OFF timezone awareness (This is the key fix!)
+# This tells Django: "Don't convert to UTC. Just save the time exactly as it is in India."
+USE_TZ = False
 # --------------------------------------------------
 # 📁 BASE CONFIG
 # --------------------------------------------------

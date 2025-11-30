@@ -1,10 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.utils import timezone
+
 from django.db import transaction, IntegrityError
-from django.contrib.auth.models import User  # Standard Django User model
-from datetime import datetime
 from datetime import timedelta
+from django.db.models.functions import TruncDay
 # Auth Imports
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -65,12 +62,8 @@ def _combine_date_time(date_str, time_str):
             return None
     return None
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Count
-from django.db.models.functions import TruncMonth
-from django.core.serializers.json import DjangoJSONEncoder
 import json
 from datetime import datetime
 
@@ -86,43 +79,54 @@ from moodle.models import (
 # ---------------------------------------------------------
 # 1. MAIN DASHBOARD VIEW (UPDATED WITH GRAPHS)
 # ---------------------------------------------------------
-
 @login_required(login_url='admin_dashboard:admin_login')
 @user_passes_test(is_superuser, login_url='admin_dashboard:admin_login')
 def admin_dashboard(request):
     # --- 1. Standard Statistics ---
     total_users = UserTable.objects.count()
+    # Calculate 5 min threshold for online status
     time_threshold = timezone.now() - timedelta(minutes=5)
     online_users = UserTable.objects.filter(last_active__gte=time_threshold).count()
+
     total_courses = Course.objects.count()
     total_quizzes = Quiz.objects.count()
     total_assignments = Assignment.objects.count()
     total_exams = Exam.objects.count()
     total_questions = Question.objects.count()
 
-    # --- 2. Graph Data: User Growth (Line Chart) ---
-    # Group users by creation month
-    monthly_users = UserTable.objects.annotate(
-        month=TruncMonth('created_at')
-    ).values('month').annotate(
+    # --- 2. Graph Data: User Growth (Day-wise Cumulative) ---
+    # Calculate date 30 days ago
+    thirty_days_ago = timezone.now() - timedelta(days=30)
+
+    # Get the total number of users BEFORE the 30-day window starts
+    # This acts as the starting baseline for the graph
+    current_total = UserTable.objects.filter(created_at__lt=thirty_days_ago).count()
+
+    # Query: Group new users by Day
+    daily_users = UserTable.objects.filter(
+        created_at__gte=thirty_days_ago
+    ).annotate(
+        day=TruncDay('created_at')
+    ).values('day').annotate(
         count=Count('id')
-    ).order_by('month')
+    ).order_by('day')
 
     user_labels = []
     user_data = []
 
-    for entry in monthly_users:
-        if entry['month']:
-            user_labels.append(entry['month'].strftime('%b %Y'))
-            user_data.append(entry['count'])
+    # Loop through days and add to cumulative total
+    for entry in daily_users:
+        if entry['day']:
+            current_total += entry['count']  # Add daily new users to running total
+            user_labels.append(entry['day'].strftime('%d %b'))  # Format: "01 Dec"
+            user_data.append(current_total)
 
-    # Fallback if no data
+    # Fallback if no data in last 30 days (Show flat line of current total)
     if not user_data:
-        user_labels = ["Jan", "Feb", "Mar", "Apr", "May"]
-        user_data = [0, 0, 0, 0, 0]
+        user_labels = ["Last 30 Days", "Today"]
+        user_data = [total_users, total_users]
 
     # --- 3. Graph Data: Content Distribution (Doughnut/Pie Chart) ---
-    # Comparing count of Quizzes vs Assignments vs Exams
     distribution_labels = ["Quizzes", "Assignments", "Exams"]
     distribution_data = [total_quizzes, total_assignments, total_exams]
 
@@ -147,7 +151,6 @@ def admin_dashboard(request):
             'total_exams': total_exams,
             'total_questions': total_questions,
         },
-        # Pass JSON strings for Chart.js
         'graphs': {
             'user_labels': json.dumps(user_labels),
             'user_data': json.dumps(user_data),
