@@ -1,6 +1,7 @@
 
 <!DOCTYPE html>
 {% load user_extras %}
+{% load duration_filters %}
 <html  dir="ltr" lang="en" xml:lang="en">
 <head>
     <title>{{ test.title }}: Attempt review</title>
@@ -616,7 +617,7 @@ document.body.className += ' jsenabled';
             <tr><th class="cell" scope="row">Started on</th><td class="cell">{{ test.open_date|date:"l, d F Y, h:i A" }}</td></tr>
             <tr><th class="cell" scope="row">State</th><td class="cell">Finished</td></tr>
             <tr><th class="cell" scope="row">Completed on</th><td class="cell">{{ test.calculated_end_time|date:"l, d F Y, h:i A" }}</td></tr>
-            <tr><th class="cell" scope="row">Time taken</th><td class="cell">{{ test.duration_minutes }} minute{{ test.duration_minutes|pluralize }}</td></tr>
+            <tr><th class="cell" scope="row">Time taken</th><td class="cell">{{ test.duration_minutes|nice_duration }}</td></tr>
           </tbody>
         </table>
 

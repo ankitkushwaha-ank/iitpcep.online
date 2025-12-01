@@ -114,11 +114,11 @@ def dashboard(request):
     # --------------------------------------------------
     # 🗓️ 6. TIMELINE LOGIC
     # --------------------------------------------------
-    timeline_filter = Q(
-        is_live=True
-    ) & (
-                              Q(close_date__gte=now) | Q(close_date__isnull=True)
-                      )
+
+    # ✅ UPDATE: Removed 'Q(is_live=True)' so it shows drafts/offline tests too
+    timeline_filter = (
+            Q(close_date__gte=now) | Q(close_date__isnull=True)
+    )
 
     all_activities = sorted(
         list(chain(
@@ -126,6 +126,7 @@ def dashboard(request):
             Quiz.objects.filter(timeline_filter).select_related('course'),
             Exam.objects.filter(timeline_filter).select_related('course')
         )),
+        # Sort by close date, put "Open Indefinitely" (None) at the very end
         key=lambda x: x.close_date or datetime(9999, 1, 1, tzinfo=timezone.utc)
     )
 
@@ -143,7 +144,8 @@ def dashboard(request):
             "close_date": activity.close_date,
             "model_name": activity.__class__.__name__,
             "model_name_lower": activity.__class__.__name__.lower(),
-            "close_date_group": date_group
+            "close_date_group": date_group,
+            "is_live": activity.is_live,  # ✅ Added this so you can show a 'Draft' badge in HTML
         })
 
     # --------------------------------------------------

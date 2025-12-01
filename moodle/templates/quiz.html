@@ -1,5 +1,6 @@
 {% include '_head.html' %}
 {%include '_header.html' %}
+{% load duration_filters %}
 <style>
     @media (min-width: 768px) {
     .pagelayout-standard #page.drawers .main-inner, body.limitedwidth #page.drawers .main-inner, #page.drawers .main-inner, .moove-container-fluid, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
@@ -206,7 +207,7 @@
 
                     <div class="box py-3 quizinfo">
                         <p class="text-left">Attempts allowed: {{ test.max_attempts }}</p>
-                        <p class="text-left">Time limit: {{ test.duration_minutes }} minute{{ test.duration_minutes|pluralize }}</p>
+                        <p class="text-left">Time limit: {{ test.duration_minutes|nice_duration }}</p>
                     </div>
             {% if test.is_live %}
             {% if quiz_end %}

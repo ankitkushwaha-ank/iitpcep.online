@@ -98,6 +98,22 @@ class BaseAssessment(models.Model):
     class Meta:
         abstract = True
 
+    @property
+    def duration_display(self):
+        hours = self.duration_minutes // 60
+        minutes = self.duration_minutes % 60
+
+        parts = []
+
+        if hours > 0:
+            parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
+
+        if minutes > 0:
+            parts.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
+
+        # Join them (e.g., "1 hour 30 minutes")
+        return " ".join(parts)
+
     # ✅ Add this property
     @property
     def calculated_end_time(self):

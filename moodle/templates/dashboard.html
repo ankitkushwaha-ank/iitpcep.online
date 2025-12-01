@@ -233,7 +233,7 @@
                                     {% for course_group in course_list %}
                                         <li class="list-group-item mt-3 p-0 px-2 border-0">
                                             <h2 class="h5 font-weight-bold mb-2" data-region="course-heading">
-                                                BO CDA {{ course_group.grouper.code }}:{{ course_group.grouper.title }}
+
                                             </h2>
 
                                             {% regroup course_group.list by close_date_group as activity_list_by_date %}
@@ -248,7 +248,7 @@
 
                                                     {% for activity in day_group.list %}
                                                         <div class="row my-2">
-                                                            <div class="col-auto text-center text-muted" data-region="event-time">
+                                                            <div class="col-auto text-center" data-region="event-time">
                                                                 {{ activity.close_date|date:"H:i"|default:"-" }}
                                                             </div>
                                                             <div class="activityiconcontainer assessment courseicon align-self-start mr-3">
@@ -261,18 +261,20 @@
                                                                 {% if activity.model_name == "Exam" %}{% url 'exam_detail' 'exam' activity.id as attempt_url %}{% endif %}
 
                                                                 <a href="{% url 'test_detail' test_type=activity.model_name_lower test_id=activity.id %}" class="font-weight-bold" style="color: #0f47ad;">{{ activity.title }}</a>
-                                                                <div class="text-muted small">
+                                                                <div class="small">
                                                                     {% if activity.close_date %}
-                                                                        {{ activity.model_name }} closes
+                                                                        {{ activity.model_name }} closes · BO CDA {{ course_group.grouper.code }}:{{ course_group.grouper.title }}
                                                                     {% else %}
                                                                         {{ activity.model_name }} is open
                                                                     {% endif %}
                                                                 </div>
                                                             </div>
                                                             <div class="col-3 text-right" data-region="event-action-container">
+                                                                {% if activity.is_live %}
                                                                 <a href="{% url 'test_detail' test_type=activity.model_name_lower test_id=activity.id %}" class="btn btn-outline-secondary btn-sm" role="button">
                                                                     Attempt quiz now
                                                                 </a>
+                                                                {% endif %}
                                                             </div>
                                                         </div>
                                                         <div class="pb-3 px-2 border-bottom"></div>
